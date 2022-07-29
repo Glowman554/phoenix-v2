@@ -498,7 +498,7 @@
     </comp>
     <comp lib="0" loc="(180,2100)" name="Tunnel">
       <a name="facing" val="east"/>
-      <a name="label" val="WPC"/>
+      <a name="label" val="SAVE_PCB"/>
     </comp>
     <comp lib="0" loc="(180,2130)" name="Tunnel">
       <a name="facing" val="east"/>
