@@ -1,0 +1,127 @@
+=== OVERVIEW ===
+
+- 8 bit data width
+- has dedicated io ports
+
+=== INSTRUCTIONS ===
+0x00: NOP
+
+0x01: MOV <reg>, <reg>		-> move register into another register
+
+0x02: LOD <reg>, <imm16>	-> load 8 bit constant into register
+
+0x03: OUT A <reg>			-> output reg to address in A
+0x04: INP <reg> A			-> input address in A to reg
+
+0x05: JNZ A					-> jump to A register if nz is set
+
+0x06: ADD <reg> <reg>		-> add register into register and store the result into the left register
+0x07: ADD <reg> <imm8>		-> add const 8 bit value to register and store in reg
+
+0x08: SUB <reg> <reg>		-> subtract one register from another and save it to the left register
+0x09: SUB <reg> <imm8>		-> sub imm8 from reg and store in reg
+
+0x0A: NAD <reg> <reg>		-> bitwise nand
+0x0B: NAD <reg> <imm8>		-> bitwise nand
+
+0x0C: NOR <reg> <reg>		-> bitwise nor
+0x0D: NOR <reg> <imm8>		-> bitwise nor
+
+0x0E: CMP <reg> <reg>		-> compare reg to reg store result in fg
+0x0F: CMP <reg> <imm8>		-> compare reg to imm8 and store result in fg
+
+0x10: JZR A					-> jump to reg if zr flag is set
+
+0x11: LDR <reg> A			-> load one byte from address A into reg
+
+0x12: WTR A <reg>			-> writes one byte from register to address A
+
+0x13 JMP A					-> load A into pc
+
+0x14 JEQ A					-> jump if equals
+
+0x15 JNQ A					-> jump if not equals
+
+=== INSTRUCTION ENCODING ===
+A instruction has a fixed size of 32bit, and can never contain two imm16.
+
+00000000 0000 0000 00000000
+
+first 8bit = instruction
+next 4bit  = first optional register
+next 4bit  = second optional register
+last 8bit = optional imm8
+
+=== HALTING THE CPU ===
+the halt bit gets set if pc == 0xffff
+
+=== REGISTERS ===
+The cpu contains three general purpose registers (r0-r2), one stack pointer (sp), as well as one flag register (fg), and a program counter (pc)
+r0 + r1 add to make the address (A) register used in jmp's and memory accesses
+
+0: r0 (8bit) -> AL
+1: r1 (8bit) -> AH
+2: r2 (8bit)
+
+14: fg (4bit)
+    -> bit 0: zero
+    -> bit 1: eq
+    -> bit 2: overflow
+    -> bit 3: halt
+
+15: pc (16bit)
+
+=== MEMORY LAYOUT ===
+0x0000 - 0x7fff = general purpose rom
+0x8000 - 0xffff = general purpose ram
+
+=== STARTUP ===
+Code execution starts at 0x0
+
+=== I/O ===
+can vary
+
+=== MICROCODE ===
+
+The microcode is saved on multiple external eeproms or 1 eeprom with 32bit output.
+All write instructions get executed on a falling edge to avoid write before read issues
+
+Microcode commands:
+
+	PUT_A_ADDR:		A -> address bus
+
+	PUT_IR0_DB:		instruction reg 0 -> data bus
+	PUT_IR1_DB:		instruction reg 1 -> data bus
+	SAVE_DB_IR0:	data bus -> instruction reg 0
+	SAVE_DB_IR1:	data bus -> instruction reg 1
+
+	PUT_IIMM_DB:	instruction imm8 -> data bus
+
+	SAVE_DB_ALUA:	data bus -> alu work reg A
+	SAVE_DB_ALUB:	data bus -> alu work reg B
+
+	ALU_ADD:		A + B -> OUT
+	ALU_CMP:		if (A == B) 1 -> EQ else 0 -> EQ && if (A == 0) 1 -> Z else 0 -> Z 
+
+	PUT_ALUOUT_DB:	OUT -> data bus
+	
+	COND_INVERT:	1 -> COND_INV
+
+	SAVE_PCB_IF_Z:	if (if COND_INV !ZERO else ZERO) address bus -> pc buf and 1 -> cond
+	SAVE_PCB_IF_EQ:	if (if COND_INV !EQ else EQ) address bus -> pc buf and 1 -> cond
+	SAVE_PCB:		address bus -> pc buf
+
+	SAVE_DB_MEM:	data bus -> ram/rom[address bus]
+	PUT_MEM_DB:		ram/rom[address bus] -> data bus
+
+	PC_FLUSH:		pc buf -> pc
+	PC_FLUSH_COND: 	if cond pc buf -> pc
+
+	ALU_SUB:		A - B -> OUT
+	ALU_NAND:		~(A & B) -> OUT
+	ALU_NOR:		~(A | B) -> OUT
+
+	IO_IN:			io[address bus] -> data bus
+	IO_OUT:			data bus -> io[address bus]
+
+	FINISH:			start next instruction fetch / decode / execute cycle
