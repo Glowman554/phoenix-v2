@@ -43,7 +43,7 @@
 0x15 JNQ A					-> jump if not equals
 
 === INSTRUCTION ENCODING ===
-A instruction has a fixed size of 32bit, and can never contain two imm16.
+A instruction has a fixed size of 24bit, and can never contain two imm8.
 
 00000000 0000 0000 00000000
 
