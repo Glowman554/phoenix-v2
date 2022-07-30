@@ -7,6 +7,8 @@
 #pragma warning(disable : 4996)	 //_CRT_SECURE_NO_WARNINGS
 #endif
 
+void print_error(int pos_start, int pos_end, char* error);
+
 lexer::lexer(char* code) : tokens(10) {
 	this->code = code;
 	this->code_len = strlen(code);
@@ -104,7 +106,9 @@ bool lexer::__parse_nm(char* input, int* out) {
 			_number = _number * number_system_base + (input[idx] - 'A' + 10);
 		}
 		else {
-			debugf("Unexpected char %c in numbver\n", input[idx]);
+			char buf[0xff] = { 0 };
+			sprintf(buf, "Unexpected char %c in number", input[idx]);
+			print_error(this->pos, this->pos + 1, buf);
 			return true;
 		}
 
@@ -209,7 +213,7 @@ bool lexer::lex() {
 			break;
 
 			default:
-				debugf("Unexpected token: %c\n", this->current_char);
+				print_error(this->pos, this->pos + 1, "Unexpected token");
 				return true;
 		}
 
