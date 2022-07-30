@@ -9,7 +9,7 @@ struct lexer_token_t
 	union
 	{
 		char data_s[0xff];
-		uint8_t data_i;
+		uint16_t data_i;
 	};
 };
 

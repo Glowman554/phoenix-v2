@@ -355,7 +355,7 @@ bool generator::gen() {
 								}
 
 								if (lo_or_hi) {
-									iimm = num >> 8;
+									iimm = (num & 0xff00) >> 8;
 								}
 								else {
 									iimm = num & 0x00ff;
