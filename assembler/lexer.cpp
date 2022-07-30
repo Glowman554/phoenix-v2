@@ -1,0 +1,207 @@
+#include "lexer.h"
+#include "debug.h"
+
+#include <string.h>
+
+#ifdef _MSC_VER
+#pragma warning(disable : 4996)	 //_CRT_SECURE_NO_WARNINGS
+#endif
+
+lexer::lexer(char* code) : tokens(10) {
+	this->code = code;
+	this->code_len = strlen(code);
+
+	this->pos = -1;
+	this->advance();
+}
+
+
+list<lexer_token_t>* lexer::get_tokens() {
+	return &this->tokens;
+}
+
+
+void lexer::advance() {
+	this->pos++;
+
+	if (this->pos < this->code_len) {
+		this->current_char = this->code[this->pos];
+		// debugf("loaded char %c at %d\n", this->current_char, this->pos);
+	}
+	else {
+		this->current_char = '\0';
+		// debugf("could not load char at %d\n", this->pos);
+	}
+}
+
+
+void lexer::__id() {
+	char buf[0xff] = { 0 };
+	int idx = 0;
+	do {
+		buf[idx++] = this->current_char;
+		this->advance();
+	} while ((this->current_char >= 'a' && this->current_char <= 'z') || (this->current_char >= 'A' && this->current_char <= 'Z') || (this->current_char >= '0' && this->current_char <= '9'));
+	// debugf("buf: %s\n", buf);
+
+	lexer_token_t token = { 0 };
+	token.type = ID;
+	strcpy(token.data_s, buf);
+	this->tokens.add(token);
+}
+
+
+bool lexer::__parse_nm(char* input, int* out) {
+	bool hex = false;
+	bool bin = false;
+	bool dec = false;
+
+	int start_offset = 0;
+
+	if (input[0] == '0') {
+		if (input[1] == 'x') {
+			hex = true;
+			start_offset = 2;
+		}
+		else if (input[1] == 'b') {
+			bin = true;
+			start_offset = 2;
+		}
+		else {
+			dec = true;
+		}
+	}
+	else {
+		dec = true;
+	}
+
+	int number_system_base = 0;
+
+	if (hex) {
+		number_system_base = 16;
+	}
+	else if (bin) {
+		number_system_base = 2;
+	}
+	else {
+		number_system_base = 10;
+	}
+
+	int _number = 0;
+	int idx = start_offset;
+
+	while (input[idx] != '\0') {
+		if (input[idx] >= '0' && input[idx] <= '9') {
+			_number = _number * number_system_base + (input[idx] - '0');
+		}
+		else if (input[idx] >= 'a' && input[idx] <= 'f') {
+			_number = _number * number_system_base + (input[idx] - 'a' + 10);
+		}
+		else if (input[idx] >= 'A' && input[idx] <= 'F') {
+			_number = _number * number_system_base + (input[idx] - 'A' + 10);
+		}
+		else {
+			debugf("Unexpected char %c in numbver\n", input[idx]);
+			return true;
+		}
+
+		idx++;
+	}
+
+	*out = _number;
+	return false;
+}
+
+
+bool lexer::__nm() {
+	char buf[0xff] = { 0 };
+	int idx = 0;
+	do {
+		buf[idx++] = this->current_char;
+		this->advance();
+	} while ((this->current_char >= '0' && this->current_char <= '9') || this->current_char == 'x' || this->current_char == 'b' || (this->current_char >= 'a' && this->current_char <= 'f') || (this->current_char >= 'A' && this->current_char <= 'F'));
+
+	int number = 0;
+	if (this->__parse_nm(buf, &number)) {
+		return true;
+	}
+
+	// debugf("number: %d\n", number);
+
+	lexer_token_t token = { 0 };
+	token.type = NUMBER;
+	token.data_i = number;
+	this->tokens.add(token);
+
+	return false;
+}
+
+
+bool lexer::lex() {
+	debugf("Lexing...\n");
+	
+	while (this->current_char) {
+
+		if ((this->current_char >= 'a' && this->current_char <= 'z') || (this->current_char >= 'A' && this->current_char <= 'Z')) {
+			this->__id();
+			continue;
+		}
+
+		if ((this->current_char >= '0' && this->current_char <= '9')) {
+			if (this->__nm()) {
+				debugf("Unexpected number format\n");
+				return true;
+			}
+
+			continue;
+		}
+
+		switch (this->current_char) {
+			case ' ':
+			case '\n':
+			case '\t':
+				break;
+
+			case ':':
+			{
+				lexer_token_t token = { 0 };
+				token.type = COLLON;
+				this->tokens.add(token);
+			}
+			break;
+
+			case ',':
+			{
+				lexer_token_t token = { 0 };
+				token.type = COMMA;
+				this->tokens.add(token);
+			}
+			break;
+
+			case '(':
+			{
+				lexer_token_t token = { 0 };
+				token.type = LPAREN;
+				this->tokens.add(token);
+			}
+			break;
+
+			case ')':
+			{
+				lexer_token_t token = { 0 };
+				token.type = RPAREN;
+				this->tokens.add(token);
+			}
+			break;
+
+			default:
+				debugf("Unexpected token: %c\n", this->current_char);
+				return true;
+		}
+
+		this->advance();
+
+	}
+
+	return false;
+}
