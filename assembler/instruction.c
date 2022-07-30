@@ -76,7 +76,7 @@ instruction_t build_jzr_instr(int ir0, int ir1, int iimm, int sreg) {
 
 instruction_t build_ldr_instr(int ir0, int ir1, int iimm, int sreg) {
 	assert(sreg == A);
-	return LDR(sreg, ir0);
+	return LDR(ir0, sreg);
 }
 
 instruction_t build_wtr_instr(int ir0, int ir1, int iimm, int sreg) {
