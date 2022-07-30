@@ -42,7 +42,7 @@ int main(int argc, char** argv) {
 	generator g = generator(l.get_tokens());
 	assert(g.gen() == false);
 
-	debugf("Succesfully assembled 0x%x bytes\n", g.get_data_len());
+	debugf("Successfully assembled 0x%x bytes\n", g.get_data_len());
 
 	debugf("Saving to %s...\n", out_file);
 	f = fopen(out_file, "wb");
