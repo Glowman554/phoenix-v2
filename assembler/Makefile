@@ -6,7 +6,7 @@ OBJS = $(addsuffix .o,$(basename $(SRCS) $(CPPSRC)))
 CC = gcc
 LD = g++
 
-CFLAGS = -g -Iinclude
+CFLAGS = -g -Iinclude -Wno-write-strings -Wno-format-overflow
 LDFLAGS =
 
 as.elf: $(OBJS)

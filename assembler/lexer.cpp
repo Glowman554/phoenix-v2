@@ -36,6 +36,7 @@ void lexer::advance() {
 
 
 void lexer::__id() {
+	int pos_start = this->pos;
 	char buf[0xff] = { 0 };
 	int idx = 0;
 	do {
@@ -46,6 +47,8 @@ void lexer::__id() {
 
 	lexer_token_t token = { 0 };
 	token.type = ID;
+	token.pos_start = pos_start;
+	token.pos_end = this->pos;
 	strcpy(token.data_s, buf);
 	this->tokens.add(token);
 }
@@ -114,6 +117,7 @@ bool lexer::__parse_nm(char* input, int* out) {
 
 
 bool lexer::__nm() {
+	int pos_start = this->pos;
 	char buf[0xff] = { 0 };
 	int idx = 0;
 	do {
@@ -130,6 +134,8 @@ bool lexer::__nm() {
 
 	lexer_token_t token = { 0 };
 	token.type = NUMBER;
+	token.pos_start = pos_start;
+	token.pos_end = this->pos;
 	token.data_i = number;
 	this->tokens.add(token);
 
@@ -166,6 +172,8 @@ bool lexer::lex() {
 			{
 				lexer_token_t token = { 0 };
 				token.type = COLLON;
+				token.pos_start = this->pos;
+				token.pos_end = this->pos + 1;
 				this->tokens.add(token);
 			}
 			break;
@@ -174,6 +182,8 @@ bool lexer::lex() {
 			{
 				lexer_token_t token = { 0 };
 				token.type = COMMA;
+				token.pos_start = this->pos;
+				token.pos_end = this->pos + 1;
 				this->tokens.add(token);
 			}
 			break;
@@ -182,6 +192,8 @@ bool lexer::lex() {
 			{
 				lexer_token_t token = { 0 };
 				token.type = LPAREN;
+				token.pos_start = this->pos;
+				token.pos_end = this->pos + 1;
 				this->tokens.add(token);
 			}
 			break;
@@ -190,6 +202,8 @@ bool lexer::lex() {
 			{
 				lexer_token_t token = { 0 };
 				token.type = RPAREN;
+				token.pos_start = this->pos;
+				token.pos_end = this->pos + 1;
 				this->tokens.add(token);
 			}
 			break;

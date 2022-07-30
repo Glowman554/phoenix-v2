@@ -6,6 +6,8 @@
 struct lexer_token_t
 {
 	int type;
+	int pos_start;
+	int pos_end;
 	union
 	{
 		char data_s[0xff];

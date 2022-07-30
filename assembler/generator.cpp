@@ -1,6 +1,8 @@
 #include "generator.h"
 #include "debug.h"
 
+void print_error(int pos_start, int pos_end, char* error);
+
 instruction_builder_t instruction_builder(char* name, int op1, int op2, instruction_t(*build) (int ir0, int ir1, int iimm, int sreg)) {
 	instruction_builder_t instr = { 0 };
 	strcpy(instr.name, name);
@@ -125,7 +127,7 @@ bool generator::gen() {
 
 	while (this->current_token) {
 		if (this->current_token->data.type != ID) {
-			debugf("Expected ID\n");
+			print_error(this->current_token->data.pos_start, this->current_token->data.pos_end, "Expected ID");
 			return true;
 		}
 
@@ -148,7 +150,9 @@ bool generator::gen() {
 			}, tmp.data_s);
 
 			if (n == nullptr) {
-				debugf("Instruction %s not found\n", tmp.data_s);
+				char buf[256] = { 0 };
+				sprintf(buf, "Instruction %s not found", tmp.data_s);
+				print_error(tmp.pos_start, tmp.pos_end, buf);
 				return true;
 			}
 
@@ -160,41 +164,42 @@ bool generator::gen() {
 					case IR0:
 					case IR1:
 						if (this->current_token->data.type != ID) {
-							debugf("Expected ID\n");
+							print_error(this->current_token->data.pos_start, this->current_token->data.pos_end, "Expected ID");
 							return true;
 						}
 						break;
 					case IIMM:
 						if (this->current_token->data.type != ID && this->current_token->data.type != NUMBER) {
-							debugf("Expected ID or NUMBER\n");
+							print_error(this->current_token->data.pos_start, this->current_token->data.pos_end, "Expected ID or NUMBER");
 							return true;
 						}
 						if (this->current_token->data.type == ID) {
 							if (strcmp(this->current_token->data.data_s, "lo") == 0 || strcmp(this->current_token->data.data_s, "hi") == 0) {
 								this->advance();
 								if (this->current_token->data.type != LPAREN) {
-									debugf("Expected LPAREN\n");
+									print_error(this->current_token->data.pos_start, this->current_token->data.pos_end, "Expected '('");
 									return true;
 								}
 								this->advance();
 								if (this->current_token->data.type != ID && this->current_token->data.type != NUMBER) {
-									debugf("Expected ID or NUMBER\n");
+									print_error(this->current_token->data.pos_start, this->current_token->data.pos_end, "Expected ID or NUMBER");
 									return true;
 								}
 								this->advance();
 								if (this->current_token->data.type != RPAREN) {
-									debugf("Expected RPAREN\n");
+									print_error(this->current_token->data.pos_start, this->current_token->data.pos_end, "Expected ')'");
 									return true;
 								}
 							}
 							else {
-								debugf("Expected 'lo' or 'hi'\n");
+								print_error(this->current_token->data.pos_start, this->current_token->data.pos_end, "Expected 'lo' or 'hi'");
+								return true;
 							}
 						}
 						break;
 					case SREG:
 						if (this->current_token->data.type != ID) {
-							debugf("Expected ID\n");
+							print_error(this->current_token->data.pos_start, this->current_token->data.pos_end, "Expected ID");
 							return true;
 						}
 						break;
@@ -203,7 +208,7 @@ bool generator::gen() {
 				if (i == 0 && n->data.operands[1] != NONE) {
 					this->advance();
 					if (this->current_token->data.type != COMMA) {
-						debugf("Expected COMMA\n");
+						print_error(this->current_token->data.pos_start, this->current_token->data.pos_end, "Expected ','");
 						return true;
 					}
 				}
@@ -225,7 +230,7 @@ bool generator::gen() {
 
 	while (this->current_token) {
 		if (this->current_token->data.type != ID) {
-			debugf("Expected ID\n");
+			print_error(this->current_token->data.pos_start, this->current_token->data.pos_end, "Expected ID");
 			return true;
 		}
 
@@ -241,7 +246,9 @@ bool generator::gen() {
 			}, tmp.data_s);
 
 			if (n == nullptr) {
-				debugf("Instruction %s not found\n", tmp.data_s);
+				char buf[256] = { 0 };
+				sprintf(buf, "Instruction %s not found", tmp.data_s);
+				print_error(tmp.pos_start, tmp.pos_end, buf);
 				return true;
 			}
 
@@ -259,7 +266,7 @@ bool generator::gen() {
 					case IR0:
 					{
 						if (this->current_token->data.type != ID) {
-							debugf("Expected ID\n");
+							print_error(this->current_token->data.pos_start, this->current_token->data.pos_end, "Expected ID");
 							return true;
 						}
 
@@ -268,12 +275,14 @@ bool generator::gen() {
 						}, this->current_token->data.data_s);
 
 						if (r == nullptr) {
-							debugf("Unknown register: %s\n", this->current_token->data.data_s);
+							char buf[256] = { 0 };
+							sprintf(buf, "Unknown register: %s", this->current_token->data.data_s);
+							print_error(this->current_token->data.pos_start, this->current_token->data.pos_end, buf);
 							return true;
 						}
 
 						if (r->data.sreg) {
-							debugf("Expected IR0 and not SREG");
+							print_error(this->current_token->data.pos_start, this->current_token->data.pos_end, "Expected IR0 and not SREG");
 							return true;
 						}
 
@@ -284,7 +293,7 @@ bool generator::gen() {
 					case IR1:
 					{
 						if (this->current_token->data.type != ID) {
-							debugf("Expected ID\n");
+							print_error(this->current_token->data.pos_start, this->current_token->data.pos_end, "Expected ID");
 							return true;
 						}
 
@@ -293,12 +302,14 @@ bool generator::gen() {
 						}, this->current_token->data.data_s);
 
 						if (r == nullptr) {
-							debugf("Unknown register: %s\n", this->current_token->data.data_s);
+							char buf[256] = { 0 };
+							sprintf(buf, "Unknown register: %s", this->current_token->data.data_s);
+							print_error(this->current_token->data.pos_start, this->current_token->data.pos_end, buf);
 							return true;
 						}
 
 						if (r->data.sreg) {
-							debugf("Expected IR1 and not SREG");
+							print_error(this->current_token->data.pos_start, this->current_token->data.pos_end, "Expected IR1 and not SREG");
 							return true;
 						}
 
@@ -308,11 +319,11 @@ bool generator::gen() {
 
 					case IIMM:
 						if (this->current_token->data.type != ID && this->current_token->data.type != NUMBER) {
-							debugf("Expected ID or NUMBER\n");
+							print_error(this->current_token->data.pos_start, this->current_token->data.pos_end, "Expected ID or NUMBER");
 							return true;
 						}
 						if (this->current_token->data.type != ID && this->current_token->data.type != NUMBER) {
-							debugf("Expected ID or NUMBER\n");
+							print_error(this->current_token->data.pos_start, this->current_token->data.pos_end, "Expected ID or NUMBER");
 							return true;
 						}
 						if (this->current_token->data.type == ID) {
@@ -327,12 +338,12 @@ bool generator::gen() {
 
 								this->advance();
 								if (this->current_token->data.type != LPAREN) {
-									debugf("Expected LPAREN\n");
+									print_error(this->current_token->data.pos_start, this->current_token->data.pos_end, "Expected LPAREN");
 									return true;
 								}
 								this->advance();
 								if (this->current_token->data.type != ID && this->current_token->data.type != NUMBER) {
-									debugf("Expected ID or NUMBER\n");
+									print_error(this->current_token->data.pos_start, this->current_token->data.pos_end, "Expected ID or NUMBER");
 									return true;
 								}
 
@@ -347,7 +358,9 @@ bool generator::gen() {
 									}, this->current_token->data.data_s);
 
 									if (l == nullptr) {
-										debugf("Label %s not found\n", this->current_token->data.data_s);
+										char buf[256];
+										sprintf(buf, "Label %s not found", this->current_token->data.data_s);
+										print_error(this->current_token->data.pos_start, this->current_token->data.pos_end, buf);
 										return true;
 									}
 
@@ -363,12 +376,13 @@ bool generator::gen() {
 
 								this->advance();
 								if (this->current_token->data.type != RPAREN) {
-									debugf("Expected RPAREN\n");
+									print_error(this->current_token->data.pos_start, this->current_token->data.pos_end, "Expected RPAREN");
 									return true;
 								}
 							}
 							else {
-								debugf("Expected 'lo' or 'hi'\n");
+								print_error(this->current_token->data.pos_start, this->current_token->data.pos_end, "Expected 'lo' or 'hi'");
+								return true;
 							}
 						}
 						else {
@@ -379,7 +393,7 @@ bool generator::gen() {
 					case SREG:
 					{
 						if (this->current_token->data.type != ID) {
-							debugf("Expected ID\n");
+							print_error(this->current_token->data.pos_start, this->current_token->data.pos_end, "Expected ID");
 							return true;
 						}
 
@@ -388,11 +402,14 @@ bool generator::gen() {
 						}, this->current_token->data.data_s);
 
 						if (r == nullptr) {
-							debugf("Unknown register: %s\n", this->current_token->data.data_s);
+							char buf[256] = { 0 };
+							sprintf(buf, "Unknown register: %s", this->current_token->data.data_s);
+							print_error(this->current_token->data.pos_start, this->current_token->data.pos_end, buf);
+							return true;
 						}
 
 						if (!r->data.sreg) {
-							debugf("Expected SREG");
+							print_error(this->current_token->data.pos_start, this->current_token->data.pos_end, "Expected SREG");
 							return true;
 						}
 
@@ -404,7 +421,7 @@ bool generator::gen() {
 				if (i == 0 && n->data.operands[1] != NONE) {
 					this->advance();
 					if (this->current_token->data.type != COMMA) {
-						debugf("Expected COMMA\n");
+						print_error(this->current_token->data.pos_start, this->current_token->data.pos_end, "Expected COMMA");
 						return true;
 					}
 				}
