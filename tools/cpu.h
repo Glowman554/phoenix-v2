@@ -128,7 +128,7 @@ typedef PACK(struct instruction {
 #define OUT(a, reg) INSTR(INSTR_OUT, reg, 0, 0)
 #define INP(reg, a) INSTR(INSTR_INP, reg, 0, 0)
 
-#define JNZ(a) INSTR(INSTR_JNZ, 0, 0, 0)
+#define JNZ(a) a == A ? INSTR(INSTR_JNZA, 0, 0, 0) : INSTR(INSTR_JNZB, 0, 0, 0)
 #define ADD(reg1, reg2) INSTR(INSTR_ADD, reg1, reg2, 0)
 #define ADDI(reg1, imm) INSTR(INSTR_ADDI, reg1, 0, imm)
 
@@ -144,11 +144,11 @@ typedef PACK(struct instruction {
 #define CMP(reg1, reg2) INSTR(INSTR_CMP, reg1, reg2, 0)
 #define CMPI(reg1, imm) INSTR(INSTR_CMPI, reg1, 0, imm)
 
-#define JZR(a) INSTR(INSTR_JZR, 0, 0, 0)
+#define JZR(a) a == A ? INSTR(INSTR_JZRA, 0, 0, 0) : INSTR(INSTR_JZRB, 0, 0, 0)
 
-#define LDR(reg, a) INSTR(INSTR_LDR, reg, 0, 0)
-#define WTR(a, reg) INSTR(INSTR_WTR, reg, 0, 0)
+#define LDR(reg, a) a == A ? INSTR(INSTR_LDRA, reg, 0, 0) : INSTR(INSTR_LDRB, reg, 0, 0)
+#define WTR(a, reg) a == A ? INSTR(INSTR_WTRA, reg, 0, 0) : INSTR(INSTR_WTRB, reg, 0, 0)
 
-#define JMP(a) INSTR(INSTR_JMP, 0, 0, 0)
-#define JEQ(a) INSTR(INSTR_JEQ, 0, 0, 0)
-#define JNQ(a) INSTR(INSTR_JNQ, 0, 0, 0)
+#define JMP(a) a == A ? INSTR(INSTR_JMPA, 0, 0, 0) : INSTR(INSTR_JMPB, 0, 0, 0)
+#define JEQ(a) a == A ? INSTR(INSTR_JEQA, 0, 0, 0) : INSTR(INSTR_JEQB, 0, 0, 0)
+#define JNQ(a) a == A ? INSTR(INSTR_JNQA, 0, 0, 0) : INSTR(INSTR_JNQB, 0, 0, 0)
