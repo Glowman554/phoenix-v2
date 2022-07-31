@@ -15,17 +15,14 @@ instruction_t build_lod_instr(int ir0, int ir1, int iimm, int sreg) {
 }
 
 instruction_t build_out_instr(int ir0, int ir1, int iimm, int sreg) {
-	assert(sreg == A);
 	return OUT(sreg, ir0);
 }
 
 instruction_t build_inp_instr(int ir0, int ir1, int iimm, int sreg) {
-	assert(sreg == A);
 	return INP(sreg, ir0);
 }
 
 instruction_t build_jnz_instr(int ir0, int ir1, int iimm, int sreg) {
-	assert(sreg == A);
 	return JNZ(sreg);
 }
 
@@ -70,31 +67,25 @@ instruction_t build_cmpi_instr(int ir0, int ir1, int iimm, int sreg) {
 }
 
 instruction_t build_jzr_instr(int ir0, int ir1, int iimm, int sreg) {
-	assert(sreg == A);
 	return JZR(sreg);
 }
 
 instruction_t build_ldr_instr(int ir0, int ir1, int iimm, int sreg) {
-	assert(sreg == A);
 	return LDR(ir0, sreg);
 }
 
 instruction_t build_wtr_instr(int ir0, int ir1, int iimm, int sreg) {
-	assert(sreg == A);
 	return WTR(sreg, ir0);
 }
 
 instruction_t build_jmp_instr(int ir0, int ir1, int iimm, int sreg) {
-	assert(sreg == A);
 	return JMP(sreg);
 }
 
 instruction_t build_jeq_instr(int ir0, int ir1, int iimm, int sreg) {
-	assert(sreg == A);
 	return JEQ(sreg);
 }
 
 instruction_t build_jnq_instr(int ir0, int ir1, int iimm, int sreg) {
-	assert(sreg == A);
 	return JNQ(sreg);
 }

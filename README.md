@@ -1,7 +1,5 @@
 # Architecture
 
-![](cpuv2_block_diagram.png)
-
 ## Registers
 
 The cpu contains 3 registers:

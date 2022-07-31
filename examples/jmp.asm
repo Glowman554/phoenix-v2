@@ -1,6 +1,6 @@
-lod r0, lo(jmphere)
-lod r1, hi(jmphere)
-jmp A
+lod r2, lo(jmphere)
+lod r3, hi(jmphere)
+jmp B
 nop
 
 jmphere:

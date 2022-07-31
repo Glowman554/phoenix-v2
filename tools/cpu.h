@@ -13,7 +13,7 @@
 
 // X == implemented, - == not yet implemented
 
-#define PUT_A_ADDR			(1 << 0) // X
+#define PUT_A_ADDR		(1 << 0) // X
 
 #define PUT_IR0_DB		(1 << 1) // X
 #define PUT_IR1_DB		(1 << 2) // X
@@ -50,6 +50,8 @@
 #define IO_IN			(1 << 22) // -
 #define IO_OUT			(1 << 23) // -
 
+#define PUT_B_ADDR		(1 << 24) // -
+
 #define FINISH			(1 << 31) // X
 
 #define MAX_INSTR 0xff
@@ -69,7 +71,7 @@
 #define INSTR_OUT 0x3	// X
 #define INSTR_INP 0x4	// X
 
-#define INSTR_JNZ 0x5	// X
+#define INSTR_JNZA 0x5	// X
 #define INSTR_ADD 0x6	// X
 #define INSTR_ADDI 0x7	// X
 
@@ -84,15 +86,23 @@
 #define INSTR_CMP 0xe	// X
 #define INSTR_CMPI 0xf	// X
 
-#define INSTR_JZR 0x10	// X
+#define INSTR_JZRA 0x10	// X
 
-#define INSTR_LDR 0x11	// X
-#define INSTR_WTR 0x12	// X
+#define INSTR_LDRA 0x11	// X
+#define INSTR_WTRA 0x12	// X
 
-#define INSTR_JMP 0x13	// X
-#define INSTR_JEQ 0x14	// X
-#define INSTR_JNQ 0x15	// X
+#define INSTR_JMPA 0x13	// X
+#define INSTR_JEQA 0x14	// X
+#define INSTR_JNQA 0x15	// X
 
+#define INSTR_JNZB 0x16	// -
+#define INSTR_JZRB 0x17	// -
+#define INSTR_JMPB 0x18	// -
+#define INSTR_JEQB 0x19	// -
+#define INSTR_JNQB 0x1a	// -
+
+#define INSTR_LDRB 0x1b	// -
+#define INSTR_WTRB 0x1c	// -
 
 typedef PACK(struct instruction {
 	uint8_t opcode;
@@ -104,12 +114,14 @@ typedef PACK(struct instruction {
 #define R0 0
 #define R1 1
 #define R2 2
+#define R3 3
 
-#define A
+#define A 4
+#define B 5
 
 #define INSTR(opcode_, reg1_, reg2_, imm_) ((instruction_t) { .opcode = opcode_, .reg1 = reg1_, .reg2 = reg2_, .imm = imm_ })
 
-#define NOP()
+#define NOP() INSTR(INSTR_NOP, 0, 0, 0)
 #define MOV(reg1, reg2) INSTR(INSTR_MOV, reg1, reg2, 0)
 #define LOD(reg, imm) INSTR(INSTR_LOD, reg, 0, imm)
 

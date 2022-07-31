@@ -60,7 +60,9 @@ generator::generator(list<lexer_token_t>* tokens) : register_names(10), instruct
 	register_names.add(register_name((char*)"r0", R0, false));
 	register_names.add(register_name((char*)"r1", R1, false));
 	register_names.add(register_name((char*)"r2", R2, false));
+	register_names.add(register_name((char*)"r3", R3, false));
 	register_names.add(register_name((char*) "A", A, true));
+	register_names.add(register_name((char*) "B", B, true));
 
 	instruction_builders.add(instruction_builder((char*)"nop", NONE, NONE, build_nop_instr));
 	instruction_builders.add(instruction_builder((char*)"mov", IR0, IR1, build_mov_instr));
