@@ -42,6 +42,15 @@
 
 0x15 JNQ A					-> jump if not equals
 
+0x16 JNZ B					-> jump if not zero
+0x17 JZR B					-> jump if zero
+0x18 JMP B					-> jump to B
+0x19 JEQ B					-> jump if equals
+0x1A JNQ B					-> jump if not equals
+
+0x1B: LDR <reg> B 			-> load one byte from address B into reg
+0x1C: WTR B <reg>			-> writes one byte from register to address B
+
 === INSTRUCTION ENCODING ===
 A instruction has a fixed size of 24bit, and can never contain two imm8.
 
@@ -56,12 +65,13 @@ last 8bit = optional imm8
 the halt bit gets set if pc == 0xffff
 
 === REGISTERS ===
-The cpu contains three general purpose registers (r0-r2), one stack pointer (sp), as well as one flag register (fg), and a program counter (pc)
-r0 + r1 add to make the address (A) register used in jmp's and memory accesses
+The cpu contains four general purpose registers (r0-r4), as well as one flag register (fg), and a program counter (pc)
+r0 + r1 add to make the address (A) register and r2 + r3 add to make the address (B) register used in jmp's and memory accesses
 
 0: r0 (8bit) -> AL
 1: r1 (8bit) -> AH
-2: r2 (8bit)
+2: r2 (8bit) -> BL
+3: r3 (8bit) -> BH
 
 14: fg (4bit)
     -> bit 0: zero
