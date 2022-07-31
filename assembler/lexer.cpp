@@ -212,6 +212,14 @@ bool lexer::lex() {
 			}
 			break;
 
+			case ';':
+			{
+				while (this->current_char != '\n' && this->current_char != '\0') {
+					this->advance();
+				}
+			}
+			break;
+
 			default:
 				print_error(this->pos, this->pos + 1, "Unexpected token");
 				return true;
