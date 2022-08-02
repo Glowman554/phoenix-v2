@@ -1,16 +1,12 @@
 entry:
-	lod r0, lo(subproc)
-	lod r1, hi(subproc)
+	lod r0, 10
+	lod r1, 20
 	lod r2, lo(ret)
 	lod r3, hi(ret)
-	jmp A
+	jmpi addr(subprocadd)
 ret:
-	lod r0, lo(0xffff)
-	lod r1, hi(0xffff)
-	jmp A
+	jmpi 0xffff
 
-subproc:
-	lod r0, 10
-	lod r1, 11
+subprocadd:
 	add r0, r1
 	jmp B
