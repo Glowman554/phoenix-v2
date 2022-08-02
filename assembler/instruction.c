@@ -89,3 +89,23 @@ instruction_t build_jeq_instr(int ir0, int ir1, int iimm, int sreg) {
 instruction_t build_jnq_instr(int ir0, int ir1, int iimm, int sreg) {
 	return JNQ(sreg);
 }
+
+instruction_t build_jmpi_instr(int ir0, int ir1, int iimm, int sreg) {
+	return JMPI(iimm);
+}
+
+instruction_t build_jeqi_instr(int ir0, int ir1, int iimm, int sreg) {
+	return JEQI(iimm);
+}
+
+instruction_t build_jnqi_instr(int ir0, int ir1, int iimm, int sreg) {
+	return JNQI(iimm);
+}
+
+instruction_t build_jzri_instr(int ir0, int ir1, int iimm, int sreg) {
+	return JZRI(iimm);
+}
+
+instruction_t build_jnzi_instr(int ir0, int ir1, int iimm, int sreg) {
+	return JNZI(iimm);
+}

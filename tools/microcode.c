@@ -130,6 +130,27 @@ int main() {
 	microcode[INSTR_WTRB << 3 | MICROCODE_STEP_0] = PUT_B_ADDR | SAVE_DB_MEM | PUT_IR0_DB;
 	microcode[INSTR_WTRB << 3 | MICROCODE_STEP_1] = FINISH;
 
+	microcode[INSTR_JMPI << 3 | MICROCODE_STEP_0] = PUT_IADR_ADDR | SAVE_PCB;
+	microcode[INSTR_JMPI << 3 | MICROCODE_STEP_1] = PC_FLUSH;
+	microcode[INSTR_JMPI << 3 | MICROCODE_STEP_3] = FINISH;
+
+	microcode[INSTR_JEQI << 3 | MICROCODE_STEP_0] = PUT_IADR_ADDR | SAVE_PCB_IF_EQ;
+	microcode[INSTR_JEQI << 3 | MICROCODE_STEP_1] = PC_FLUSH_COND;
+	microcode[INSTR_JEQI << 3 | MICROCODE_STEP_2] = FINISH;
+
+	microcode[INSTR_JNQI << 3 | MICROCODE_STEP_0] = PUT_IADR_ADDR | COND_INVERT | SAVE_PCB_IF_EQ;
+	microcode[INSTR_JNQI << 3 | MICROCODE_STEP_1] = PC_FLUSH_COND;
+	microcode[INSTR_JNQI << 3 | MICROCODE_STEP_2] = FINISH;
+
+	microcode[INSTR_JEQI << 3 | MICROCODE_STEP_0] = PUT_IADR_ADDR | SAVE_PCB_IF_EQ;
+	microcode[INSTR_JEQI << 3 | MICROCODE_STEP_1] = PC_FLUSH_COND;
+	microcode[INSTR_JEQI << 3 | MICROCODE_STEP_2] = FINISH;
+
+	microcode[INSTR_JNZI << 3 | MICROCODE_STEP_0] = PUT_IADR_ADDR | COND_INVERT | SAVE_PCB_IF_Z;
+	microcode[INSTR_JNZI << 3 | MICROCODE_STEP_1] = PC_FLUSH_COND;
+	microcode[INSTR_JNZI << 3 | MICROCODE_STEP_2] = FINISH;
+
+
 	FILE* f = fopen("microcode.bin", "wb");
 	fwrite(microcode, sizeof(microcode), 1, f);
 	fclose(f);

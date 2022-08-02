@@ -175,6 +175,9 @@
       <a name="label" val="PUT_B_ADDR"/>
     </comp>
     <comp lib="0" loc="(1020,3740)" name="Transistor"/>
+    <comp lib="0" loc="(1020,3740)" name="Tunnel">
+      <a name="label" val="PUT_IADR_ADDR"/>
+    </comp>
     <comp lib="0" loc="(1020,3770)" name="Transistor"/>
     <comp lib="0" loc="(1020,3800)" name="Transistor"/>
     <comp lib="0" loc="(1020,3830)" name="Transistor"/>
@@ -221,6 +224,16 @@
     <comp lib="0" loc="(1220,2360)" name="Tunnel">
       <a name="facing" val="east"/>
       <a name="label" val="pc_out_address_bus"/>
+    </comp>
+    <comp lib="0" loc="(1250,2710)" name="Splitter">
+      <a name="fanout" val="8"/>
+      <a name="incoming" val="8"/>
+      <a name="spacing" val="3"/>
+    </comp>
+    <comp lib="0" loc="(1250,2950)" name="Splitter">
+      <a name="fanout" val="8"/>
+      <a name="incoming" val="8"/>
+      <a name="spacing" val="3"/>
     </comp>
     <comp lib="0" loc="(1260,2990)" name="Pull Resistor">
       <a name="facing" val="east"/>
@@ -372,6 +385,12 @@
     <comp lib="0" loc="(1260,3710)" name="Tunnel">
       <a name="label" val="PUT_B_ADDR"/>
     </comp>
+    <comp lib="0" loc="(1260,3740)" name="Pull Resistor">
+      <a name="facing" val="east"/>
+    </comp>
+    <comp lib="0" loc="(1260,3740)" name="Tunnel">
+      <a name="label" val="PUT_IADR_ADDR"/>
+    </comp>
     <comp lib="0" loc="(130,1370)" name="Tunnel">
       <a name="facing" val="east"/>
       <a name="label" val="address_bus"/>
@@ -385,6 +404,35 @@
       <a name="facing" val="east"/>
       <a name="label" val="address_bus"/>
       <a name="width" val="16"/>
+    </comp>
+    <comp lib="0" loc="(1310,2490)" name="Transistor"/>
+    <comp lib="0" loc="(1310,2520)" name="Transistor"/>
+    <comp lib="0" loc="(1310,2550)" name="Transistor"/>
+    <comp lib="0" loc="(1310,2580)" name="Transistor"/>
+    <comp lib="0" loc="(1310,2610)" name="Transistor"/>
+    <comp lib="0" loc="(1310,2640)" name="Transistor"/>
+    <comp lib="0" loc="(1310,2670)" name="Transistor"/>
+    <comp lib="0" loc="(1310,2700)" name="Transistor"/>
+    <comp lib="0" loc="(1310,2730)" name="Transistor"/>
+    <comp lib="0" loc="(1310,2760)" name="Transistor"/>
+    <comp lib="0" loc="(1310,2790)" name="Transistor"/>
+    <comp lib="0" loc="(1310,2820)" name="Transistor"/>
+    <comp lib="0" loc="(1310,2850)" name="Transistor"/>
+    <comp lib="0" loc="(1310,2880)" name="Transistor"/>
+    <comp lib="0" loc="(1310,2910)" name="Transistor"/>
+    <comp lib="0" loc="(1310,2940)" name="Transistor"/>
+    <comp lib="0" loc="(1330,2480)" name="Splitter">
+      <a name="facing" val="west"/>
+      <a name="fanout" val="16"/>
+      <a name="incoming" val="16"/>
+      <a name="spacing" val="3"/>
+    </comp>
+    <comp lib="0" loc="(1350,2480)" name="Tunnel">
+      <a name="label" val="address_bus"/>
+      <a name="width" val="16"/>
+    </comp>
+    <comp lib="0" loc="(1380,2950)" name="Tunnel">
+      <a name="label" val="PUT_IADR_ADDR"/>
     </comp>
     <comp lib="0" loc="(140,2530)" name="Tunnel">
       <a name="facing" val="east"/>
@@ -1465,6 +1513,9 @@
       <a name="facing" val="south"/>
     </comp>
     <comp lib="1" loc="(130,2590)" name="OR Gate"/>
+    <comp lib="1" loc="(1330,2950)" name="NOT Gate">
+      <a name="facing" val="west"/>
+    </comp>
     <comp lib="1" loc="(160,2380)" name="AND Gate"/>
     <comp lib="1" loc="(160,2640)" name="OR Gate">
       <a name="facing" val="west"/>
@@ -1670,8 +1721,8 @@
       <a name="addrWidth" val="15"/>
       <a name="appearance" val="logisim_evolution"/>
       <a name="contents">addr/data: 15 8
-2 2 c 2 3 0 18 5*0
-2 0 ff 1 1 0 13
+1d 40 30 1d 40 30 1d 40
+30 1d 40 30
 </a>
       <a name="labelvisible" val="true"/>
     </comp>
@@ -1766,7 +1817,9 @@
 2801 40000 80000000 5*0 1001800 40000 80000000 5*0
 1001000 40000 80000000 5*0 1004000 20000 0 80000000
 4*0 1002000 40000 80000000 5*0 1002800 40000 80000000
-5*0 1010008 80000000 6*0 1008002 80000000
+5*0 1010008 80000000 6*0 1008002 80000000 6*0 2004000
+20000 0 80000000 4*0 2002000 40000 80000000 5*0
+2002800 40000 80000000 13*0 2001800 40000 80000000
 </a>
       <a name="dataWidth" val="32"/>
     </comp>
@@ -1824,12 +1877,33 @@
     <wire from="(110,3130)" to="(130,3130)"/>
     <wire from="(110,3170)" to="(110,3950)"/>
     <wire from="(110,3950)" to="(1000,3950)"/>
+    <wire from="(1230,2710)" to="(1230,2910)"/>
+    <wire from="(1230,2710)" to="(1250,2710)"/>
+    <wire from="(1290,2470)" to="(1290,2500)"/>
+    <wire from="(1290,2500)" to="(1290,2530)"/>
+    <wire from="(1290,2530)" to="(1290,2560)"/>
+    <wire from="(1290,2560)" to="(1290,2590)"/>
+    <wire from="(1290,2590)" to="(1290,2620)"/>
+    <wire from="(1290,2620)" to="(1290,2650)"/>
+    <wire from="(1290,2650)" to="(1290,2680)"/>
+    <wire from="(1290,2680)" to="(1290,2710)"/>
+    <wire from="(1290,2710)" to="(1290,2740)"/>
+    <wire from="(1290,2740)" to="(1290,2770)"/>
+    <wire from="(1290,2770)" to="(1290,2800)"/>
+    <wire from="(1290,2800)" to="(1290,2830)"/>
+    <wire from="(1290,2830)" to="(1290,2860)"/>
+    <wire from="(1290,2860)" to="(1290,2890)"/>
+    <wire from="(1290,2890)" to="(1290,2920)"/>
+    <wire from="(1290,2920)" to="(1290,2950)"/>
+    <wire from="(1290,2950)" to="(1330,2950)"/>
     <wire from="(130,1370)" to="(150,1370)"/>
     <wire from="(130,1790)" to="(130,1820)"/>
     <wire from="(130,1790)" to="(300,1790)"/>
     <wire from="(130,1820)" to="(150,1820)"/>
     <wire from="(130,2590)" to="(260,2590)"/>
     <wire from="(130,960)" to="(150,960)"/>
+    <wire from="(1330,2480)" to="(1350,2480)"/>
+    <wire from="(1360,2950)" to="(1380,2950)"/>
     <wire from="(140,2530)" to="(170,2530)"/>
     <wire from="(1490,1880)" to="(1790,1880)"/>
     <wire from="(1490,1890)" to="(1570,1890)"/>
@@ -2601,7 +2675,7 @@
     <wire from="(510,1610)" to="(530,1610)"/>
     <wire from="(510,2300)" to="(650,2300)"/>
     <wire from="(510,2790)" to="(510,2890)"/>
-    <wire from="(510,2890)" to="(1000,2890)"/>
+    <wire from="(510,2890)" to="(980,2890)"/>
     <wire from="(510,3310)" to="(540,3310)"/>
     <wire from="(520,2550)" to="(520,2580)"/>
     <wire from="(520,2580)" to="(610,2580)"/>
@@ -2651,7 +2725,9 @@
     <wire from="(60,2400)" to="(60,2420)"/>
     <wire from="(60,2400)" to="(70,2400)"/>
     <wire from="(60,2610)" to="(80,2610)"/>
-    <wire from="(600,2790)" to="(600,3290)"/>
+    <wire from="(600,2790)" to="(600,2910)"/>
+    <wire from="(600,2910)" to="(600,3290)"/>
+    <wire from="(600,2910)" to="(850,2910)"/>
     <wire from="(610,1160)" to="(610,1240)"/>
     <wire from="(610,1240)" to="(620,1240)"/>
     <wire from="(610,2550)" to="(610,2580)"/>
@@ -2693,9 +2769,14 @@
     <wire from="(80,2360)" to="(110,2360)"/>
     <wire from="(850,1180)" to="(880,1180)"/>
     <wire from="(850,1240)" to="(880,1240)"/>
+    <wire from="(850,2910)" to="(850,2950)"/>
+    <wire from="(850,2950)" to="(1250,2950)"/>
     <wire from="(850,2990)" to="(910,2990)"/>
     <wire from="(90,2310)" to="(110,2310)"/>
     <wire from="(910,2990)" to="(910,3930)"/>
     <wire from="(910,3930)" to="(960,3930)"/>
+    <wire from="(980,2890)" to="(1000,2890)"/>
+    <wire from="(980,2890)" to="(980,2910)"/>
+    <wire from="(980,2910)" to="(1230,2910)"/>
   </circuit>
 </project>

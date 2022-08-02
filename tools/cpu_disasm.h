@@ -95,6 +95,21 @@ static inline void cpu_disasm(instruction_t instruction, char* out) {
 	case INSTR_WTRB:
 		sprintf(out, "wtr B, %s", regs[instruction.reg1]);
 		break;
+	case INSTR_JMPI:
+		sprintf(out, "jmp 0x%x", instruction.imm16);
+		break;
+	case INSTR_JEQI:
+		sprintf(out, "jeq 0x%x", instruction.imm16);
+		break;
+	case INSTR_JNQI:
+		sprintf(out, "jnq 0x%x", instruction.imm16);
+		break;
+	case INSTR_JZRI:
+		sprintf(out, "jzr 0x%x", instruction.imm16);
+		break;
+	case INSTR_JNZI:
+		sprintf(out, "jnz 0x%x", instruction.imm16);
+		break;
 	default:
 		sprintf(out, "unk 0x%x", instruction.opcode);
 		break;

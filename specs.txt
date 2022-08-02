@@ -51,15 +51,25 @@
 0x1B: LDR <reg> B 			-> load one byte from address B into reg
 0x1C: WTR B <reg>			-> writes one byte from register to address B
 
+0x1d: JMP <imm16>			-> load imm16 into pc
+0x1e: JEQ <imm16>			-> jump if equals
+0x1f: JNQ <imm16>			-> jump if not equals
+0x20: JZR <imm16>			-> jump if zero
+0x21: JNZ <imm16>			-> jump if not zero
+
 === INSTRUCTION ENCODING ===
 A instruction has a fixed size of 24bit, and can never contain two imm8.
 
 00000000 0000 0000 00000000
 
 first 8bit = instruction
-next 4bit  = first optional register
+
 next 4bit  = second optional register
+next 4bit  = first optional register
+
 last 8bit = optional imm8
+
+the register sections can be used as a high part for the imm8 to make it a imm16
 
 === HALTING THE CPU ===
 the halt bit gets set if pc == 0xffff
@@ -133,5 +143,7 @@ Microcode commands:
 
 	IO_IN:			io[address bus] -> data bus
 	IO_OUT:			data bus -> io[address bus]
+
+	PUT_IADR_ADDR:	ir0 + ir1 + imm8 -> address bus
 
 	FINISH:			start next instruction fetch / decode / execute cycle

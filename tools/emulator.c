@@ -186,6 +186,39 @@ bool cpu_tick(cpu_state_t* state) {
 	case INSTR_WTRB:
 		cpu_write_byte(BR, state->regs[instruction.reg1]);
 		break;
+	
+	case INSTR_JMPI:
+		state->pc = instruction.imm16;
+		goto out;
+		break;
+	case INSTR_JEQI:
+		if ((state->fg & FG_EQ) != 0) {
+			debugf("exec jmp\n");
+			state->pc = instruction.imm16;
+			goto out;
+		}
+		break;
+	case INSTR_JNQI:
+		if ((state->fg & FG_EQ) == 0) {
+			debugf("exec jmp\n");
+			state->pc = instruction.imm16;
+			goto out;
+		}
+		break;
+	case INSTR_JZRI:
+		if ((state->fg & FG_ZERO) != 0) {
+			debugf("exec jmp\n");
+			state->pc = instruction.imm16;
+			goto out;
+		}
+		break;
+	case INSTR_JNZI:
+		if ((state->fg & FG_ZERO) == 0) {
+			debugf("exec jmp\n");
+			state->pc = instruction.imm16;
+			goto out;
+		}
+		break;
 	default:
 		debugf("unk instr setting halt flag\n");
 		state->fg |= FG_HALT;

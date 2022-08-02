@@ -50,6 +50,12 @@ extern "C" {
 	instruction_t build_jmp_instr(int ir0, int ir1, int iimm, int sreg);
 	instruction_t build_jeq_instr(int ir0, int ir1, int iimm, int sreg);
 	instruction_t build_jnq_instr(int ir0, int ir1, int iimm, int sreg);
+
+	instruction_t build_jmpi_instr(int ir0, int ir1, int iimm, int sreg);
+	instruction_t build_jeqi_instr(int ir0, int ir1, int iimm, int sreg);
+	instruction_t build_jnqi_instr(int ir0, int ir1, int iimm, int sreg);
+	instruction_t build_jzri_instr(int ir0, int ir1, int iimm, int sreg);
+	instruction_t build_jnzi_instr(int ir0, int ir1, int iimm, int sreg);
 }
 
 generator::generator(list<lexer_token_t>* tokens) : register_names(10), instruction_builders(10) {
@@ -86,6 +92,11 @@ generator::generator(list<lexer_token_t>* tokens) : register_names(10), instruct
 	instruction_builders.add(instruction_builder((char*)"jmp", SREG, NONE, build_jmp_instr));
 	instruction_builders.add(instruction_builder((char*)"jeq", SREG, NONE, build_jeq_instr));
 	instruction_builders.add(instruction_builder((char*)"jnq", SREG, NONE, build_jnq_instr));
+	instruction_builders.add(instruction_builder((char*)"jmpi", IIMM, NONE, build_jmpi_instr));
+	instruction_builders.add(instruction_builder((char*)"jeqi", IIMM, NONE, build_jeqi_instr));
+	instruction_builders.add(instruction_builder((char*)"jnqi", IIMM, NONE, build_jnqi_instr));
+	instruction_builders.add(instruction_builder((char*)"jzri", IIMM, NONE, build_jzri_instr));
+	instruction_builders.add(instruction_builder((char*)"jnzi", IIMM, NONE, build_jnzi_instr));
 }
 
 
@@ -176,7 +187,7 @@ bool generator::gen() {
 							return true;
 						}
 						if (this->current_token->data.type == ID) {
-							if (strcmp(this->current_token->data.data_s, "lo") == 0 || strcmp(this->current_token->data.data_s, "hi") == 0) {
+							if (strcmp(this->current_token->data.data_s, "lo") == 0 || strcmp(this->current_token->data.data_s, "hi") == 0 || strcmp(this->current_token->data.data_s, "addr") == 0) {
 								this->advance();
 								if (this->current_token->data.type != LPAREN) {
 									print_error(this->current_token->data.pos_start, this->current_token->data.pos_end, "Expected '('");
@@ -194,7 +205,7 @@ bool generator::gen() {
 								}
 							}
 							else {
-								print_error(this->current_token->data.pos_start, this->current_token->data.pos_end, "Expected 'lo' or 'hi'");
+								print_error(this->current_token->data.pos_start, this->current_token->data.pos_end, "Expected 'lo' or 'hi' or 'addr'");
 								return true;
 							}
 						}
@@ -330,12 +341,15 @@ bool generator::gen() {
 						}
 						if (this->current_token->data.type == ID) {
 							bool lo_or_hi = false;
-							if (strcmp(this->current_token->data.data_s, "lo") == 0 || strcmp(this->current_token->data.data_s, "hi") == 0) {
+							bool lo_or_hi_found = false;
+							if (strcmp(this->current_token->data.data_s, "lo") == 0 || strcmp(this->current_token->data.data_s, "hi") == 0 || strcmp(this->current_token->data.data_s, "addr") == 0) {
 								if (strcmp(this->current_token->data.data_s, "lo") == 0) {
 									lo_or_hi = false;
+									lo_or_hi_found = true;
 								}
-								else {
+								else if (strcmp(this->current_token->data.data_s, "hi") == 0) {
 									lo_or_hi = true;
+									lo_or_hi_found = true;
 								}
 
 								this->advance();
@@ -365,15 +379,19 @@ bool generator::gen() {
 										print_error(this->current_token->data.pos_start, this->current_token->data.pos_end, buf);
 										return true;
 									}
-
 									num = l->data.address;
 								}
 
-								if (lo_or_hi) {
-									iimm = (num & 0xff00) >> 8;
-								}
-								else {
-									iimm = num & 0x00ff;
+								if (lo_or_hi_found) {
+									if (lo_or_hi) {
+										iimm = (num & 0xff00) >> 8;
+									}
+									else {
+										iimm = num & 0x00ff;
+									}
+								} else {
+									debugf("%d\n", num);
+									iimm = num;
 								}
 
 								this->advance();
@@ -383,7 +401,7 @@ bool generator::gen() {
 								}
 							}
 							else {
-								print_error(this->current_token->data.pos_start, this->current_token->data.pos_end, "Expected 'lo' or 'hi'");
+								print_error(this->current_token->data.pos_start, this->current_token->data.pos_end, "Expected 'lo' or 'hi' or 'addr'");
 								return true;
 							}
 						}
