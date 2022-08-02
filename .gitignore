@@ -1,3 +1,9 @@
 *.elf
 *.bin
 *.o
+
+.sdk
+bin
+lib
+BIN
+disk
