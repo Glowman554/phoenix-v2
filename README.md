@@ -6,9 +6,10 @@ The cpu contains 3 registers:
 
 - R0 (AL)
 - R1 (AH)
-- R2
+- R2 (BL)
+- R3 (BH)
 
-The R0 and R1 registers are used to store the low and high bytes of the A register used for addressing of memory and io.
+The R0 and R1 registers are used to store the low and high bytes of the A register used for addressing of memory and io. The same happens for R2 and R3 wich make the B register.
 All registers are 8 bits wide.
 
 ## Instruction set

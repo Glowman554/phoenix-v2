@@ -1,4 +1,3 @@
-#include <iostream>
 #include <assert.h>
 #include "lexer.h"
 #include "generator.h"
