@@ -237,7 +237,7 @@ out:
 }
 
 void cpu_dbg(cpu_state_t* state, char* out) {
-	sprintf(out, "---- CPU STATE ----\nPC: 0x%x\nFG: %s%s%s%s\nR0: 0x%x, R1: 0x%x, R2: 0x%x, R3: 0x%x\n------------------\n\n", state->pc, (state->fg & FG_ZERO) != 0 ? "FG_ZERO" : "", (state->fg & FG_EQ) != 0 ? "FG_EQ" : "", (state->fg & FG_OV) != 0 ? "FG_OV" : "", (state->fg & FG_HALT) != 0 ? "FG_HALT" : "", state->regs[0], state->regs[1], state->regs[2], state->regs[3]);
+	sprintf(out, "---- CPU STATE ----\nPC: 0x%x\nFG: %s%s%s%s\nR0: 0x%x, R1: 0x%x, R2: 0x%x, R3: 0x%x\n------------------\n\n", state->pc, (state->fg & FG_ZERO) != 0 ? "FG_ZERO " : "", (state->fg & FG_EQ) != 0 ? "FG_EQ " : "", (state->fg & FG_OV) != 0 ? "FG_OV " : "", (state->fg & FG_HALT) != 0 ? "FG_HALT" : "", state->regs[0], state->regs[1], state->regs[2], state->regs[3]);
 }
 
 // -------------------------------------------------------------------------
