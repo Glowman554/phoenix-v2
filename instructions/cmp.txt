@@ -1,0 +1,30 @@
+cmp r1, r2 ->
+start
+	if r1 == 0
+		set zero
+	else
+		unset zero
+	fi
+
+	if r1 == r2
+		set eq
+	else
+		unset eq
+	fi
+finish
+
+
+cmp r, imm8 ->
+start
+	if r == 0
+		set zero
+	else
+		unset zero
+	fi
+
+	if r == imm8
+		set eq
+	else
+		unset eq
+	fi
+finish

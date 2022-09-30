@@ -1,0 +1,4 @@
+mov r1, r2 ->
+start
+	r1 = r2
+finish

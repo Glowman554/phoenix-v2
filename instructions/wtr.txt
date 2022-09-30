@@ -1,0 +1,6 @@
+wtr A?B, r ->
+A = (r0:r1)
+B = (r2:r3)
+start
+	mem[A?B] = r
+finish

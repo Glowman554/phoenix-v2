@@ -1,0 +1,8 @@
+jnq A?B?imm16 ->
+A = (r0:r1)
+B = (r2:r3)
+start
+	if eq isnotset
+		pc = A?B?imm16
+	fi
+finish

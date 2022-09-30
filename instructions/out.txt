@@ -1,0 +1,5 @@
+out a, r ->
+A = (r0:r1)
+start
+	io[a] = r
+finish
