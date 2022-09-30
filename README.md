@@ -32,7 +32,7 @@ the register sections can be used as a high part for the imm8 to make it a imm16
 ## IO
 
 The io can vary depending on the implementation. Generally, there are 2 control lines called IO_IN and IO_OUT which are used to control the IO device.
-The IO device should read the value of the address bus and depending on the control lines, write the value to the data bus or read the value from the data bus.
+The IO device should read the io address of the address bus and depending on the control lines, write the value to the data bus or read the value from the data bus.
 
 ## Memory
 
