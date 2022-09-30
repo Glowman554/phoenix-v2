@@ -44,3 +44,5 @@ The recommended memory layout is:
 - 0x8000 - 0xffff = general purpose ram
 
 The cpu halts the execution when the program counter gets set to 0xffff either from reaching the end of the memory space or from an JMP instruction loading 0xffff into the program counter.
+
+![cpu](cpu.svg)
