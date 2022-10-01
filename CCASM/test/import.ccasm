@@ -1,0 +1,4 @@
+import "file.ccasm"
+
+_start:
+    jmp _start
