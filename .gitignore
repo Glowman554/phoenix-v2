@@ -1,6 +1,7 @@
 *.elf
 *.bin
 *.o
+*.hex
 
 .sdk
 bin
