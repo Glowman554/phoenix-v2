@@ -199,8 +199,8 @@ void debugf(const char* fmt, ...) {
 }
 
 void cpu_disasm(instruction_t instruction, char* out) {
-  char* regs[] = { "r0", "r1", "r2", "r3" };
-
+  char* regs[] = { "r0", "r1", "r2", "r3", "unk", "unk", "unk", "unk", "unk", "unk", "unk", "unk", "unk", "unk", "unk", "unk" };
+  
   switch (instruction.opcode) {
     case INSTR_NOP:
       sprintf(out, "nop");
