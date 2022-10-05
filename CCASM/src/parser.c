@@ -5,6 +5,7 @@
 #include <stdlib.h>
 #include <strings.h>
 #include <stdio.h>
+#include <string.h>
 
 int instruction_count = 0; // offset by instr_count >> 24bits
 int p_pos = -1;
