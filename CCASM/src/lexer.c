@@ -1,30 +1,54 @@
 #include "include/lexer.h"
 #include "include/errors.h"
+#include "include/utils.h"
 #include <stdio.h>
+#include <string.h>
 
-void advance(int* pos, size_t* token_len, eof* is_eof) {
-    if ((*pos) > (int)(*token_len)) ++*is_eof;
-    else ++*pos;
+int pos = -1;
+size_t code_len = 0;
+char* code;
+char current_char = '\0';
+
+void advance() {
+    if (pos > (int)code_len) current_char = '\0';
+    else {
+        pos++;
+        current_char = code[pos];
+    }
 }
 
-token_t lex_number(char* code, size_t code_len, int* pos) {
-    eof is_eof = false;
+token_t lex_id() {
+    token_t t = {.type = ID};
+    int start_pos = pos;
+    while (current_char != '\0' && (in_bounds(current_char, 'a', 'z') || in_bounds(current_char, 'A', 'Z') || current_char == '_')) {
+        if ((pos - start_pos) >= (MAX_LABEL_SIZE-1)) {
+            // error. Label to long
+            throw_error("Label to long!", true);
+        }
+        t.string_data[pos - start_pos] = current_char;
+        advance();
+    }
+    t.string_data[pos-start_pos] = '\0';
+    return t;
+}
+
+token_t lex_number() {
     int base = 10;
     int start_range1 = '0';
     int end_range1   = '9';
     int start_range2 = 'a';
     int end_range2   = 'f';
 
-    if (code[*pos] == '0') {
-        if (*pos+1 <= (int)code_len && code[*pos+1] == 'x') {
+    if (code[pos] == '0') {
+        if (pos+1 <= (int)code_len && code[pos+1] == 'x') {
             // base 16
-            advance(pos, &code_len, &is_eof);
-            advance(pos, &code_len, &is_eof);
+            advance();
+            advance();
             base = 16;
-        } else if (*pos+1 <= (int)code_len && code[*pos+1] == 'b') {
+        } else if (pos+1 <= (int)code_len && code[pos+1] == 'b') {
             // base 2
-            advance(pos, &code_len, &is_eof);
-            advance(pos, &code_len, &is_eof);
+            advance();
+            advance();
             base = 2;
             start_range1 = '0';
             end_range1   = '1';
@@ -43,8 +67,10 @@ token_t lex_number(char* code, size_t code_len, int* pos) {
         end_range2 = end_range1;
     }
     int number = 0;
-    for (;!is_eof && (code[*pos] >= start_range1 && code[*pos] <= end_range1) && (code[*pos] >= start_range2 && code[*pos] <= end_range2); advance(pos, &code_len, &is_eof)) {
-        number += (code[*pos] - start_range2) * base;
+    for (int s = 0;current_char != '\0' && ((current_char >= start_range1 && current_char <= end_range1) || (current_char >= start_range2 && current_char <= end_range2)); advance(), s++) {
+        if (base == 16) number = (number * base) + (current_char - start_range2 + 10);
+        //else if (base == 2)
+        else number = (number * base) + (current_char - start_range2);
     }
 
     if (number > MAX_INTEGER_SIZE) {
@@ -58,22 +84,22 @@ token_t lex_number(char* code, size_t code_len, int* pos) {
 
 
 // realloc tokens and append
-token_t* append_token(token_t* a, size_t* b, token_t c) {
-    if (*b == 0) {
-        a[0] = c;
-    } else {
-        a = realloc(a, (*++b)*sizeof(token_t));
-        a[*b] = c;
-    }
+token_t* append_token(token_t* a, int* b, token_t c) {
+    a = realloc(a, ((*b)++)*sizeof(token_t));
+    a[(*b)-1] = c;
     return a;
 }
 
-token_t* lex(char* code, size_t code_len, size_t* number_of_tokens_produced) {
-    eof is_eof = false;
+token_t* lex(char* _code, size_t _code_len, int* number_of_tokens_produced) {
+    code = malloc((strlen(_code)+1)*sizeof(char));
+    *number_of_tokens_produced = 0;
+    strcpy(code, _code);
+    code_len = _code_len;
     token_t* tokens = malloc(sizeof(token_t));
+    advance();
+    
 
-    for (int pos = 0; !is_eof; advance(&pos, &code_len, &is_eof)) {
-        char current_char = code[pos];
+    for (; current_char != '\0'; advance()) {
         switch (current_char) {
             case ' ':  break;
             case '\n': break;
@@ -98,12 +124,17 @@ token_t* lex(char* code, size_t code_len, size_t* number_of_tokens_produced) {
             default:
             {
                 // check for IDs and Numbers. otherwise throw error
-                if (current_char == '_' || (current_char >= 'a' && current_char <= 'z') || (current_char >= 'A' && current_char <= 'Z')) {
+                if (in_bounds(current_char, 'a', 'z') || in_bounds(current_char, 'A', 'Z') || current_char == '_') {
                     // ID
+                    token_t token_to_append = lex_id();
+                    tokens = append_token(tokens, number_of_tokens_produced, token_to_append);
 
-                } else if (current_char >= '0' && current_char <= '9')  {
+                    pos--;
+                } else if (in_bounds(current_char, '0', '9'))  {
                     // Number
-                    tokens = append_token(tokens, number_of_tokens_produced, lex_number(code, code_len, &pos));
+                    token_t token_to_append = lex_number();
+                    tokens = append_token(tokens, number_of_tokens_produced, token_to_append);
+                    pos--;
                 } else {
                     char str[17];
                     sprintf(str, "Unknown Token: %d", current_char);
@@ -112,5 +143,6 @@ token_t* lex(char* code, size_t code_len, size_t* number_of_tokens_produced) {
             } break;
         }
     }
+
     return tokens;
 }

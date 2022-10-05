@@ -2,9 +2,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-void throw_error(char* str, bool quit) {
-    printf("%sERROR: %s%s\n", RED, str, COLOR_RESET);
-    if (quit) {
+void throw_error(char* str, bool err) {
+    if (err) {
+        fprintf(stderr, "%sERROR: %s%s\n", RED, str, COLOR_RESET);
         exit(1);
-    }
+    } else;
 }
