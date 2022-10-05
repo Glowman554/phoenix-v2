@@ -1,6 +1,6 @@
 #pragma once
 
-#include "cpu.h"
+#include <cpu.h>
 #include <stdio.h>
 
 static inline void cpu_disasm(instruction_t instruction, char* out) {
