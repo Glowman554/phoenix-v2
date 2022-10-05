@@ -390,7 +390,7 @@ bool generator::gen() {
 										iimm = num & 0x00ff;
 									}
 								} else {
-									debugf("%d\n", num);
+									// debugf("%d\n", num);
 									iimm = num;
 								}
 
