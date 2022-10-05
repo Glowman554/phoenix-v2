@@ -5,12 +5,20 @@ function install {
 	sudo cp -v $1 /bin/$PREFIX$2
 }
 
-make -C tools
-make -C assembler
-make -C visual_emu
+function build {
+	echo "Building $1"
+	make -C $1 clean -i
+	make -C $1
+}
 
-install tools/disassembler.elf disasm
-install tools/emulator.elf emu
-install tools/microcode.elf microcode
-install assembler/as.elf as
-install visual_emu/visual_emu.elf emu-visual
+build tools/assembler
+build tools/disassembler
+build tools/emulator
+build tools/microcode
+build tools/visual_eumlator
+
+install tools/assembler/assembler.elf as
+install tools/disassembler/disassembler.elf disasm
+install tools/emulator/emulator.elf emu
+install tools/microcode/microcode.elf microcode
+install tools/visual_eumlator/visual_eumlator.elf emu-visual

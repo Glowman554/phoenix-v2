@@ -1,0 +1,16 @@
+CC = clang
+CFLAGS = -Iinclude -I../common -g
+
+OBJS = $(patsubst %.c,%.o,$(wildcard *.c))
+
+OUTPUT = microcode.elf
+
+$(OUTPUT): $(OBJS)
+	$(CC) $(CFLAGS) $^ -o $@
+
+clean:
+	rm $(OBJS) $(OUTPUT)
+
+%.o: %.c
+	$(CC) $(CFLAGS) -c $< -o $@
+
