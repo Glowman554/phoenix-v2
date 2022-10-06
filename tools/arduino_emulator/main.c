@@ -25,20 +25,27 @@ void cpu_write_byte(uint16_t addr, uint8_t val) {
 	}
 }
 
-uint8_t* io_mapping[] = {
-    (uint8_t*) 0x23, // PINB
-    (uint8_t*) 0x24, // DDRB
-    (uint8_t*) 0x25, // PORTB
-};
-
 uint8_t cpu_io_read(uint16_t addr) {
 	// debugf("reading byte from io at 0x%x", addr);
-	return *io_mapping[addr];
+    switch (addr) {
+        case 0x0:
+            return PIND;
+        default:
+            debugf("invalid io address %x", addr);
+            return 0x0;
+    }
 }
 
 void cpu_io_write(uint16_t addr, uint8_t val) {
 	// debugf("writing byte 0x%x to io at 0x%x", val, addr);
-    *io_mapping[addr] = val;
+    switch (addr) {
+        case 0x0:
+            PORTB = val;
+            return;
+        default:
+            debugf("invalid io address %x", addr);
+            return;
+    }
 }
 
 void main() {
@@ -51,6 +58,10 @@ void main() {
     if (!(PINB & _BV(DDB4))) { // go into programing mode if pin 12 is pulled low
 		programing_mode();
     } else {
+        DDRB = 0xff; // set pb0 - pb7 as output
+        DDRD = 0x0; // set pd0 - pd7 as input
+        PORTD = 0x0; // set pd0 - pd7 no pull
+
 	    core_run();
 
 	    // PORTB |= _BV(DDB5);

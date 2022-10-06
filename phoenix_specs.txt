@@ -101,7 +101,17 @@ r0 + r1 add to make the address A register and r2 + r3 add to make the address B
 Code execution starts at 0x0
 
 === I/O ===
-can vary
+
+The cpu can have multiple io ports. The following io ports exsist:
+
+0x0: GPIO
+
+=== GPIO ===
+
+The Gpio port consists of 8 input and 8 output pins.
+The value of the 8 input pins can be read using the inp instruction.
+The value of the 8 output pins can be set using the out instruction.
+The gpio pins do not need any configuration.
 
 === MICROCODE ===
 
