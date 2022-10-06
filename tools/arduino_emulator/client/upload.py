@@ -15,5 +15,3 @@ with open(sys.argv[2], 'rb') as f:
             exit(0)
 
 tunnel.command("EXIT")
-tunnel.port.close()
-exit(0)
