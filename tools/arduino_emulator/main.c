@@ -35,14 +35,18 @@ void cpu_io_write(uint16_t addr, uint8_t val) {
 
 void main() {
 	DDRB |= _BV(DDB5);
-
+    DDRB &= ~_BV(DDB4); // set pin 12 input
+    PORTB |= _BV(DDB4); // set pull-up for pin 12
+    
 	USART0_init();
 
-	write_program_to_eeprom();
-	core_run();
+    if (!(PINB & _BV(DDB4))) { // go into programing mode if pin 12 is pulled low
+		programing_mode();
+    } else {
+	    core_run();
 
-	PORTB |= _BV(DDB5);
-
+	    PORTB |= _BV(DDB5);
+    }
 	while (1) {
 	}
 }

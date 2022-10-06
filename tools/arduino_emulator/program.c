@@ -1,19 +1,75 @@
 #include <program.h>
-#include <cpu.h>
-#include <cpu_core.h>
+#include <avr/io.h>
+#include <stdint.h>
+#include <usart.h>
+#include <avr/eeprom.h>
+#include <string.h>
+#include <stdio.h>
 
-void write_program_to_eeprom() {
-	cpu_write_instruction(LOD(R0, 0), 0 * sizeof(instruction_t));
-	cpu_write_instruction(LOD(R1, 1), 1 * sizeof(instruction_t));
-	cpu_write_instruction(LOD(R2, 12), 2 * sizeof(instruction_t)); //  compute the 13th fibonacci number leaves the result in r3
-	// loop:
-	cpu_write_instruction(MOV(R3, R0), 3 * sizeof(instruction_t));
-	cpu_write_instruction(ADD(R3, R1), 4 * sizeof(instruction_t));
-	cpu_write_instruction(MOV(R0, R1), 5 * sizeof(instruction_t));
-	cpu_write_instruction(MOV(R1, R3), 6 * sizeof(instruction_t));
-	cpu_write_instruction(SUBI(R2, 1), 7 * sizeof(instruction_t));
-	cpu_write_instruction(CMPI(R2, 0), 8 * sizeof(instruction_t));
-	cpu_write_instruction(JNZI(3 * sizeof(instruction_t)), 9 * sizeof(instruction_t)); // jmp not zero to loop
-	// done:
-	cpu_write_instruction(JMPI(0xffff), 10 * sizeof(instruction_t)); // jump to 0xffff halts the cpu
+char* parse_number(char* input, int* output) {
+	int idx = 0;
+	int number_system_base = 10;
+
+	if (input[0] == '0') {
+		if (input[1] == 'x') {
+			number_system_base = 16;
+			idx = 2;
+		} else if (input[1] == 'b') {
+			number_system_base = 2;
+			idx = 2;
+		}
+	}
+
+	int _number = 0;
+
+	while (input[idx] != '\0') {
+		if (input[idx] >= '0' && input[idx] <= '9') {
+			_number = _number * number_system_base + (input[idx] - '0');
+		} else if (input[idx] >= 'a' && input[idx] <= 'f') {
+			_number = _number * number_system_base + (input[idx] - 'a' + 10);
+		} else if (input[idx] >= 'A' && input[idx] <= 'F') {
+			_number = _number * number_system_base + (input[idx] - 'A' + 10);
+		} else {
+			break;
+		}
+
+		idx++;
+	}
+
+	*output = _number;
+
+	return &input[idx];
+}
+
+void programing_mode() {
+    USART0_transmit_str("READY\n");
+
+	while (1) {
+        char buf[0xff] = { 0 };
+        USART0_receive_until(buf, '\n');
+
+        if (strcmp(buf, "PING") == 0) {
+        } else if(strncmp(buf, "READ ", 5) == 0) {
+            int n;
+            parse_number(&buf[5], &n);
+            char out[32] = { 0 };
+            sprintf(out, "%d\n", eeprom_read_byte((uint8_t*) n));
+            USART0_transmit_str(out);
+            continue;
+        } else if(strncmp(buf, "WRITE ", 6) == 0) {
+            int addr;
+            char* new = parse_number(&buf[6], &addr);
+            int val;
+            parse_number(&new[1], &val);
+            eeprom_write_byte((uint8_t*) addr, val);
+        } else {
+            goto error;
+        }
+
+        USART0_transmit_str("OK\n");
+        continue;
+
+    error:
+        USART0_transmit_str("ERROR\n");
+	}
 }

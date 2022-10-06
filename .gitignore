@@ -8,3 +8,5 @@ bin
 lib
 BIN
 disk
+
+__pycache__

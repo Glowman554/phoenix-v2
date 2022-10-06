@@ -29,3 +29,22 @@ void USART0_transmit_str(const char* str) {
 		USART0_transmit(*str++);
 	}
 }
+
+unsigned char USART0_receive() {
+    // Wait for data to be received
+    while (!(UCSR0A & (1 << RXC0)));
+
+    // Get and return received data from buffer
+    return UDR0;
+}
+
+int USART0_receive_until(unsigned char* out, char delim) {
+    int bytes = 0;
+    char buf = 0;
+
+    while ((buf = USART0_receive()) != delim) {
+        out[bytes++] = buf;
+    }
+
+    return bytes;
+}
