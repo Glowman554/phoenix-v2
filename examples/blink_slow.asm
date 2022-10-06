@@ -1,9 +1,11 @@
 entry:
     lod r0, lo(0x0) ; io port 0
     lod r1, hi(0x0)
-    lod r5, 0
+    lod r5, 0b00100000
 loop:
+    nori r5, 0
     nadi r5, 0b00100000 ; toggle pin 5
+    nori r5, 0
     out A, r5
 
 
