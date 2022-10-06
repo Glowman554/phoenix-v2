@@ -45,7 +45,8 @@ char* parse_number(char* input, int* output) {
 void programing_mode() {
     USART0_transmit_str("READY\n");
 
-	while (1) {
+    bool running = true;
+	while (running) {
         char buf[0xff] = { 0 };
         USART0_receive_until(buf, '\n');
 
@@ -64,8 +65,7 @@ void programing_mode() {
             parse_number(&new[1], &val);
             cpu_write_byte(addr, val);
         } else if (strcmp(buf, "EXIT") == 0) {
-            USART0_transmit_str("EXIT\n");
-            return;
+            running = false;
         } else {
             goto error;
         }
