@@ -5,6 +5,7 @@
 #include <avr/eeprom.h>
 #include <string.h>
 #include <stdio.h>
+#include <cpu_core.h>
 
 char* parse_number(char* input, int* output) {
 	int idx = 0;
@@ -50,10 +51,10 @@ void programing_mode() {
 
         if (strcmp(buf, "PING") == 0) {
         } else if(strncmp(buf, "READ ", 5) == 0) {
-            int n;
-            parse_number(&buf[5], &n);
+            int addr;
+            parse_number(&buf[5], &addr);
             char out[32] = { 0 };
-            sprintf(out, "%d\n", eeprom_read_byte((uint8_t*) n));
+            sprintf(out, "%d\n", cpu_fetch_byte(addr));
             USART0_transmit_str(out);
             continue;
         } else if(strncmp(buf, "WRITE ", 6) == 0) {
@@ -61,7 +62,10 @@ void programing_mode() {
             char* new = parse_number(&buf[6], &addr);
             int val;
             parse_number(&new[1], &val);
-            eeprom_write_byte((uint8_t*) addr, val);
+            cpu_write_byte(addr, val);
+        } else if (strcmp(buf, "EXIT") == 0) {
+            USART0_transmit_str("EXIT\n");
+            return;
         } else {
             goto error;
         }

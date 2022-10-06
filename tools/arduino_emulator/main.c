@@ -57,15 +57,16 @@ void main() {
 
     if (!(PINB & _BV(DDB4))) { // go into programing mode if pin 12 is pulled low
 		programing_mode();
-    } else {
-        DDRB = 0xff; // set pb0 - pb7 as output
-        DDRD = 0x0; // set pd0 - pd7 as input
-        PORTD = 0x0; // set pd0 - pd7 no pull
-
-	    core_run();
-
-	    // PORTB |= _BV(DDB5);
     }
+
+    DDRB = 0xff; // set pb0 - pb7 as output
+    DDRD = 0x0; // set pd0 - pd7 as input
+    PORTD = 0x0; // set pd0 - pd7 no pull
+
+	core_run();
+
+	// PORTB |= _BV(DDB5);
+    
 	while (1) {
 	}
 }

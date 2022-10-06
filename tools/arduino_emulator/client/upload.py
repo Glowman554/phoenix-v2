@@ -13,3 +13,7 @@ with open(sys.argv[2], 'rb') as f:
         if int(tunnel.command(f"READ {i}")) != data[i]:
             print(f"--- ERROR --- Verification at {hex(i)} failed!")
             exit(0)
+
+tunnel.command("EXIT")
+tunnel.port.close()
+exit(0)
