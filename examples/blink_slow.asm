@@ -3,7 +3,7 @@ entry:
     lod r1, hi(0x0)
     lod r5, 0
 loop:
-    nori r5, 0 ; invert pins
+    nadi r5, 0b00100000 ; toggle pin 5
     out A, r5
 
 
