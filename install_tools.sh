@@ -1,4 +1,4 @@
-PREFIX=ccpu-
+PREFIX=phoenix-
 
 function install {
 	echo "Installing $1"

@@ -1,6 +1,6 @@
 %.bin: %.asm
 	@echo AS $<
-	@ccpu-as $< $@
+	@phoenix-as $< $@
 
 all: $(patsubst %.asm,%.bin,$(wildcard *.asm))
 
