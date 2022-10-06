@@ -9,7 +9,7 @@ entry:
     lod r1, hi(0x2)
 
 loop:
-    lod r2, 0b00000000 ; set PB5 high
+    lod r2, 0b00000000 ; set PB5 low
     out A, r2
 
     lod r2, lo(ret1)
@@ -17,7 +17,7 @@ loop:
     jmpi addr(delay)
 ret1:
 
-    lod r2, 0b00100000 ; set PB5 low
+    lod r2, 0b00100000 ; set PB5 high
     out A, r2
 
 
