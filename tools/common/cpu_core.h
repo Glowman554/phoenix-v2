@@ -12,6 +12,12 @@
 #define FG_OV (1 << 3)
 #define FG_HALT (1 << 4)
 
+#ifdef SILENT
+#define silent(s)
+#else
+#define silent(s) s
+#endif
+
 typedef struct cpu_state {
 	uint16_t pc;
 	uint16_t fg;
@@ -44,9 +50,11 @@ static inline bool cpu_tick(cpu_state_t* state) {
 
 	// debugf("0x%x: 0x%x 0x%x 0x%x 0x%x", state->pc, instruction.opcode, instruction.reg1, instruction.reg2, instruction.imm);
 
-	char disassmebled_instr[32] = { 0 };
-	cpu_disasm(instruction, disassmebled_instr);
-	debugf("0x%x: %s", state->pc, disassmebled_instr);
+    silent({
+    	char disassmebled_instr[32] = { 0 };
+    	cpu_disasm(instruction, disassmebled_instr);
+	    debugf("0x%x: %s", state->pc, disassmebled_instr);
+    });
 
 	uint16_t AR = (state->regs[1] << 8) | state->regs[0];
 	uint16_t BR = (state->regs[3] << 8) | state->regs[2];
@@ -69,7 +77,7 @@ static inline bool cpu_tick(cpu_state_t* state) {
 		break;
 	case INSTR_JNZA:
 		if ((state->fg & FG_ZERO) == 0) {
-			debugf("exec jmp");
+			silent(debugf("exec jmp"));
 			state->pc = AR;
 			goto out;
 		}
@@ -103,12 +111,12 @@ static inline bool cpu_tick(cpu_state_t* state) {
 
 		if (state->regs[instruction.reg1] == state->regs[instruction.reg2]) {
 			state->fg |= FG_EQ;
-			debugf("setting bit FG_EQ");
+			silent(debugf("setting bit FG_EQ"));
 		}
 
 		if (state->regs[instruction.reg1] == 0) {
 			state->fg |= FG_ZERO;
-			debugf("setting bit FG_ZERO");
+			silent(debugf("setting bit FG_ZERO"));
 		}
 		break;
 	case INSTR_CMPI:
@@ -116,17 +124,17 @@ static inline bool cpu_tick(cpu_state_t* state) {
 
 		if (state->regs[instruction.reg1] == instruction.imm) {
 			state->fg |= FG_EQ;
-			debugf("setting bit FG_EQ");
+			silent(debugf("setting bit FG_EQ"));
 		}
 
 		if (state->regs[instruction.reg1] == 0) {
 			state->fg |= FG_ZERO;
-			debugf("setting bit FG_ZERO");
+			silent(debugf("setting bit FG_ZERO"));
 		}
 		break;
 	case INSTR_JZRA:
 		if ((state->fg & FG_ZERO) != 0) {
-			debugf("exec jmp");
+			silent(debugf("exec jmp"));
 			state->pc = AR;
 			goto out;
 		}
@@ -143,28 +151,28 @@ static inline bool cpu_tick(cpu_state_t* state) {
 		break;
 	case INSTR_JEQA:
 		if ((state->fg & FG_EQ) != 0) {
-			debugf("exec jmp");
+			silent(debugf("exec jmp"));
 			state->pc = AR;
 			goto out;
 		}
 		break;
 	case INSTR_JNQA:
 		if ((state->fg & FG_EQ) == 0) {
-			debugf("exec jmp");
+			silent(debugf("exec jmp"));
 			state->pc = AR;
 			goto out;
 		}
 		break;
 	case INSTR_JNZB:
 		if ((state->fg & FG_ZERO) == 0) {
-			debugf("exec jmp");
+			silent(debugf("exec jmp"));
 			state->pc = BR;
 			goto out;
 		}
 		break;
 	case INSTR_JZRB:
 		if ((state->fg & FG_ZERO) != 0) {
-			debugf("exec jmp");
+			silent(debugf("exec jmp"));
 			state->pc = BR;
 			goto out;
 		}
@@ -175,14 +183,14 @@ static inline bool cpu_tick(cpu_state_t* state) {
 		break;
 	case INSTR_JEQB:
 		if ((state->fg & FG_EQ) != 0) {
-			debugf("exec jmp");
+			silent(debugf("exec jmp"));
 			state->pc = BR;
 			goto out;
 		}
 		break;
 	case INSTR_JNQB:
 		if ((state->fg & FG_EQ) == 0) {
-			debugf("exec jmp");
+			silent(debugf("exec jmp"));
 			state->pc = BR;
 			goto out;
 		}
@@ -200,34 +208,34 @@ static inline bool cpu_tick(cpu_state_t* state) {
 		break;
 	case INSTR_JEQI:
 		if ((state->fg & FG_EQ) != 0) {
-			debugf("exec jmp");
+			silent(debugf("exec jmp"));
 			state->pc = instruction.imm16;
 			goto out;
 		}
 		break;
 	case INSTR_JNQI:
 		if ((state->fg & FG_EQ) == 0) {
-			debugf("exec jmp");
+			silent(debugf("exec jmp"));
 			state->pc = instruction.imm16;
 			goto out;
 		}
 		break;
 	case INSTR_JZRI:
 		if ((state->fg & FG_ZERO) != 0) {
-			debugf("exec jmp");
+			silent(debugf("exec jmp"));
 			state->pc = instruction.imm16;
 			goto out;
 		}
 		break;
 	case INSTR_JNZI:
 		if ((state->fg & FG_ZERO) == 0) {
-			debugf("exec jmp");
+			silent(debugf("exec jmp"));
 			state->pc = instruction.imm16;
 			goto out;
 		}
 		break;
 	default:
-		debugf("unk instr setting halt flag");
+		silent(debugf("unk instr setting halt flag"));
 		state->fg |= FG_HALT;
 		break;
 	}
@@ -236,7 +244,7 @@ static inline bool cpu_tick(cpu_state_t* state) {
 
 out:
 	if (state->pc == 0xffff) {
-		debugf("pc == 0xffff setting halt flag");
+		silent(debugf("pc == 0xffff setting halt flag"));
 		state->fg |= FG_HALT;
 	}
 
@@ -250,8 +258,10 @@ static inline void cpu_dbg(cpu_state_t* state, char* out) {
 static inline void core_run() {
 	cpu_state_t state = { 0 };
 	while (cpu_tick(&state)) {
-		// char out[0xff] = { 0 };
-		// cpu_dbg(&state, out);
-		// debugf("%s", out);
+        silent({
+            char out[0xff] = { 0 };
+		    cpu_dbg(&state, out);
+		    debugf("%s", out);
+        });
 	}
 }

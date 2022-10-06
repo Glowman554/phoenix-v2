@@ -4,7 +4,7 @@ MCU = atmega328p
 F_CPU=16000000
 BAUD=38400
 
-CFLAGS = -mmcu=$(MCU) -DF_CPU=$(F_CPU) -DBAUD=$(BAUD) -Iinclude -I../common -c
+CFLAGS = -DSILENT -mmcu=$(MCU) -DF_CPU=$(F_CPU) -DBAUD=$(BAUD) -Iinclude -I../common -c
 
 OUTPUT = arduino_emulator.hex
 

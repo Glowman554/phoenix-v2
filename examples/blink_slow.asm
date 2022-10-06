@@ -16,10 +16,17 @@ ret1:
     ; jmpi 0xffff
 
 delay:
-    lod r3, 0x2
-delayloop:
+    lod r4, 0x10
+delayloop1:
+    subi r4, 1
+    
+    lod r3, 0xff
+delayloop2:
     subi r3, 1
     cmpi r3, 0
-    jnzi addr(delayloop)
+    jnzi addr(delayloop2)
+
+    cmpi r4, 0
+    jnzi addr(delayloop1)
 
     jmp B
