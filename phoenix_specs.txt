@@ -75,21 +75,23 @@ the register sections can be used as a high part for the imm8 to make it a imm16
 the halt bit gets set if pc == 0xffff
 
 === REGISTERS ===
-The cpu contains four general purpose registers (r0-r4), as well as one flag register (fg), and a program counter (pc)
-r0 + r1 add to make the address (A) register and r2 + r3 add to make the address (B) register used in jmp's and memory accesses
+The cpu contains six general purpose registers (r0-r5), as well as one flag register (fg), and a program counter (pc)
+r0 + r1 add to make the address A register and r2 + r3 add to make the address B register used in jmp's and memory accesses
 
 0: r0 (8bit) -> AL
 1: r1 (8bit) -> AH
 2: r2 (8bit) -> BL
 3: r3 (8bit) -> BH
+4: r4
+5: r5
 
-14: fg (4bit)
+-: fg (4bit)
     -> bit 0: zero
     -> bit 1: eq
     -> bit 2: overflow
     -> bit 3: halt
 
-15: pc (16bit)
+-: pc (16bit)
 
 === MEMORY LAYOUT ===
 0x0000 - 0x7fff = general purpose rom

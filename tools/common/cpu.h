@@ -128,9 +128,11 @@ typedef PACK(struct instruction {
 #define R1 1
 #define R2 2
 #define R3 3
+#define R4 4
+#define R5 5
 
-#define A 4
-#define B 5
+#define A 16
+#define B 17
 
 #define INSTR(opcode_, reg1_, reg2_, imm_) ((instruction_t) { .opcode = opcode_, .reg1 = reg1_, .reg2 = reg2_, .imm = imm_ })
 #define INSTR_IMM16(opcode_, imm16_) ((instruction_t) { .opcode = opcode_, .imm16 = imm16_ })

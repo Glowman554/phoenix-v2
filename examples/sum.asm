@@ -36,12 +36,9 @@ entry:
 loop:
     lod r1, lo(0x8005)
     add r1, r2
-    ldr r2, A ; load from memory at offset
+    ldr r4, A ; load from memory at offset
 
-    add r3, r2 ; sum the values
-    
-    mov r2, r1
-    subi r2, lo(0x8005) ; reconstruct r2  from r1
+    add r3, r4 ; sum the values
 
     cmpi r2, 0
     subi r2, 1

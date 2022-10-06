@@ -4,12 +4,14 @@ Risen from the ashes of the first attempt. The first attempt burned because of p
 
 ## Registers
 
-The cpu contains 3 registers:
+The cpu contains 6 registers:
 
 - R0 (AL)
 - R1 (AH)
 - R2 (BL)
 - R3 (BH)
+- R4
+- R5
 
 The R0 and R1 registers are used to store the low and high bytes of the A register used for addressing of memory and io. The same happens for R2 and R3 wich make the B register.
 All registers are 8 bits wide.
