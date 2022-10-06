@@ -148,7 +148,8 @@ bool lexer::lex() {
 		switch (this->current_char) {
 			case ' ':
 			case '\n':
-			case '\t':
+            case '\r':
+            case '\t':
 				break;
 
 			case ':':
