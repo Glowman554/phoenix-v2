@@ -1,6 +1,7 @@
 // #define __AVR_ATmega328P__
 
 #include <avr/io.h>
+#include <stdint.h>
 #include <usart.h>
 #include <debug.h>
 #include <avr/eeprom.h> 
@@ -8,13 +9,13 @@
 #include <program.h>
 
 uint8_t cpu_fetch_byte(uint16_t addr) {
-	debugf("fetching byte at 0x%x", addr);
+	// debugf("fetching byte at 0x%x", addr);
 
 	return eeprom_read_byte((uint8_t*) addr);
 }
 
 void cpu_write_byte(uint16_t addr, uint8_t val) {
-	debugf("writing byte 0x%x at 0x%x", val, addr);
+	// debugf("writing byte 0x%x at 0x%x", val, addr);
 
 	// this check is done since the eeprom has a limited amount of writes
 	if (eeprom_read_byte((uint8_t*) addr) == val) {
@@ -24,17 +25,24 @@ void cpu_write_byte(uint16_t addr, uint8_t val) {
 	}
 }
 
+uint8_t* io_mapping[] = {
+    (uint8_t*) 0x23, // PINB
+    (uint8_t*) 0x24, // DDRB
+    (uint8_t*) 0x25, // PORTB
+};
+
 uint8_t cpu_io_read(uint16_t addr) {
-	debugf("reading byte from io at 0x%x", addr);
-	return 0x0;
+	// debugf("reading byte from io at 0x%x", addr);
+	return *io_mapping[addr];
 }
 
 void cpu_io_write(uint16_t addr, uint8_t val) {
-	debugf("writing byte 0x%x to io at 0x%x", val, addr);
+	// debugf("writing byte 0x%x to io at 0x%x", val, addr);
+    *io_mapping[addr] = val;
 }
 
 void main() {
-	DDRB |= _BV(DDB5);
+	// DDRB |= _BV(DDB5);
     DDRB &= ~_BV(DDB4); // set pin 12 input
     PORTB |= _BV(DDB4); // set pull-up for pin 12
     
@@ -45,7 +53,7 @@ void main() {
     } else {
 	    core_run();
 
-	    PORTB |= _BV(DDB5);
+	    // PORTB |= _BV(DDB5);
     }
 	while (1) {
 	}

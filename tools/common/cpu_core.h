@@ -250,8 +250,8 @@ static inline void cpu_dbg(cpu_state_t* state, char* out) {
 static inline void core_run() {
 	cpu_state_t state = { 0 };
 	while (cpu_tick(&state)) {
-		char out[0xff] = { 0 };
-		cpu_dbg(&state, out);
-		debugf("%s", out);
+		// char out[0xff] = { 0 };
+		// cpu_dbg(&state, out);
+		// debugf("%s", out);
 	}
 }
