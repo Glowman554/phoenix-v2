@@ -1,6 +1,8 @@
+$define SUM_ARRAY_START 0x8005
+
 entry:
-    lod r0, lo(0x8005)
-    lod r1, hi(0x8005)
+    lod r0, lo(SUM_ARRAY_START)
+    lod r1, hi(SUM_ARRAY_START)
 
     lod r2, 1
     wtr A, r2
@@ -29,12 +31,12 @@ entry:
     lod r2, 5
     wtr A, r2
 
-    lod r1, hi(0x8005)
+    lod r1, hi(SUM_ARRAY_START)
     lod r2, 6 ; number of elements to loop over (-1 element)
     lod r3, 0 ; will be the result (should be 0x29)
 
 loop:
-    lod r0, lo(0x8005)
+    lod r0, lo(SUM_ARRAY_START)
     add r0, r2
     ldr r4, A ; load from memory at offset
 

@@ -6,8 +6,8 @@
 	"task_dir": "tasks",
 	"custom_header": "Phoenix",
 	"variables": {
-    "cflags": "-Iinclude -I../common -g",
+    "cflags": "-Iinclude -I../common -g -Wno-deprecated-declarations",
     "output": "assembler.exe"
   },
-	"non_silent": false
+	"non_silent": true
 }

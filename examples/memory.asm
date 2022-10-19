@@ -1,5 +1,7 @@
-lod r0, lo(0x8000)
-lod r1, hi(0x8000)
+$define RAM_START 0x8000
+
+lod r0, lo(RAM_START)
+lod r1, hi(RAM_START)
 lod r2, 0xf0
 
 wtr A, r2

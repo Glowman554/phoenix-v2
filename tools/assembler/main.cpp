@@ -2,6 +2,7 @@
 #include "lexer.h"
 #include "generator.h"
 #include "debug.h"
+#include <preprocessor.h>
 
 #ifdef _MSC_VER
 #pragma warning(disable : 4996) //_CRT_SECURE_NO_WARNINGS
@@ -62,6 +63,10 @@ int main(int argc, char** argv) {
 	fread(code, size, 1, f);
 
 	fclose(f);
+
+	char* old_code = code;
+	code = preprocess(code);
+	free(old_code);
 
 	lexer l = lexer((char*)code);
 

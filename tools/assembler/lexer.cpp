@@ -44,7 +44,7 @@ void lexer::__id() {
 	do {
 		buf[idx++] = this->current_char;
 		this->advance();
-	} while ((this->current_char >= 'a' && this->current_char <= 'z') || (this->current_char >= 'A' && this->current_char <= 'Z') || (this->current_char >= '0' && this->current_char <= '9'));
+	} while ((this->current_char >= 'a' && this->current_char <= 'z') || (this->current_char >= 'A' && this->current_char <= 'Z') || (this->current_char >= '0' && this->current_char <= '9') || this->current_char == '_');
 	// debugf("buf: %s\n", buf);
 
 	lexer_token_t token = { 0 };
