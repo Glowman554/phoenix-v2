@@ -1,0 +1,10 @@
+{
+	"name": "build",
+	"commands": [
+		"phoenix-as ${file} ${file}.bin"
+	],
+	"dependencies": [],
+	"run_after_task": [],
+	"allow_fail": false,
+	"run_for": "asm"
+}

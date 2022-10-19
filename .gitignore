@@ -2,6 +2,7 @@
 *.bin
 *.o
 *.hex
+*.exe
 
 .sdk
 bin
@@ -10,3 +11,5 @@ BIN
 disk
 
 __pycache__
+
+*.gm2.*

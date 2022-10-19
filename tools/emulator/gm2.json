@@ -1,0 +1,13 @@
+{
+	"name": "emulator",
+	"description": "Default description lol",
+	"author": "glowman554",
+	"version": "0.0.1",
+	"task_dir": "tasks",
+	"custom_header": "Phoenix",
+	"variables": {
+    "cflags": "-Iinclude -I../common -g",
+    "output": "emulator.exe"
+  },
+	"non_silent": false
+}
