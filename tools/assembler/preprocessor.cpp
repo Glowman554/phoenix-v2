@@ -188,7 +188,5 @@ char* preprocess(char* input) {
 		}
 	}
 
-	debugf("%s\n", output);
-
 	return output;
 }
