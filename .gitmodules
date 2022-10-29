@@ -1,0 +1,6 @@
+[submodule "tools/pico_emulator/--rec"]
+	path = tools/pico_emulator/--rec
+	url = https://github.com/raspberrypi/pico-sdk
+[submodule "tools/pico_emulator/pico-sdk"]
+	path = tools/pico_emulator/pico-sdk
+	url = https://github.com/raspberrypi/pico-sdk
