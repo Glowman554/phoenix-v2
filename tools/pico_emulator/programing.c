@@ -6,6 +6,10 @@
 #include <setclock.h>
 #include <pico_hal.h>
 
+#include "pico/stdlib.h"
+
+#define PROG_LED 25
+
 char* parse_number(char* input, int* output) {
 	int idx = 0;
 	int number_system_base = 10;
@@ -44,7 +48,11 @@ char* parse_number(char* input, int* output) {
 extern uint8_t memory_[0xffff];
 
 void programing_mode() {
-	while (!tud_cdc_connected()) {}
+    gpio_init(PROG_LED);
+	gpio_set_dir(PROG_LED, GPIO_OUT);
+	gpio_put(PROG_LED, true);
+
+    while (!tud_cdc_connected()) {}
 
 	bool running = true;
 	while (running) {
@@ -90,4 +98,6 @@ void programing_mode() {
     error:
         printf("ERROR\n");
 	}
+
+	gpio_put(PROG_LED, false);
 }
