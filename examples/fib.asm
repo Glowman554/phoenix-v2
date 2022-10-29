@@ -1,7 +1,7 @@
 entry:
 	lod r0, 0
 	lod r1, 1
-	lod r2, 12 ; compute the 13th fibonacci number leaves the result in r3
+	lod r2, 11 ; compute the 11th fibonacci number leaves the result in r3
 
 loop:
 	mov r3, r0
