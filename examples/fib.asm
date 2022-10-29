@@ -13,8 +13,13 @@ loop:
 	jnzi addr(loop)
 
 done:
+loop2:
     lod r0, lo(0x0)
     lod r1, hi(0x0)
     out A, r3
+    
+    lod r4, 0
+    out A, r4
+    jmpi addr(loop2)
 
     jmpi 0xffff
