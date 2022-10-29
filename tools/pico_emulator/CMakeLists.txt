@@ -15,9 +15,20 @@ set(TARGET pico_emulator)
 
 add_executable(${TARGET}
     main.c
+	programing.c
+	debug.c
+	readline.c
+	setclock.c
 )
 
-include_directories(${TARGET} ${CMAKE_CURRENT_SOURCE_DIR}/../common/)
+include_directories(${TARGET} 
+	${CMAKE_CURRENT_SOURCE_DIR}/../common/
+	${CMAKE_CURRENT_SOURCE_DIR}/include
+)
+
+target_compile_options(${TARGET} PRIVATE
+	-DSILENT
+)
 
 # pull in common dependencies
 target_link_libraries(${TARGET} 

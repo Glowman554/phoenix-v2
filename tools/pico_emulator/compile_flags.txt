@@ -45,3 +45,4 @@
 -Ipico-sdk/src/rp2_common/pico_unique_id/include
 -Ipico-sdk/src/rp2_common/hardware_flash/include
 -Ipico-sdk/src/common/pico_usb_reset_interface/include
+-Iinclude
