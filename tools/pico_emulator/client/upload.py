@@ -16,4 +16,5 @@ with open(sys.argv[2], 'rb') as f:
 
 # clock_speed = input("Clock speed (in MHz)? ")
 # tunnel.command("CLOCK " + str(clock_speed))
+tunnel.command("SAVE")
 tunnel.command("EXIT")
