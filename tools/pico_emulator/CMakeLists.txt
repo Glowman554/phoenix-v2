@@ -5,6 +5,8 @@ cmake_minimum_required(VERSION 3.13)
 include(pico-sdk/pico_sdk_init.cmake)
 include(pico-sdk/tools/CMakeLists.txt)
 
+add_subdirectory(littlefs-lib)
+
 project(pico_emulator)
 
 # initialize the Raspberry Pi Pico SDK
@@ -33,6 +35,7 @@ target_compile_options(${TARGET} PRIVATE
 # pull in common dependencies
 target_link_libraries(${TARGET} 
     pico_stdlib
+    littlefs-lib
 )
 
 # enable usb output & uart output
