@@ -1,7 +1,7 @@
 entry:
 	lod r0, 0
 	lod r1, 1
-	lod r2, 12 ; compute the 13th fibonacci number leaves the result in r3
+	lod r2, 11 ; compute the 11th fibonacci number leaves the result in r3
 
 loop:
 	mov r3, r0
@@ -13,8 +13,13 @@ loop:
 	jnzi addr(loop)
 
 done:
+loop2:
     lod r0, lo(0x0)
     lod r1, hi(0x0)
     out A, r3
+    
+    lod r4, 0
+    out A, r4
+    jmpi addr(loop2)
 
     jmpi 0xffff
