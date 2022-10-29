@@ -4,6 +4,7 @@
 #include <readline.h>
 #include <cpu_core.h>
 #include <setclock.h>
+#include <pico_hal.h>
 
 char* parse_number(char* input, int* output) {
 	int idx = 0;
@@ -40,6 +41,8 @@ char* parse_number(char* input, int* output) {
 	return &input[idx];
 }
 
+extern uint8_t memory_[0xffff];
+
 void programing_mode() {
 	while (!tud_cdc_connected()) {}
 
@@ -65,6 +68,16 @@ void programing_mode() {
 			int clock;
             parse_number(&buf[6], &clock);
 			clock_set_mhz(clock);
+        } else if (strcmp(buf, "FORMAT") == 0) {
+            pico_unmount();
+            if (pico_mount(true) < 0) {
+                goto error;
+            }
+        } else if (strcmp(buf, "SAVE") == 0) {
+            int file = pico_open("prog", LFS_O_RDWR | LFS_O_CREAT);
+            pico_write(file, memory_, sizeof(memory_));
+            pico_close(file);
+
         } else if (strcmp(buf, "EXIT") == 0) {
             running = false;
         } else {

@@ -6,6 +6,7 @@
 #include <stdarg.h>
 
 #include <programing.h>
+#include <pico_hal.h>
 
 uint8_t memory_[0xffff] = { 0 };
 
@@ -61,6 +62,7 @@ uint16_t emit(instruction_t instr) {
     return result;
 }
 
+#define GPIO_PROGRAMING_SEL 17
 
 
 int main() {
@@ -76,7 +78,28 @@ int main() {
 		gpio_set_dir(i + 8, GPIO_IN);
 	}
 
-	programing_mode();
+    if (pico_mount(false) < 0) {
+        printf("Unable to mount");
+        programing_mode();
+    }
+
+    gpio_init(GPIO_PROGRAMING_SEL);
+    gpio_set_dir(GPIO_PROGRAMING_SEL, GPIO_IN);
+    gpio_set_pulls(GPIO_PROGRAMING_SEL, false, true);
+
+    if (gpio_get(GPIO_PROGRAMING_SEL)) {
+	    programing_mode();
+    } else {
+        int file = pico_open("prog", LFS_O_RDWR);
+        if (file < 0) {
+            printf("Unable to open prog");
+            programing_mode();
+        } else {
+            pico_read(file, memory_, sizeof(memory_));
+            pico_close(file);
+        }
+    }
+
     core_run();
 
 	while (true) {}
