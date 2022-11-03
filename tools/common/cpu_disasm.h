@@ -110,6 +110,12 @@ static inline void cpu_disasm(instruction_t instruction, char* out) {
 	case INSTR_JNZI:
 		sprintf(out, "jnz 0x%x", instruction.imm16);
 		break;
+	case INSTR_LADA:
+		sprintf(out, "lad A, 0x%x", instruction.imm16);
+		break;
+	case INSTR_LADB:
+		sprintf(out, "lad B, 0x%x", instruction.imm16);
+		break;
 	default:
 		sprintf(out, "unk 0x%x", instruction.opcode);
 		break;

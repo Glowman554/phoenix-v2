@@ -14,8 +14,7 @@ loop:
 
 done:
 loop2:
-    lod r0, lo(0x0)
-    lod r1, hi(0x0)
+    lad A, 0x0
     out A, r3
     
     lod r4, 0

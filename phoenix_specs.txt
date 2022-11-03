@@ -57,6 +57,9 @@
 0x20: JZR <imm16>			-> jump if zero
 0x21: JNZ <imm16>			-> jump if not zero
 
+0x22: LAD A <imm16>			-> load address
+0x23: LAD B <imm16>			-> load address
+
 === INSTRUCTION ENCODING ===
 A instruction has a fixed size of 24bit, and can never contain two imm8.
 
@@ -157,5 +160,8 @@ Microcode commands:
 	IO_OUT:			data bus -> io[address bus]
 
 	PUT_IADR_ADDR:	ir0 + ir1 + imm8 -> address bus
+
+	SAVE_ADDR_A: 	address bus -> A reg
+	SAVE_ADDR_B: 	address bus -> B reg
 
 	FINISH:			start next instruction fetch / decode / execute cycle

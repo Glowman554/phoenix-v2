@@ -47,12 +47,15 @@
 #define ALU_NAND		(1 << 20) // X
 #define ALU_NOR			(1 << 21) // X
 
-#define IO_IN			(1 << 22) // -
-#define IO_OUT			(1 << 23) // -
+#define IO_IN			(1 << 22) // x
+#define IO_OUT			(1 << 23) // x
 
 #define PUT_B_ADDR		(1 << 24) // X
 
-#define PUT_IADR_ADDR	(1 << 25) // -
+#define PUT_IADR_ADDR	(1 << 25) // x
+
+#define SAVE_ADDR_A		(1 << 26) // x
+#define SAVE_ADDR_B		(1 << 27) // x
 
 #define FINISH			(1 << 31) // X
 
@@ -106,11 +109,14 @@
 #define INSTR_LDRB 0x1b	// X
 #define INSTR_WTRB 0x1c	// X
 
-#define INSTR_JMPI 0x1d	// -
-#define INSTR_JEQI 0x1e	// -
-#define INSTR_JNQI 0x1f	// -
-#define INSTR_JZRI 0x20	// -
-#define INSTR_JNZI 0x21	// -
+#define INSTR_JMPI 0x1d	// x
+#define INSTR_JEQI 0x1e	// x
+#define INSTR_JNQI 0x1f	// x
+#define INSTR_JZRI 0x20	// x
+#define INSTR_JNZI 0x21	// x
+
+#define INSTR_LADA 0x22 // x
+#define INSTR_LADB 0x23 // x
 
 typedef PACK(struct instruction {
 	uint8_t opcode;
@@ -174,3 +180,5 @@ typedef PACK(struct instruction {
 #define JNQI(imm) INSTR_IMM16(INSTR_JNQI, imm)
 #define JZRI(imm) INSTR_IMM16(INSTR_JZRI, imm)
 #define JNZI(imm) INSTR_IMM16(INSTR_JNZI, imm)
+
+#define LAD(a, imm) a == A ? INSTR_IMM16(INSTR_LADA, imm) : INSTR_IMM16(INSTR_LADB, imm)

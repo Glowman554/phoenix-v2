@@ -1,6 +1,5 @@
 entry:
-    lod r0, lo(0x0)
-    lod r1, hi(0x0)
+    lad A, 0
 
     lod r2, 0
 

@@ -1,8 +1,7 @@
 $define SUM_ARRAY_START 0x8005
 
 entry:
-    lod r0, lo(SUM_ARRAY_START)
-    lod r1, hi(SUM_ARRAY_START)
+    lad A, SUM_ARRAY_START
 
     lod r2, 1
     wtr A, r2

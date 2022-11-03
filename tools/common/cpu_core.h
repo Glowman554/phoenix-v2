@@ -234,6 +234,14 @@ static inline bool cpu_tick(cpu_state_t* state) {
 			goto out;
 		}
 		break;
+	case INSTR_LADA:
+		state->regs[0] = instruction.imm16 & 0xff;
+		state->regs[1] = (instruction.imm16 & 0xff00) >> 8;
+		break;
+	case INSTR_LADB:
+		state->regs[2] = instruction.imm16 & 0xff;
+		state->regs[3] = (instruction.imm16 & 0xff00) >> 8;
+		break;
 	default:
 		silent(debugf("unk instr setting halt flag"));
 		state->fg |= FG_HALT;

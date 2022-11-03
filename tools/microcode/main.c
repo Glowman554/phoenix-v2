@@ -150,6 +150,11 @@ int main() {
 	microcode[INSTR_JNZI << 3 | MICROCODE_STEP_1] = PC_FLUSH_COND;
 	microcode[INSTR_JNZI << 3 | MICROCODE_STEP_2] = FINISH;
 
+	microcode[INSTR_LADA << 3 | MICROCODE_STEP_0] = PUT_IADR_ADDR | SAVE_ADDR_A;
+	microcode[INSTR_LADA << 3 | MICROCODE_STEP_1] = FINISH;
+	
+	microcode[INSTR_LADB << 3 | MICROCODE_STEP_0] = PUT_IADR_ADDR | SAVE_ADDR_B;
+	microcode[INSTR_LADB << 3 | MICROCODE_STEP_1] = FINISH;
 
 	FILE* f = fopen("microcode.bin", "wb");
 	fwrite(microcode, sizeof(microcode), 1, f);
