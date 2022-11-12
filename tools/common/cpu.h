@@ -73,8 +73,8 @@
 #define INSTR_MOV 0x1	// X
 #define INSTR_LOD 0x2	// X
 
-#define INSTR_OUT 0x3	// X
-#define INSTR_INP 0x4	// X
+#define INSTR_OUTA 0x3	// X
+#define INSTR_INPA 0x4	// X
 
 #define INSTR_JNZA 0x5	// X
 #define INSTR_ADD 0x6	// X
@@ -118,6 +118,9 @@
 #define INSTR_LADA 0x22 // x
 #define INSTR_LADB 0x23 // x
 
+#define INSTR_OUTB 0x24	// X
+#define INSTR_INPB 0x25	// X
+
 typedef PACK(struct instruction {
 	uint8_t opcode;
 	union {
@@ -147,8 +150,8 @@ typedef PACK(struct instruction {
 #define MOV(reg1, reg2) INSTR(INSTR_MOV, reg1, reg2, 0)
 #define LOD(reg, imm) INSTR(INSTR_LOD, reg, 0, imm)
 
-#define OUT(a, reg) INSTR(INSTR_OUT, reg, 0, 0)
-#define INP(reg, a) INSTR(INSTR_INP, reg, 0, 0)
+#define OUT(a, reg) a == A ? INSTR(INSTR_OUTA, reg, 0, 0) : INSTR(INSTR_OUTB, reg, 0, 0)
+#define INP(reg, a) a == A ? INSTR(INSTR_INPA, reg, 0, 0) : INSTR(INSTR_INPB, reg, 0, 0)
 
 #define JNZ(a) a == A ? INSTR(INSTR_JNZA, 0, 0, 0) : INSTR(INSTR_JNZB, 0, 0, 0)
 #define ADD(reg1, reg2) INSTR(INSTR_ADD, reg1, reg2, 0)
