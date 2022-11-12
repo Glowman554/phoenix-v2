@@ -1,13 +1,13 @@
 #include <stdio.h>
 #include <string.h>
-#include "include/lexer.h"
 #include "include/utils.h"
+#include "include/lexer.h"
 #include "include/parser.h"
 
 int main(void) {
-    char* str = "notmain:nop nop nop";
+    char* str = "add r1, 0xff";
     size_t len = strlen(str);
-    int* tokens_len = malloc(sizeof(size_t));
+    int* tokens_len = malloc(sizeof(int));
     token_t* tokens = lex(str, len, tokens_len);
     print_tokens(*tokens_len, tokens);
 

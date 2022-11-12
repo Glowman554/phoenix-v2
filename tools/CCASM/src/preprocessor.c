@@ -5,7 +5,7 @@
 
 // has to be allocated. Has to be freed by the user as well
 void preprocess(char* code, size_t* code_len) {
-    // go through the text character by character. If after a \n or in the beginning of the file the word found is "import" followed by "filename.ccasm"
+    // go through the text character by character. If after a \n or in the beginning of the file the word found is "import" followed by "filename.asm"
     // read that files contents and preprocess them as well
     // add the two strings together
     bool import_found = false;

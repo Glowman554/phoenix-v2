@@ -9,4 +9,3 @@
 void print_tokens(int token_len, token_t* tokens);
 void print_labels(size_t label_len, label_t* labels);
 bool in_bounds(char a, char b, char c);
-

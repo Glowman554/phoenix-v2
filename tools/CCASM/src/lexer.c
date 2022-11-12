@@ -20,7 +20,7 @@ void advance() {
 token_t lex_id() {
     token_t t = {.type = ID};
     int start_pos = pos;
-    while (current_char != '\0' && (in_bounds(current_char, 'a', 'z') || in_bounds(current_char, 'A', 'Z') || current_char == '_')) {
+    while (current_char != '\0' && (in_bounds(current_char, 'a', 'z') || in_bounds(current_char, 'A', 'Z') || in_bounds(current_char, '0', '9') || current_char == '_')) {
         if ((pos - start_pos) >= (MAX_LABEL_SIZE-1)) {
             // error. Label to long
             throw_error("Label to long!", true);
@@ -56,13 +56,11 @@ token_t lex_number() {
             end_range2 = end_range1;
         } else {
             // base 10
-            base = 10;
             start_range2 = start_range1;
             end_range2 = end_range1;
         }
     } else {
         // base 10
-        base = 10;
         start_range2 = start_range1;
         end_range2 = end_range1;
     }
@@ -108,6 +106,11 @@ token_t* lex(char* _code, size_t _code_len, int* number_of_tokens_produced) {
             case ':':
             {
                 token_t to_append = {.type = COLON, .string_data = ":"};
+                tokens = append_token(tokens, number_of_tokens_produced, to_append);
+            } break;
+            case ',':
+            {
+                token_t to_append = {.type = COMMA, .string_data = ","};
                 tokens = append_token(tokens, number_of_tokens_produced, to_append);
             } break;
             case '(':
