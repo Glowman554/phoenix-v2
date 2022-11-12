@@ -38,30 +38,13 @@ void dregister_register(void);
 typedef void (*parser_function)(void);
 
 #define INSTRUCTIONS_LEN 18
-char* instructions[INSTRUCTIONS_LEN] = {"add", "cmp", "inp", "jeq", "jmp", "jnq", "jnz", "jzr", "lad", "ldr", "lod", "mov", "nad", "nop", "nor", "out", "sub", "wtr"};
-parser_function corresponding_function[INSTRUCTIONS_LEN] = { register_register_or_imm8
-                                                           , register_register_or_imm8
-                                                           , register_A
-                                                           , dregister_or_imm16
-                                                           , dregister_or_imm16
-                                                           , dregister_or_imm16
-                                                           , dregister_or_imm16
-                                                           , dregister_or_imm16
-                                                           , dregister_imm16
-                                                           , register_dregister
-                                                           , register_imm8
-                                                           , register_register
-                                                           , register_register_or_imm8
-                                                           , nop
-                                                           , register_register_or_imm8
-                                                           , A_register
-                                                           , register_register_or_imm8
-                                                           , dregister_register };
+extern char* instructions[INSTRUCTIONS_LEN];
+extern parser_function corresponding_function[INSTRUCTIONS_LEN];
 
 #define REGISTER_LEN 5
 #define DREG_LEN 2
-char* registers[REGISTER_LEN] = {"r1", "r2", "r3", "r4", "r5"};
-char* d_registers[DREG_LEN] = {"A", "B"};
+extern char* registers[REGISTER_LEN];
+extern char* d_registers[DREG_LEN];
 
 typedef struct {
     int id;

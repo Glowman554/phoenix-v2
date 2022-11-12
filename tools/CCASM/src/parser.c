@@ -7,6 +7,30 @@
 #include <stdio.h>
 #include <string.h>
 
+char* instructions[INSTRUCTIONS_LEN] = {"add", "cmp", "inp", "jeq", "jmp", "jnq", "jnz", "jzr", "lad", "ldr", "lod", "mov", "nad", "nop", "nor", "out", "sub", "wtr"};
+parser_function corresponding_function[INSTRUCTIONS_LEN] = { register_register_or_imm8
+                                                           , register_register_or_imm8
+                                                           , register_A
+                                                           , dregister_or_imm16
+                                                           , dregister_or_imm16
+                                                           , dregister_or_imm16
+                                                           , dregister_or_imm16
+                                                           , dregister_or_imm16
+                                                           , dregister_imm16
+                                                           , register_dregister
+                                                           , register_imm8
+                                                           , register_register
+                                                           , register_register_or_imm8
+                                                           , nop
+                                                           , register_register_or_imm8
+                                                           , A_register
+                                                           , register_register_or_imm8
+                                                           , dregister_register };
+
+
+char* registers[REGISTER_LEN] = {"r1", "r2", "r3", "r4", "r5"};
+char* d_registers[DREG_LEN] = {"A", "B"};
+
 int instruction_count = 0; // offset by instr_count >> 24bits
 int p_pos = -1;
 eot is_eot = false;
