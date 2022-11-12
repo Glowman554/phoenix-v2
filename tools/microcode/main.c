@@ -14,11 +14,11 @@ int main() {
 	microcode[INSTR_LOD << 3 | MICROCODE_STEP_0] = PUT_IIMM_DB | SAVE_DB_IR0;
 	microcode[INSTR_LOD << 3 | MICROCODE_STEP_1] = FINISH;
 
-	microcode[INSTR_OUT << 3 | MICROCODE_STEP_0] = PUT_A_ADDR | PUT_IR0_DB | IO_OUT;
-	microcode[INSTR_OUT << 3 | MICROCODE_STEP_1] = FINISH;
+	microcode[INSTR_OUTA << 3 | MICROCODE_STEP_0] = PUT_A_ADDR | PUT_IR0_DB | IO_OUT;
+	microcode[INSTR_OUTA << 3 | MICROCODE_STEP_1] = FINISH;
 
-	microcode[INSTR_INP << 3 | MICROCODE_STEP_0] = PUT_A_ADDR | SAVE_DB_IR0 | IO_IN;
-	microcode[INSTR_INP << 3 | MICROCODE_STEP_1] = FINISH;
+	microcode[INSTR_INPA << 3 | MICROCODE_STEP_0] = PUT_A_ADDR | SAVE_DB_IR0 | IO_IN;
+	microcode[INSTR_INPA << 3 | MICROCODE_STEP_1] = FINISH;
 
 	microcode[INSTR_JNZA << 3 | MICROCODE_STEP_0] = PUT_A_ADDR | COND_INVERT | SAVE_PCB_IF_Z;
 	microcode[INSTR_JNZA << 3 | MICROCODE_STEP_1] = PC_FLUSH_COND;
@@ -155,6 +155,12 @@ int main() {
 	
 	microcode[INSTR_LADB << 3 | MICROCODE_STEP_0] = PUT_IADR_ADDR | SAVE_ADDR_B;
 	microcode[INSTR_LADB << 3 | MICROCODE_STEP_1] = FINISH;
+
+	microcode[INSTR_OUTB << 3 | MICROCODE_STEP_0] = PUT_B_ADDR | PUT_IR0_DB | IO_OUT;
+	microcode[INSTR_OUTB << 3 | MICROCODE_STEP_1] = FINISH;
+
+	microcode[INSTR_INPB << 3 | MICROCODE_STEP_0] = PUT_B_ADDR | SAVE_DB_IR0 | IO_IN;
+	microcode[INSTR_INPB << 3 | MICROCODE_STEP_1] = FINISH;
 
 	FILE* f = fopen("microcode.bin", "wb");
 	fwrite(microcode, sizeof(microcode), 1, f);

@@ -69,10 +69,10 @@ static inline bool cpu_tick(cpu_state_t* state) {
 	case INSTR_LOD:
 		state->regs[instruction.reg1] = instruction.imm;
 		break;
-	case INSTR_OUT:
+	case INSTR_OUTA:
 		cpu_io_write(AR, state->regs[instruction.reg1]);
 		break;
-	case INSTR_INP:
+	case INSTR_INPA:
 		state->regs[instruction.reg1] = cpu_io_read(AR);
 		break;
 	case INSTR_JNZA:
@@ -241,6 +241,12 @@ static inline bool cpu_tick(cpu_state_t* state) {
 	case INSTR_LADB:
 		state->regs[2] = instruction.imm16 & 0xff;
 		state->regs[3] = (instruction.imm16 & 0xff00) >> 8;
+		break;
+	case INSTR_OUTB:
+		cpu_io_write(BR, state->regs[instruction.reg1]);
+		break;
+	case INSTR_INPB:
+		state->regs[instruction.reg1] = cpu_io_read(BR);
 		break;
 	default:
 		silent(debugf("unk instr setting halt flag"));

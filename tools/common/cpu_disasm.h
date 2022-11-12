@@ -17,10 +17,10 @@ static inline void cpu_disasm(instruction_t instruction, char* out) {
 	case INSTR_LOD:
 		sprintf(out, "lod %s, 0x%x", regs[instruction.reg1], instruction.imm);
 		break;
-	case INSTR_OUT:
+	case INSTR_OUTA:
 		sprintf(out, "out A, %s", regs[instruction.reg1]);
 		break;
-	case INSTR_INP:
+	case INSTR_INPA:
 		sprintf(out, "inp %s, A", regs[instruction.reg1]);
 		break;
 	case INSTR_JNZA:
@@ -115,6 +115,12 @@ static inline void cpu_disasm(instruction_t instruction, char* out) {
 		break;
 	case INSTR_LADB:
 		sprintf(out, "lad B, 0x%x", instruction.imm16);
+		break;
+	case INSTR_OUTB:
+		sprintf(out, "out B, %s", regs[instruction.reg1]);
+		break;
+	case INSTR_INPB:
+		sprintf(out, "inp %s, B", regs[instruction.reg1]);
 		break;
 	default:
 		sprintf(out, "unk 0x%x", instruction.opcode);
