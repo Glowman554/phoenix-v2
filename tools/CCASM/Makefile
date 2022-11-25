@@ -18,3 +18,6 @@ clean:
 
 %.o: %.cpp
 	$(CXX) $(CFLAGS) -c $< -o $@
+
+format:
+	find . -regex '.*\.\(cpp\|hpp\|cu\|c\|h\)' -exec clang-format --verbose -style=file -i {} \;

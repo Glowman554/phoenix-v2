@@ -1,8 +1,8 @@
 #pragma once
 
+#include <stdbool.h>
 #include <stdint.h>
 #include <stdlib.h>
-#include <stdbool.h>
 
 #define MAX_INTEGER16_SIZE 65536
 #define MAX_INTEGER8_SIZE 255
@@ -10,20 +10,12 @@
 
 typedef bool eof;
 
-enum TokenTypes {
-    ID,
-    COLON,
-    COMMA,
-    NUMBER8,
-    NUMBER16,
-    LPAREN,
-    RPAREN
-};
+enum TokenTypes { ID, COLON, COMMA, NUMBER8, NUMBER16, LPAREN, RPAREN };
 
 typedef struct {
-    int type;
-    char string_data[MAX_LABEL_SIZE];
-    uint16_t imm16_data;
+	int type;
+	char string_data[MAX_LABEL_SIZE];
+	uint16_t imm16_data;
 } token_t;
 
 token_t* append_token(token_t* a, int* b, token_t c);
