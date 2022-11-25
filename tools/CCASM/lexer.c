@@ -1,6 +1,6 @@
-#include "include/lexer.h"
-#include "include/errors.h"
-#include "include/utils.h"
+#include <lexer.h>
+#include <errors.h>
+#include <utils.h>
 #include <stdio.h>
 #include <string.h>
 
@@ -71,13 +71,18 @@ token_t lex_number() {
         else number = (number * base) + (current_char - start_range2);
     }
 
-    if (number > MAX_INTEGER_SIZE) {
+    if (number > MAX_INTEGER16_SIZE) {
         char str[31];
-        sprintf(str, "Integer to big. Is %d. Max is %d", number, MAX_INTEGER_SIZE);
+        sprintf(str, "Integer to big. Is %d. Max is %d", number, MAX_INTEGER16_SIZE);
         throw_error(str, true);
     }
-    token_t ret_tok = {.imm16_data = number, .type = NUMBER};
-    return ret_tok;
+    if (number <= MAX_INTEGER8_SIZE) {
+        token_t ret_tok = {.imm16_data = number, .type = NUMBER8};
+        return ret_tok;
+    } else {
+        token_t ret_tok = {.imm16_data = number, .type = NUMBER16};
+        return ret_tok;
+    }
 }
 
 

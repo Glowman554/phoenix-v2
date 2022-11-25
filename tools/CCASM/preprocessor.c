@@ -1,5 +1,5 @@
-#include "include/preprocessor.h"
-#include "include/errors.h"
+#include <preprocessor.h>
+#include <errors.h>
 #include <string.h>
 #include <stdio.h>
 

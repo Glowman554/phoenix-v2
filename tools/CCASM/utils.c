@@ -1,9 +1,9 @@
-#include "include/utils.h"
+#include <utils.h>
 #include <stdio.h>
 
 void print_tokens(int token_len, token_t* tokens) {
     for (int i = 0; i < token_len; i++) {
-        if (tokens[i].type == NUMBER) printf("T: %d V: %d\n", tokens[i].type, tokens[i].imm16_data);
+        if (tokens[i].type == NUMBER8 || tokens[i].type == NUMBER16) printf("T: %d V: %d\n", tokens[i].type, tokens[i].imm16_data);
         else printf("T: %d V: %s\n", tokens[i].type, tokens[i].string_data);
     }
 }

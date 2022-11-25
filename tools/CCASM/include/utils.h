@@ -1,7 +1,7 @@
 #pragma once
 
-#include "lexer.h"
-#include "parser.h"
+#include <lexer.h>
+#include <parser.h>
 #include <stdio.h>
 
 #define NOT_IMPLEMENTED printf("%s %s:%d is not implemented yet!\n", __func__, __FILE__, __LINE__);

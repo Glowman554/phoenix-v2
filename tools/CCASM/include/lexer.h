@@ -4,7 +4,8 @@
 #include <stdlib.h>
 #include <stdbool.h>
 
-#define MAX_INTEGER_SIZE 65536
+#define MAX_INTEGER16_SIZE 65536
+#define MAX_INTEGER8_SIZE 255
 #define MAX_LABEL_SIZE 0xff
 
 typedef bool eof;
@@ -13,7 +14,8 @@ enum TokenTypes {
     ID,
     COLON,
     COMMA,
-    NUMBER,
+    NUMBER8,
+    NUMBER16,
     LPAREN,
     RPAREN
 };
