@@ -139,7 +139,7 @@ int parse_second_class(int expected_type) {
 			throw_error("Type error", enable_errors);
 		return current_token.imm16_data;
 	} else {
-		char err[36];
+		char err[0xff];
 		sprintf(err, "Unexpected second class citizen: \"%s\"", current_token.string_data);
 		throw_error(err, enable_errors);
 		p_advance();

@@ -1,6 +1,9 @@
 CC = clang
 CXX = clang
 CFLAGS = -Iinclude -I../common -g
+ifeq ($(SANITIZE), true)
+	CFLAGS += -fsanitize=address,undefined
+endif
 
 OBJS = $(patsubst %.c,%.o,$(wildcard *.c)) $(patsubst %.cpp,%.o,$(wildcard *.cpp))
 

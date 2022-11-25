@@ -1,2 +1,1 @@
-_ccasm_file:
-    add r0, 0xf0
+add r0, 0xf0
