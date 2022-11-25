@@ -88,8 +88,9 @@ token_t lex_number() {
 
 // realloc tokens and append
 token_t* append_token(token_t* a, int* b, token_t c) {
-    a = realloc(a, ((*b)++)*sizeof(token_t));
-    a[(*b)-1] = c;
+    *b = *b + 1;
+    a = realloc(a, *b * sizeof(token_t));
+    a[*b - 1] = c;
     return a;
 }
 

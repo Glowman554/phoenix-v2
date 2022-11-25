@@ -88,13 +88,15 @@ void init_labels(token_t* tokens, size_t len) {
 }
 
 instruction_t* dynamic_node(instruction_t* nodes, instruction_t node, size_t* number_of_nodes) {
-    nodes = realloc(nodes, ((*number_of_nodes)++)*sizeof(instruction_t));
-    nodes[(*number_of_nodes)-1] = node;
+    *number_of_nodes = *number_of_nodes + 1;
+    nodes = realloc(nodes, *number_of_nodes * sizeof(instruction_t));
+    nodes[*number_of_nodes - 1] = node;
     return nodes;
 }
 label_t* dynamic_label(label_t* labels, label_t label, size_t* number_of_labels) {
-    labels = realloc(labels, ((*number_of_labels)++)*sizeof(label_t));
-    labels[(*number_of_labels)-1] = label;
+    *number_of_labels = *number_of_labels + 1;
+    labels = realloc(labels, *number_of_labels * sizeof(label_t));
+    labels[*number_of_labels - 1] = label;
     return labels;
 }
 

@@ -1,2 +1,2 @@
 _ccasm_file:
-    jmp _start
+    add r0, 0xf0
