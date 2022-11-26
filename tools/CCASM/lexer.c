@@ -144,7 +144,7 @@ token_t* lex(char* _code, size_t _code_len, int* number_of_tokens_produced) {
 				tokens = append_token(tokens, number_of_tokens_produced, token_to_append);
 				pos--;
 			} else {
-				char str[17];
+				char str[18];
 				sprintf(str, "Unknown Token: %d", current_char);
 				throw_error(str, true);
 			}

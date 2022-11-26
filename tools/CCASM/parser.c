@@ -1,4 +1,4 @@
-#include <errors.h>
+#include<errors.h>
 #include <lexer.h>
 #include <parser.h>
 #include <stdio.h>
@@ -11,8 +11,8 @@ char* instructions[INSTRUCTIONS_LEN] = {"add", "cmp", "inp", "jeq", "jmp", "jnq"
 parser_function corresponding_function[INSTRUCTIONS_LEN] = {register_register_or_imm8, register_register_or_imm8, register_dregister, dregister_or_imm16, dregister_or_imm16, dregister_or_imm16, dregister_or_imm16, dregister_or_imm16, dregister_imm16, register_dregister, register_imm8, register_register, register_register_or_imm8, nop, register_register_or_imm8, dregister_register, register_register_or_imm8, dregister_register};
 int instruction_opcodes[INSTRUCTIONS_LEN] = {INSTR_ADD, INSTR_CMP, INSTR_INPA, INSTR_JEQA, INSTR_JMPA, INSTR_JNQA, INSTR_JNZA, INSTR_JZRA, INSTR_LADA, INSTR_LDRA, INSTR_LOD, INSTR_MOV, INSTR_NAD, INSTR_NOP, INSTR_NOR, INSTR_OUTA, INSTR_SUB, INSTR_WTRA};
 
-char* registers[REGISTER_LEN] = {"r1", "r2", "r3", "r4", "r5"};
-uint8_t register_opcodes[REGISTER_LEN] = {R1, R2, R3, R4, R5};
+char* registers[REGISTER_LEN] = {"r0", "r1", "r2", "r3", "r4", "r5"};
+uint8_t register_opcodes[REGISTER_LEN] = {R0, R1, R2, R3, R4, R5};
 char* d_registers[DREG_LEN] = {"A", "B"};
 uint8_t d_register_opcodes[DREG_LEN] = {A, B};
 
@@ -28,7 +28,6 @@ bool enable_errors = true;
 void init_labels(token_t* tokens, size_t len) {
 	AST.labels = malloc(1 * sizeof(label_t));
 	parse(tokens, len, false);
-	print_labels(AST.number_of_labels, AST.labels); // remove!
 	// free(AST.nodes);
 	AST.number_of_nodes = 0;
 	p_pos = -1;
@@ -72,7 +71,7 @@ root_t* parse(token_t* _tokens, size_t _len, bool _enable_errors) {
 	AST.number_of_labels = 0;
 	p_advance();
 
-	for (; !is_eot;) {
+	for (; !is_eot; instruction_count+=0x3) {
 		// main switch for the start of instructions. Basically should all be IDs. Otherwise something went wrong horribly
 		if (current_token.type == ID) {
 			parse_id();
@@ -113,7 +112,7 @@ int parse_second_class(int expected_type) {
 		// get address of label
 		label_t lbl = get_label(AST.labels, &AST.number_of_labels, current_token.string_data);
 		return lbl.value;
-	} else if (current_token.type == ID && IS_REGISTER()) {
+	} else if (current_token.type == ID && is_register(current_token.string_data)) {
 		if (expected_type != REG_TYPE)
 			throw_error("Type error", enable_errors);
 
@@ -126,11 +125,13 @@ int parse_second_class(int expected_type) {
 			throw_error("Type error", enable_errors);
 
 		// get dreg value
-		for (int i = 16; i < DREG_LEN + 16; i++) {
-			if (strcmp(d_registers[i - 16], current_token.string_data) == 0)
+		for (int i = 0; i < DREG_LEN; i++) {
+			if (strcmp(d_registers[i], current_token.string_data) == 0) {
 				return d_register_opcodes[i];
+			}
 		}
 	} else if (current_token.type == NUMBER8) {
+		if (expected_type == IMM16_TYPE) return current_token.imm16_data;
 		if (expected_type != IMM8_TYPE)
 			throw_error("Type error", enable_errors);
 		return current_token.imm16_data;
@@ -148,8 +149,8 @@ int parse_second_class(int expected_type) {
 }
 
 int get_register() {
-	for (int i = 1; i <= REGISTER_LEN; i++) {
-		if (strcmp(registers[i - 1], current_token.string_data) == 0)
+	for (int i = 0; i < REGISTER_LEN; i++) {
+		if (strcmp(registers[i], current_token.string_data) == 0)
 			return i;
 	}
 	return -1;
@@ -186,7 +187,7 @@ void register_register_or_imm8(int opcode) {
 
 	parse_comma();
 
-	if (IS_REGISTER()) {
+	if (is_register(current_token.string_data)) {
 		instr.reg2 = parse_second_class(REG_TYPE);
 		p_advance();
 	} else {
@@ -220,11 +221,12 @@ void dregister_or_imm16(int opcode) {
 	p_advance();
 
 	if (IS_DREG()) {
-		instr.reg1 = parse_second_class(DREG_TYPE);
-		INCR_ON_DREG();
+		int i = parse_second_class(DREG_TYPE);
+		INCR_ON_DREG(i);
 		p_advance();
 	} else {
 		instr.imm16 = parse_second_class(IMM16_TYPE);
+		p_advance();
 		// call get opcode increment to get for example jnqi.
 		instr.opcode = get_opcode_increment_from_opcode(instr.opcode);
 	}
@@ -237,8 +239,8 @@ void dregister_imm16(int opcode) {
 	instruction_t instr = {.opcode = opcode};
 	p_advance();
 
-	instr.reg1 = parse_second_class(DREG_TYPE);
-	INCR_ON_DREG();
+	int i = parse_second_class(DREG_TYPE);
+	INCR_ON_DREG(i);
 	p_advance();
 
 	parse_comma();
@@ -259,8 +261,8 @@ void register_dregister(int opcode) {
 
 	parse_comma();
 
-	instr.reg2 = parse_second_class(DREG_TYPE);
-	INCR_ON_DREG();
+	int i = parse_second_class(DREG_TYPE);
+	INCR_ON_DREG(i);
 	p_advance();
 
 	APPEND_TO_AST();
@@ -292,13 +294,13 @@ void dregister_register(int opcode) {
 	instruction_t instr = {.opcode = opcode};
 	p_advance();
 
-	instr.reg1 = parse_second_class(DREG_TYPE);
-	INCR_ON_DREG();
+	int i = parse_second_class(DREG_TYPE);
+	INCR_ON_DREG(i);
 	p_advance();
 
 	parse_comma();
 
-	instr.reg2 = parse_second_class(REG_TYPE);
+	instr.reg1 = parse_second_class(REG_TYPE);
 	p_advance();
 
 	APPEND_TO_AST();
@@ -309,6 +311,13 @@ void parse_comma() {
 		p_advance();
 	else
 		throw_error("Comma expected!", enable_errors);
+}
+
+bool is_register(char* cmp) {
+	for (int i = 0; i < REGISTER_LEN;i++) {
+		if (strcmp(registers[i], cmp) == 0) return true;
+	}
+	return false;
 }
 
 int get_opcode_increment_from_opcode(int x) {
