@@ -1,6 +1,9 @@
 CC = clang
 CXX = clang
 CFLAGS = -Iinclude -I../common -g
+ifeq ($(SANITIZE), true)
+	CFLAGS += -fsanitize=address,undefined
+endif
 
 OBJS = $(patsubst %.c,%.o,$(wildcard *.c)) $(patsubst %.cpp,%.o,$(wildcard *.cpp))
 
@@ -18,3 +21,6 @@ clean:
 
 %.o: %.cpp
 	$(CXX) $(CFLAGS) -c $< -o $@
+
+format:
+	find . -regex '.*\.\(cpp\|hpp\|cu\|c\|h\)' -exec clang-format --verbose -style=file -i {} \;
