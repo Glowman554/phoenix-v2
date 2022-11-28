@@ -67,7 +67,6 @@ root_t* parse(token_t* _tokens, size_t _len, bool _enable_errors) {
 	len = _len;
 	AST.nodes = malloc(1 * sizeof(instruction_t));
 	AST.number_of_nodes = 0;
-	AST.number_of_labels = 0;
 	p_advance();
 
 	for (; !is_eot; instruction_count+=0x3) {
@@ -96,7 +95,7 @@ void parse_id() {
 		p_advance();
 		p_advance();
 	} else {
-		char err[33];
+		char err[0xff];
 		sprintf(err, "Invalid instruction or label: \"%s\"", current_token.string_data);
 		throw_error(err, enable_errors);
 		p_advance();
