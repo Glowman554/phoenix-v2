@@ -8,9 +8,9 @@ loop:
 	add r3, r1
 	mov r0, r1
 	mov r1, r3
-	subi r2, 1
-	cmpi r2, 0
-	jnzi addr(loop)
+	sub r2, 1
+	cmp r2, 0
+	jnz loop
 
 done:
 loop2:
@@ -19,6 +19,6 @@ loop2:
     
     lod r4, 0
     out A, r4
-    jmpi addr(loop2)
+    jmp loop2
 
-    jmpi 0xffff
+    jmp 0xffff

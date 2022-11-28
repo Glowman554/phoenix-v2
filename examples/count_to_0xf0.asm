@@ -4,9 +4,9 @@ entry:
     lod r2, 0
 
 loop:
-    addi r2, 1
-	cmpi r2, 0xf0
-    jnqi addr(loop)
+    add r2, 1
+	cmp r2, 0xf0
+    jnq loop
 
 finish:
-	jmpi 0xffff
+	jmp 0xffff
