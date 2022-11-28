@@ -6,7 +6,7 @@
 #include <string.h>
 
 int main(int argc, char** argv) {
-	assert(argc > 1);
+	assert(argc == 3);
 
 	char* str;
 	FILE* f = fopen(argv[1], "r");
@@ -29,7 +29,7 @@ int main(int argc, char** argv) {
 	// parse
 	init_labels(tokens, (size_t)(*tokens_len));
 	root_t* ast = parse(tokens, (size_t)(*tokens_len), true);
-	gen_from_instructions("out.bin", ast->nodes, ast->number_of_nodes);
+	gen_from_instructions(argv[2], ast->nodes, ast->number_of_nodes);
 	free(tokens_len);
 	free(tokens);
 }
