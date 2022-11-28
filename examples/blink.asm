@@ -2,7 +2,7 @@ entry:
     lad A, 0x0
     lod r5, 0
 loop:
-    nor r5, 0
+    nor r5, 0 ; toggle pins
     out A, r5
 
 

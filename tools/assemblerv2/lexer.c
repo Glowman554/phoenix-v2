@@ -88,6 +88,12 @@ token_t lex_number() {
 	}
 }
 
+void lex_comment() {
+    while (code[pos] != '\n' && code[pos] != '\0') {
+		advance();
+	}
+}
+
 // realloc tokens and append
 token_t* append_token(token_t* a, int* b, token_t c) {
 	*b = *b + 1;
@@ -129,6 +135,9 @@ token_t* lex(char* _code, size_t _code_len, int* number_of_tokens_produced) {
 			token_t to_append = {.type = RPAREN, .string_data = ")"};
 			tokens = append_token(tokens, number_of_tokens_produced, to_append);
 		} break;
+        case ';': {
+            lex_comment();
+        } break;
 
 		default: {
 			// check for IDs and Numbers. otherwise throw error
