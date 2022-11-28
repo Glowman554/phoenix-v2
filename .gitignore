@@ -13,3 +13,4 @@ disk
 __pycache__
 
 *.gm2.*
+*.log
