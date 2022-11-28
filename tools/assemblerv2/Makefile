@@ -7,7 +7,7 @@ endif
 
 OBJS = $(patsubst %.c,%.o,$(wildcard *.c)) $(patsubst %.cpp,%.o,$(wildcard *.cpp))
 
-OUTPUT = ccasm.elf
+OUTPUT = assembler.elf
 
 $(OUTPUT): $(OBJS)
 	$(CXX) $(CFLAGS) $^ -o $@

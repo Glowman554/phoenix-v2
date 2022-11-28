@@ -2,22 +2,21 @@ entry:
     lad A, 0x0
     lod r5, 0
 loop:
-    nori r5, 0 ; invert pins
+    nor r5, 0
     out A, r5
 
 
-    lad B, addr(ret1)
-    jmpi addr(delay)
+    lad B, ret1
+    jmp delay
 ret1:
 
-    jmpi addr(loop)
-    ; jmpi 0xffff
+    jmp loop
 
 delay:
     lod r3, 0x2
 delayloop:
-    subi r3, 1
-    cmpi r3, 0
-    jnzi addr(delayloop)
+    sub r3, 1
+    cmp r3, 0
+    jnz delayloop
 
     jmp B

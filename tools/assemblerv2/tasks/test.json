@@ -1,0 +1,13 @@
+{
+	"name": "test",
+	"commands": [
+		"../assembler.exe ${file} ${file}.o"
+	],
+	"dependencies": [
+		"link"
+	],
+	"run_after_task": [],
+	"allow_fail": false,
+	"run_for": "asm",
+	"run_in": "test"
+}

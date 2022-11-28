@@ -1,10 +1,10 @@
 {
-	"name": "assembler",
+	"name": "cpp_comp",
 	"commands": [
-		"gm2 run link"
+		"clang++ ${cflags} ${file} -c -o ${file}.o"
 	],
 	"dependencies": [],
 	"run_after_task": [],
 	"allow_fail": false,
-	"run_in": "assemblerv2"
+	"run_for": "cpp"
 }

@@ -6,5 +6,5 @@
 	"task_dir": "tasks",
 	"custom_header": "Phoenix",
 	"variables": {},
-	"non_silent": false
+	"non_silent": true
 }
