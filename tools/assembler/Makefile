@@ -1,6 +1,6 @@
 CC = clang
 CXX = clang++
-CFLAGS = -Iinclude -I../common -g -std=c++20
+CFLAGS = -Iinclude -I../common -g
 
 OBJS = $(patsubst %.c,%.o,$(wildcard *.c)) $(patsubst %.cpp,%.o,$(wildcard *.cpp))
 
