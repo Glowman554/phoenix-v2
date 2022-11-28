@@ -19,14 +19,15 @@ void cpu_write_byte(uint16_t addr, uint8_t val) {
 }
 
 uint8_t cpu_io_read(uint16_t addr) {
-	// debugf("reading byte from io at 0x%x", addr);
+	debugf("reading byte from io at 0x%x", addr);
 	return 0x0;
 }
 
 void cpu_io_write(uint16_t addr, uint8_t val) {
-	// debugf("writing byte 0x%x to io at 0x%x", val, addr);
+	debugf("writing byte 0x%x to io at 0x%x", val, addr);
 }
 
+extern FILE* logfile;
 
 int main(int argc, char* argv[]) {
 	if (argc < 2) {
@@ -47,7 +48,7 @@ int main(int argc, char* argv[]) {
 	char* buffer = new char[fsize + 1];
 	memset(buffer, 0, fsize + 1);
 	fread(buffer, 1, fsize, config);
-	printf("%s\n", buffer);
+	// printf("%s\n", buffer);
 	json_config = nlohmann::json::parse(buffer);
 
 	for (auto& it : json_config) {
@@ -72,9 +73,19 @@ int main(int argc, char* argv[]) {
 		fread(memory_, 1, size, f);
 		fclose(f);
 
+		if (it["logfile"].is_string()) {
+			std::string lf = it["logfile"];
+			std::cout << BLUE "Using logfile " << lf <<  COLOR_RESET << std::endl;
+			logfile = fopen(lf.c_str(), "w");
+		}
+
 		cpu_state_t state = { 0 };
 		int timeout = 100000;
 		while (cpu_tick(&state)) {
+			char out[0xff] = { 0 };
+			cpu_dbg(&state, out);
+			debugf("%s", out);
+
 			if(timeout-- == 0) {
 				std::cout << RED "--- TEST TOOK TO LONG ---" COLOR_RESET << std::endl;
 				break;
@@ -93,6 +104,10 @@ int main(int argc, char* argv[]) {
 			}
 		}
 
+		if (logfile) {
+			fclose(logfile);
+			logfile = nullptr;
+		}
 	}
 
 	return 0;
