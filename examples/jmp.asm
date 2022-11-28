@@ -1,5 +1,4 @@
-lod r2, lo(jmphere)
-lod r3, hi(jmphere)
+lad B, jmphere
 jmp B ; jump to the address in r2:r3
 nop
 
