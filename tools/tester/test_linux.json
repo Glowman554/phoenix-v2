@@ -1,0 +1,18 @@
+[
+	{
+		"file": "../../examples/sum.bin",
+		"r3": 41
+	},
+	{
+		"file": "../../examples/fib.bin",
+		"r3": 144
+	},
+	{
+		"file": "../../examples/count_to_0xf0.bin",
+		"r2": 240
+	},
+	{
+		"file": "../../examples/memory.bin",
+		"r3": 240
+	}
+]
