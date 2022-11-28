@@ -11,7 +11,7 @@ function build {
 	make -C $1
 }
 
-build tools/assembler
+build tools/assemblerv2
 build tools/disassembler
 build tools/emulator
 build tools/microcode
