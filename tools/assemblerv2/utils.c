@@ -16,6 +16,6 @@ bool in_bounds(char a, char b, char c) {
 
 void print_labels(size_t label_len, label_t* labels) {
 	for (int i = 0; i < (int)label_len; i++) {
-		printf("Label: %s -> %d\n", labels[i].name, labels[i].value);
+		printf("Label: %s -> 0x%x\n", labels[i].name, (labels[i].value+1)*0x3);
 	}
 }
