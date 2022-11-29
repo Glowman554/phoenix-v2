@@ -27,7 +27,6 @@ bool enable_errors = true;
 void init_labels(token_t* tokens, size_t len) {
 	AST.labels = malloc(1 * sizeof(label_t));
 	parse(tokens, len, false);
-	print_labels(AST.number_of_labels, AST.labels);
 	free(AST.nodes);
 	AST.number_of_nodes = 0;
 	p_pos = -1;
@@ -89,15 +88,9 @@ void parse_id() {
 				corresponding_function[i](instruction_opcodes[i]);
 			}
 		}
-		instruction_count++;
 	} else if (p_pos + 1 <= (int)len && tokens[p_pos + 1].type == COLON) {
 		// label
-		label_t label_to_append;
-		if (instruction_count == 0) {
-			label_to_append.value = 0x0;
-		} else {
-			label_to_append.value = (instruction_count+1)*0x3;
-		}
+		label_t label_to_append = {.value = instruction_count};
 		strcpy(label_to_append.name, current_token.string_data);
 		AST.labels = dynamic_label(AST.labels, label_to_append, &AST.number_of_labels);
 		p_advance();

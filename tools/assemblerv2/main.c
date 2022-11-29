@@ -25,6 +25,7 @@ int main(int argc, char** argv) {
 	size_t len = strlen(str);
 	int* tokens_len = malloc(sizeof(int));
 	token_t* tokens = lex(str, len, tokens_len);
+	//print_tokens(*tokens_len, tokens);
 
 	// parse
 	init_labels(tokens, (size_t)(*tokens_len));
