@@ -34,56 +34,56 @@ token_t lex_id() {
 }
 
 token_t lex_number() {
-	int base = 10;
-	int start_range1 = '0';
-	int end_range1 = '9';
-	int start_range2 = 'a';
-	int end_range2 = 'f';
-
-	if (code[pos] == '0') {
-		if (pos + 1 <= (int)code_len && code[pos + 1] == 'x') {
-			// base 16
-			advance();
-			advance();
-			base = 16;
-		} else if (pos + 1 <= (int)code_len && code[pos + 1] == 'b') {
-			// base 2
-			advance();
-			advance();
-			base = 2;
-			start_range1 = '0';
-			end_range1 = '1';
-			start_range2 = start_range1;
-			end_range2 = end_range1;
-		} else {
-			// base 10
-			start_range2 = start_range1;
-			end_range2 = end_range1;
+	int idx = 0;
+	int number_system_base = 10;
+	
+    if (current_char == '0') {
+		advance();
+		if (current_char == 'x') {
+			number_system_base = 16;
+			idx = 2;
 		}
-	} else {
-		// base 10
-		start_range2 = start_range1;
-		end_range2 = end_range1;
-	}
-	int number = 0;
-	for (int s = 0; current_char != '\0' && ((current_char >= start_range1 && current_char <= end_range1) || (current_char >= start_range2 && current_char <= end_range2)); advance(), s++) {
-		if (base == 16)
-			number = (number * base) + (current_char - start_range2 + 10);
-		// else if (base == 2)
-		else
-			number = (number * base) + (current_char - start_range2);
+		else if (current_char == 'b') {
+            number_system_base = 2;
+			idx = 2;
+		}
+		advance();
 	}
 
-	if (number > MAX_INTEGER16_SIZE) {
-		char str[31];
-		sprintf(str, "Integer to big. Is %d. Max is %d", number, MAX_INTEGER16_SIZE);
+
+	int _number = 0;
+
+	while (current_char != '\0' && (in_bounds(current_char, '0', '9') || in_bounds(current_char, 'a', 'f'))) {
+		if (current_char >= '0' && current_char <= '9') {
+			_number = _number * number_system_base + (current_char - '0');
+		}
+		else if (current_char >= 'a' && current_char <= 'f') {
+			_number = _number * number_system_base + (current_char - 'a' + 10);
+		}
+		else if (current_char >= 'A' && current_char <= 'F') {
+			_number = _number * number_system_base + (current_char - 'A' + 10);
+		}
+		else {
+			char buf[0xff] = { 0 };
+			sprintf(buf, "Unexpected char %c in number", current_char);
+			throw_error(buf, true);
+			token_t t;
+			return t;
+		}
+
+		advance();
+	}
+
+	if (_number > MAX_INTEGER16_SIZE) {
+		char str[0xff];
+		sprintf(str, "Integer to big. Is %d. Max is %d", _number, MAX_INTEGER16_SIZE);
 		throw_error(str, true);
 	}
-	if (number <= MAX_INTEGER8_SIZE) {
-		token_t ret_tok = {.imm16_data = number, .type = NUMBER8};
+	if (_number <= MAX_INTEGER8_SIZE) {
+		token_t ret_tok = {.imm16_data = _number, .type = NUMBER8};
 		return ret_tok;
 	} else {
-		token_t ret_tok = {.imm16_data = number, .type = NUMBER16};
+		token_t ret_tok = {.imm16_data = _number, .type = NUMBER16};
 		return ret_tok;
 	}
 }

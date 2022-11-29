@@ -69,7 +69,7 @@ root_t* parse(token_t* _tokens, size_t _len, bool _enable_errors) {
 	AST.number_of_nodes = 0;
 	p_advance();
 
-	for (; !is_eot; instruction_count+=0x3) {
+	for (; !is_eot;) {
 		// main switch for the start of instructions. Basically should all be IDs. Otherwise something went wrong horribly
 		if (current_token.type == ID) {
 			parse_id();
@@ -84,8 +84,10 @@ root_t* parse(token_t* _tokens, size_t _len, bool _enable_errors) {
 void parse_id() {
 	if (is_instruction()) {
 		for (int i = 0; i < INSTRUCTIONS_LEN; i++) {
-			if (strcmp(instructions[i], current_token.string_data) == 0)
+			if (strcmp(instructions[i], current_token.string_data) == 0) {
 				corresponding_function[i](instruction_opcodes[i]);
+				instruction_count+=0x3;
+			}
 		}
 	} else if (p_pos + 1 <= (int)len && tokens[p_pos + 1].type == COLON) {
 		// label
