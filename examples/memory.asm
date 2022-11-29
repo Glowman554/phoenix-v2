@@ -1,14 +1,12 @@
-$define RAM_START 0x8000
-
-lad A, RAM_START
+lad A, 0x8000
 lod r2, 0xf0
 
 wtr A, r2
 ldr r3, A
 
-cmpi r3, 0xf0
-jeqi addr(jmphere)
+cmp r3, 0xf0
+jeq jmphere
 nop
 
 jmphere:
-	jmpi 0xffff
+	jmp 0xffff

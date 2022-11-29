@@ -11,14 +11,16 @@ function build {
 	make -C $1
 }
 
-build tools/assembler
+build tools/assemblerv2
 build tools/disassembler
 build tools/emulator
 build tools/microcode
 build tools/visual_eumlator
+build tools/tester
 
 install tools/assemblerv2/assembler.elf as
 install tools/disassembler/disassembler.elf disasm
 install tools/emulator/emulator.elf emu
 install tools/microcode/microcode.elf microcode
 install tools/visual_eumlator/visual_eumlator.elf emu-visual
+install tools/tester/tester.elf test

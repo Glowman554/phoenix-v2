@@ -1,10 +1,10 @@
 entry:
 	lod r0, 10
 	lod r1, 20
-	lad B, addr(ret)
-	jmpi addr(subprocadd)
+	lad B, ret
+	jmp subprocadd
 ret:
-	jmpi 0xffff
+	jmp 0xffff
 
 subprocadd:
 	add r0, r1

@@ -7,7 +7,7 @@ function build_tool {
     )
 }
 
-build_tool assembler as
+build_tool assemblerv2 as
 build_tool disassembler disasm
 build_tool emulator emu
 build_tool microcode microcode

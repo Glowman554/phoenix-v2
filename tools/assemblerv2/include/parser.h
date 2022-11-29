@@ -16,7 +16,7 @@ bool is_register(char* cmp);
 
 #define IS_COMMA() (current_token.type == COMMA)
 #define INCR_ON_DREG(i) if (i == B) instr.opcode = get_opcode_increment_from_for_b(instr.opcode);
-#define APPEND_TO_AST() AST.nodes = dynamic_node(AST.nodes, instr, &AST.number_of_nodes);
+void append_to_ast(instruction_t instr);
 
 // parser functions
 void register_register_or_imm8(int opcode);

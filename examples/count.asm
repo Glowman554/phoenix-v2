@@ -4,6 +4,6 @@ entry:
     lod r2, 0
 
 loop:
-    addi r2, 1
+    add r2, 1
     out A, r2
-    jmpi addr(loop)
+    jmp loop

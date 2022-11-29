@@ -24,10 +24,10 @@ size_t len;
 token_t* tokens;
 bool enable_errors = true;
 
-void init_labels(token_t* tokens, size_t len) {
+void init_labels(token_t* _tokens, size_t _len) {
 	AST.labels = malloc(1 * sizeof(label_t));
-	parse(tokens, len, false);
-	// free(AST.nodes);
+	parse(_tokens, _len, false);
+	free(AST.nodes);
 	AST.number_of_nodes = 0;
 	p_pos = -1;
 	is_eot = false;
@@ -69,12 +69,12 @@ root_t* parse(token_t* _tokens, size_t _len, bool _enable_errors) {
 	AST.number_of_nodes = 0;
 	p_advance();
 
-	for (; !is_eot; instruction_count+=0x3) {
+	for (; !is_eot;) {
 		// main switch for the start of instructions. Basically should all be IDs. Otherwise something went wrong horribly
 		if (current_token.type == ID) {
 			parse_id();
 		} else {
-			throw_error("Expected Instruction but got something else", enable_errors);
+			throw_error("Expected Instruction but got something else", true);
 			p_advance();
 		}
 	}
@@ -84,20 +84,24 @@ root_t* parse(token_t* _tokens, size_t _len, bool _enable_errors) {
 void parse_id() {
 	if (is_instruction()) {
 		for (int i = 0; i < INSTRUCTIONS_LEN; i++) {
-			if (strcmp(instructions[i], current_token.string_data) == 0)
+			if (strcmp(instructions[i], current_token.string_data) == 0) {
 				corresponding_function[i](instruction_opcodes[i]);
+			}
 		}
 	} else if (p_pos + 1 <= (int)len && tokens[p_pos + 1].type == COLON) {
-		// label
-		label_t label_to_append = {.value = instruction_count};
-		strcpy(label_to_append.name, current_token.string_data);
-		AST.labels = dynamic_label(AST.labels, label_to_append, &AST.number_of_labels);
+		if (!enable_errors) {
+			// label
+			label_t label_to_append = {.value = instruction_count};
+			//if (instruction_count == 0) label_to_append.value -= 0x3;
+			strcpy(label_to_append.name, current_token.string_data);
+			AST.labels = dynamic_label(AST.labels, label_to_append, &AST.number_of_labels);
+		}
 		p_advance();
 		p_advance();
 	} else {
 		char err[0xff];
 		sprintf(err, "Invalid instruction or label: \"%s\"", current_token.string_data);
-		throw_error(err, enable_errors);
+		throw_error(err, true);
 		p_advance();
 	}
 }
@@ -141,7 +145,6 @@ int parse_second_class(int expected_type) {
 		char err[0xff];
 		sprintf(err, "Unexpected second class citizen: \"%s\"", current_token.string_data);
 		throw_error(err, enable_errors);
-		p_advance();
 	}
 	return -1;
 }
@@ -195,7 +198,7 @@ void register_register_or_imm8(int opcode) {
 		p_advance();
 	}
 
-	APPEND_TO_AST();
+	append_to_ast(instr);
 }
 
 void register_imm8(int opcode) {
@@ -210,7 +213,7 @@ void register_imm8(int opcode) {
 	instr.imm = parse_second_class(IMM8_TYPE);
 	p_advance();
 
-	APPEND_TO_AST();
+	append_to_ast(instr);
 }
 
 void dregister_or_imm16(int opcode) {
@@ -229,7 +232,7 @@ void dregister_or_imm16(int opcode) {
 		instr.opcode = get_opcode_increment_from_opcode(instr.opcode);
 	}
 
-	APPEND_TO_AST();
+	append_to_ast(instr);
 }
 
 void dregister_imm16(int opcode) {
@@ -246,7 +249,7 @@ void dregister_imm16(int opcode) {
 	instr.imm16 = parse_second_class(IMM16_TYPE);
 	p_advance();
 
-	APPEND_TO_AST();
+	append_to_ast(instr);
 }
 
 void register_dregister(int opcode) {
@@ -263,7 +266,7 @@ void register_dregister(int opcode) {
 	INCR_ON_DREG(i);
 	p_advance();
 
-	APPEND_TO_AST();
+	append_to_ast(instr);
 }
 
 void register_register(int opcode) {
@@ -278,13 +281,13 @@ void register_register(int opcode) {
 	instr.reg2 = parse_second_class(REG_TYPE);
 	p_advance();
 
-	APPEND_TO_AST();
+	append_to_ast(instr);
 }
 
 void nop(int opcode) {
 	instruction_t instr = {.opcode = opcode};
 	p_advance();
-	APPEND_TO_AST();
+	append_to_ast(instr);
 }
 
 void dregister_register(int opcode) {
@@ -301,7 +304,7 @@ void dregister_register(int opcode) {
 	instr.reg1 = parse_second_class(REG_TYPE);
 	p_advance();
 
-	APPEND_TO_AST();
+	append_to_ast(instr);
 }
 
 void parse_comma() {
@@ -393,4 +396,9 @@ int get_opcode_increment_from_for_b(int x) {
 		break;
 	}
 	return x;
+}
+
+void append_to_ast(instruction_t instr) {
+	AST.nodes = dynamic_node(AST.nodes, instr, &AST.number_of_nodes);
+	instruction_count+=0x3;
 }
