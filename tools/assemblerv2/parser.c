@@ -91,6 +91,7 @@ void parse_id() {
 	} else if (p_pos + 1 <= (int)len && tokens[p_pos + 1].type == COLON) {
 		// label
 		label_t label_to_append = {.value = instruction_count};
+		if (instruction_count != 0) label_to_append.value += 0x3;
 		strcpy(label_to_append.name, current_token.string_data);
 		AST.labels = dynamic_label(AST.labels, label_to_append, &AST.number_of_labels);
 		p_advance();
