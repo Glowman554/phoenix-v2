@@ -1,0 +1,12 @@
+{
+	"name": "link",
+	"commands": [
+		"clang++ ${findall o} -o ${output}"
+	],
+	"dependencies": [
+		"c_comp",
+		"cpp_comp"
+	],
+	"run_after_task": [],
+	"allow_fail": false
+}

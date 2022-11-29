@@ -1,0 +1,11 @@
+{
+	"name": "test",
+	"commands": [
+		".\\${output} test.json"
+	],
+	"dependencies": [
+		"link"
+	],
+	"run_after_task": [],
+	"allow_fail": false
+}
