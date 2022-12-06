@@ -53,7 +53,7 @@ token_t lex_number() {
 
 	int _number = 0;
 
-	while (current_char != '\0' && (in_bounds(current_char, '0', '9') || in_bounds(current_char, 'a', 'f'))) {
+	while (current_char != '\0' && (in_bounds(current_char, '0', '9') || in_bounds(current_char, 'a', 'f') || in_bounds(current_char, 'A', 'F'))) {
 		if (current_char >= '0' && current_char <= '9') {
 			_number = _number * number_system_base + (current_char - '0');
 		}
