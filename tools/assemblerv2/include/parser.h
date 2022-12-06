@@ -27,10 +27,11 @@ void register_dregister(int opcode);
 void register_register(int opcode);
 void nop(int opcode);
 void dregister_register(int opcode);
+void db(int opcode);
 
 typedef void (*parser_function)(int);
 
-#define INSTRUCTIONS_LEN 18
+#define INSTRUCTIONS_LEN 19
 extern char* instructions[INSTRUCTIONS_LEN];
 extern parser_function corresponding_function[INSTRUCTIONS_LEN];
 extern int instruction_opcodes[INSTRUCTIONS_LEN];

@@ -6,14 +6,17 @@ ifeq ($(SANITIZE), true)
 endif
 
 OBJS = $(patsubst %.c,%.o,$(wildcard *.c)) $(patsubst %.cpp,%.o,$(wildcard *.cpp))
+TESTS = $(patsubst %.asm,%.bin,$(wildcard test/*.asm))
 
 OUTPUT = assembler.elf
 
 $(OUTPUT): $(OBJS)
 	$(CXX) $(CFLAGS) $^ -o $@
 
+test: $(OUTPUT) $(TESTS)
+
 clean:
-	rm $(OBJS) $(OUTPUT)
+	rm $(OBJS) $(TESTS) $(OUTPUT)
 
 %.o: %.c
 	$(CC) $(CFLAGS) -c $< -o $@
@@ -21,6 +24,9 @@ clean:
 
 %.o: %.cpp
 	$(CXX) $(CFLAGS) -c $< -o $@
+
+%.bin: %.asm
+	./$(OUTPUT) $< $@
 
 format:
 	find . -regex '.*\.\(cpp\|hpp\|cu\|c\|h\)' -exec clang-format --verbose -style=file -i {} \;

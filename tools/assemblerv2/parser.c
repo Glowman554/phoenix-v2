@@ -6,15 +6,17 @@
 #include <string.h>
 #include <utils.h>
 
-char* instructions[INSTRUCTIONS_LEN] = {"add", "cmp", "inp", "jeq", "jmp", "jnq", "jnz", "jzr", "lad", "ldr", "lod", "mov", "nad", "nop", "nor", "out", "sub", "wtr"};
-parser_function corresponding_function[INSTRUCTIONS_LEN] = {register_register_or_imm8, register_register_or_imm8, register_dregister, dregister_or_imm16, dregister_or_imm16, dregister_or_imm16, dregister_or_imm16, dregister_or_imm16, dregister_imm16, register_dregister, register_imm8, register_register, register_register_or_imm8, nop, register_register_or_imm8, dregister_register, register_register_or_imm8, dregister_register};
-int instruction_opcodes[INSTRUCTIONS_LEN] = {INSTR_ADD, INSTR_CMP, INSTR_INPA, INSTR_JEQA, INSTR_JMPA, INSTR_JNQA, INSTR_JNZA, INSTR_JZRA, INSTR_LADA, INSTR_LDRA, INSTR_LOD, INSTR_MOV, INSTR_NAD, INSTR_NOP, INSTR_NOR, INSTR_OUTA, INSTR_SUB, INSTR_WTRA};
+char* instructions[INSTRUCTIONS_LEN] = {"add", "cmp", "inp", "jeq", "jmp", "jnq", "jnz", "jzr", "lad", "ldr", "lod", "mov", "nad", "nop", "nor", "out", "sub", "wtr", "db"};
+parser_function corresponding_function[INSTRUCTIONS_LEN] = {register_register_or_imm8, register_register_or_imm8, register_dregister, dregister_or_imm16, dregister_or_imm16, dregister_or_imm16, dregister_or_imm16, dregister_or_imm16, dregister_imm16, register_dregister, register_imm8, register_register, register_register_or_imm8, nop, register_register_or_imm8, dregister_register, register_register_or_imm8, dregister_register, db};
+int instruction_opcodes[INSTRUCTIONS_LEN] = {INSTR_ADD, INSTR_CMP, INSTR_INPA, INSTR_JEQA, INSTR_JMPA, INSTR_JNQA, INSTR_JNZA, INSTR_JZRA, INSTR_LADA, INSTR_LDRA, INSTR_LOD, INSTR_MOV, INSTR_NAD, INSTR_NOP, INSTR_NOR, INSTR_OUTA, INSTR_SUB, INSTR_WTRA, -1};
 
 char* registers[REGISTER_LEN] = {"r0", "r1", "r2", "r3", "r4", "r5"};
 uint8_t register_opcodes[REGISTER_LEN] = {R0, R1, R2, R3, R4, R5};
 char* d_registers[DREG_LEN] = {"A", "B"};
 uint8_t d_register_opcodes[DREG_LEN] = {A, B};
 
+int db_count = 0;
+uint8_t current_db[3];
 int instruction_count = 0; // offset by instr_count >> 24bits
 int p_pos = -1;
 eot is_eot = false;
@@ -78,6 +80,9 @@ root_t* parse(token_t* _tokens, size_t _len, bool _enable_errors) {
 			p_advance();
 		}
 	}
+	if (db_count != 0) {
+		append_to_ast(*((instruction_t*)&current_db));
+	}
 	return &AST;
 }
 
@@ -131,6 +136,36 @@ int parse_second_class(int expected_type) {
 			if (strcmp(d_registers[i], current_token.string_data) == 0) {
 				return d_register_opcodes[i];
 			}
+		}
+	} else if (current_token.type == ID && ((strcmp(current_token.string_data, "lo") == 0) || (strcmp(current_token.string_data, "hi") == 0))) {
+		if (expected_type == IMM16_TYPE || expected_type == IMM8_TYPE);
+		else {
+			throw_error("Type error", enable_errors);
+		}
+		bool lo = false;
+		if (strcmp(current_token.string_data, "lo") == 0) lo = true;
+		else if (strcmp(current_token.string_data, "hi") == 0) lo = false;
+		else {
+			throw_error("Expected hi or lo!", enable_errors);
+			p_advance();
+		}
+		p_advance();
+		if (current_token.type == LPAREN) {
+			p_advance();
+			int i2;
+			if (lo) i2 = (parse_second_class(IMM16_TYPE) & 0x00FF);
+			else i2 = (parse_second_class(IMM16_TYPE) & 0xFF00) >> 8;
+			p_advance();
+
+			if (current_token.type == RPAREN) {
+				return i2;
+			} else {
+				throw_error("Closing Paren expected", enable_errors);
+				p_advance();
+			}
+		} else {
+			throw_error("Opening Paren expected", enable_errors);
+			p_advance();
 		}
 	} else if (current_token.type == NUMBER8) {
 		if (expected_type == IMM16_TYPE) return current_token.imm16_data;
@@ -305,6 +340,21 @@ void dregister_register(int opcode) {
 	p_advance();
 
 	append_to_ast(instr);
+}
+
+void db(int opcode) {
+	p_advance();
+	int i = parse_second_class(IMM8_TYPE);
+	p_advance();
+
+	if (db_count < 3) {
+		current_db[db_count] = (uint8_t)i;
+		db_count++;
+	}
+	if (db_count == 4) {
+		append_to_ast(*((instruction_t*)&current_db));
+		db_count = 0;
+	}
 }
 
 void parse_comma() {
