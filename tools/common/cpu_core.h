@@ -22,6 +22,11 @@ typedef struct cpu_state {
 	uint16_t pc;
 	uint16_t fg;
 	uint8_t regs[6];
+
+	uint8_t intr;
+	uint8_t curr_intr;
+	uint8_t intr_mask;
+	uint16_t intr_ret;
 } cpu_state_t;
 
 uint8_t cpu_fetch_byte(uint16_t addr);
@@ -42,6 +47,22 @@ static inline instruction_t cpu_fetch_instruction(uint16_t addr) {
 static inline void cpu_write_instruction(instruction_t instr, uint16_t addr) {
 	for (size_t i = 0; i < sizeof(instruction_t); i++) {
 		cpu_write_byte(addr + i, ((uint8_t*)&instr)[i]);
+	}
+}
+
+static inline uint8_t cpu_io_read_i(uint16_t addr, cpu_state_t* state) {
+	if (addr == INT_IO) {
+		return state->curr_intr;
+	} else {
+		return cpu_io_read(addr);
+	}
+}
+
+static inline void cpu_io_write_i(uint16_t addr, uint8_t val, cpu_state_t* state) {
+	if (addr == INT_IO) {
+		state->intr_mask = val;
+	} else {
+		cpu_io_write(addr, val);
 	}
 }
 
@@ -70,10 +91,10 @@ static inline bool cpu_tick(cpu_state_t* state) {
 		state->regs[instruction.reg1] = instruction.imm;
 		break;
 	case INSTR_OUTA:
-		cpu_io_write(AR, state->regs[instruction.reg1]);
+		cpu_io_write_i(AR, state->regs[instruction.reg1], state);
 		break;
 	case INSTR_INPA:
-		state->regs[instruction.reg1] = cpu_io_read(AR);
+		state->regs[instruction.reg1] = cpu_io_read_i(AR, state);
 		break;
 	case INSTR_JNZA:
 		if ((state->fg & FG_ZERO) == 0) {
@@ -243,10 +264,15 @@ static inline bool cpu_tick(cpu_state_t* state) {
 		state->regs[3] = (instruction.imm16 & 0xff00) >> 8;
 		break;
 	case INSTR_OUTB:
-		cpu_io_write(BR, state->regs[instruction.reg1]);
+		cpu_io_write_i(BR, state->regs[instruction.reg1], state);
 		break;
 	case INSTR_INPB:
-		state->regs[instruction.reg1] = cpu_io_read(BR);
+		state->regs[instruction.reg1] = cpu_io_read_i(BR, state);
+		break;
+	case INSTR_IRE:
+		state->pc = state->intr_ret;
+		state->curr_intr = 0;
+		goto out;
 		break;
 	default:
 		silent(debugf("unk instr setting halt flag"));
@@ -260,13 +286,20 @@ out:
 	if (state->pc == 0xffff) {
 		silent(debugf("pc == 0xffff setting halt flag"));
 		state->fg |= FG_HALT;
+	} else {
+		if ((state->intr & state->intr_mask) != 0) {
+			state->curr_intr = state->intr;
+			state->intr = 0;
+			state->intr_ret = state->pc;
+			state->pc = INT_ENTRY;
+		}
 	}
 
 	return !((state->fg & FG_HALT) != 0);
 }
 
 static inline void cpu_dbg(cpu_state_t* state, char* out) {
-	sprintf(out, "---- CPU STATE ----\n\rPC: 0x%x\n\rFG: %s%s%s%s\n\rR0: 0x%x, R1: 0x%x, R2: 0x%x\n\rR3: 0x%x, R4: 0x%x, R5: 0x%x\n\r-------------------", state->pc, (state->fg & FG_ZERO) != 0 ? "FG_ZERO " : "", (state->fg & FG_EQ) != 0 ? "FG_EQ " : "", (state->fg & FG_OV) != 0 ? "FG_OV " : "", (state->fg & FG_HALT) != 0 ? "FG_HALT" : "", state->regs[0], state->regs[1], state->regs[2], state->regs[3], state->regs[4], state->regs[5]);
+	sprintf(out, "---- CPU STATE ----\n\rPC: 0x%x\n\rFG: %s%s%s%s\n\rR0: 0x%x, R1: 0x%x, R2: 0x%x\n\rR3: 0x%x, R4: 0x%x, R5: 0x%x\n\rINT_RET: 0x%x\n\r-------------------", state->pc, (state->fg & FG_ZERO) != 0 ? "FG_ZERO " : "", (state->fg & FG_EQ) != 0 ? "FG_EQ " : "", (state->fg & FG_OV) != 0 ? "FG_OV " : "", (state->fg & FG_HALT) != 0 ? "FG_HALT" : "", state->regs[0], state->regs[1], state->regs[2], state->regs[3], state->regs[4], state->regs[5], state->intr_ret);
 }
 
 static inline void core_run() {

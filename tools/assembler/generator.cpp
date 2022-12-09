@@ -58,6 +58,8 @@ extern "C" {
 	instruction_t build_jnzi_instr(int ir0, int ir1, int iimm, int sreg);
 
 	instruction_t build_lad_instr(int ir0, int ir1, int iimm, int sreg);
+
+	instruction_t build_ire_instr(int ir0, int ir1, int iimm, int sreg);
 }
 
 generator::generator(list<lexer_token_t>* tokens) : register_names(10), instruction_builders(10) {
@@ -102,6 +104,7 @@ generator::generator(list<lexer_token_t>* tokens) : register_names(10), instruct
 	instruction_builders.add(instruction_builder((char*)"jzri", IIMM, NONE, build_jzri_instr));
 	instruction_builders.add(instruction_builder((char*)"jnzi", IIMM, NONE, build_jnzi_instr));
 	instruction_builders.add(instruction_builder((char*)"lad", SREG, IIMM, build_lad_instr));
+	instruction_builders.add(instruction_builder((char*)"ire", NONE, NONE, build_ire_instr));
 }
 
 

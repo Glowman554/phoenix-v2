@@ -125,6 +125,18 @@
 
 #define INSTR_IRE 0x26
 
+#define INT0	(1 << 0)
+#define INT1	(1 << 1)
+#define INT2	(1 << 2)
+#define INT3	(1 << 3)
+#define INT4	(1 << 4)
+#define INT5	(1 << 5)
+#define INT6	(1 << 6)
+#define INT7	(1 << 7)
+
+#define INT_ENTRY 0x8000
+#define INT_IO 0xff00
+
 typedef PACK(struct instruction {
 	uint8_t opcode;
 	union {
@@ -190,4 +202,4 @@ typedef PACK(struct instruction {
 
 #define LAD(a, imm) a == A ? INSTR_IMM16(INSTR_LADA, imm) : INSTR_IMM16(INSTR_LADB, imm)
 
-#define IRE() INSTR(INSTR_IRET, 0, 0, 0)
+#define IRE() INSTR(INSTR_IRE, 0, 0, 0)

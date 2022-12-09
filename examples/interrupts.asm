@@ -10,3 +10,7 @@ entry:
 loop:
 	nop
 	jmp loop
+
+	db 0x26 ; manually encode ire
+	db 0
+	db 0
