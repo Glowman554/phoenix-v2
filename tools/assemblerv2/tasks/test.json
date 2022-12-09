@@ -1,7 +1,7 @@
 {
 	"name": "test",
 	"commands": [
-		"../assembler.exe ${file} ${file}.o"
+		"../assembler.exe ${file} ${file}.bin"
 	],
 	"dependencies": [
 		"link"

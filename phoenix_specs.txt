@@ -60,6 +60,12 @@
 0x22: LAD A <imm16>			-> load address
 0x23: LAD B <imm16>			-> load address
 
+0x24: OUT B <reg>			-> output reg to address in B
+0x25: INP <reg> B			-> input address in B to reg
+
+
+0x26: IRE					-> interrupt return
+
 === INSTRUCTION ENCODING ===
 A instruction has a fixed size of 24bit, and can never contain two imm8.
 
@@ -116,6 +122,20 @@ The value of the 8 input pins can be read using the inp instruction.
 The value of the 8 output pins can be set using the out instruction.
 The gpio pins do not need any configuration.
 
+=== INTERRUPTS ===
+
+when a interrupt is triggered the cpu jumps to 0x8000 (first address in ram).
+The code execution can be continued using the ire (interrupt return instruction).
+The interrupt handler needs to save the registers manually.
+
+The interrupt will trigger when the current instruction finished executing.
+
+=== INTERRUPT CONTROLLER ===
+The interrupt controller is located at 0xff00 in the io space.
+
+the bits written to that address decide if the interrupt can be triggered.
+reading from that io port will get the current interrupt id.
+
 === MICROCODE ===
 
 The microcode is saved on multiple external eeproms or 1 eeprom with 32bit output.
@@ -164,4 +184,7 @@ Microcode commands:
 	SAVE_ADDR_A: 	address bus -> A reg
 	SAVE_ADDR_B: 	address bus -> B reg
 
+	INT_RET_TO_ADDR: Interrupt return address -> address bus && resets interrupt controller int num
+
+	FINISH_NOINT:	start next instruction fetch / decode / execute cycle without running interrupts
 	FINISH:			start next instruction fetch / decode / execute cycle

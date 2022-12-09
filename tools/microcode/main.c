@@ -162,6 +162,10 @@ int main() {
 	microcode[INSTR_INPB << 3 | MICROCODE_STEP_0] = PUT_B_ADDR | SAVE_DB_IR0 | IO_IN;
 	microcode[INSTR_INPB << 3 | MICROCODE_STEP_1] = FINISH;
 
+	microcode[INSTR_IRE << 3 | MICROCODE_STEP_0] = INT_RET_TO_ADDR | SAVE_PCB;
+	microcode[INSTR_IRE << 3 | MICROCODE_STEP_1] = PC_FLUSH;
+	microcode[INSTR_IRE << 3 | MICROCODE_STEP_2] = FINISH;
+
 	FILE* f = fopen("microcode.bin", "wb");
 	fwrite(microcode, sizeof(microcode), 1, f);
 	fclose(f);
