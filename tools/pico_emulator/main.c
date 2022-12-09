@@ -63,7 +63,66 @@ uint16_t emit(instruction_t instr) {
 }
 
 #define GPIO_PROGRAMING_SEL 17
+#define INT0_IN 28
+#define INT1_IN 27
+#define INT2_IN 26
+#define INT3_IN 22
+#define INT4_IN 21
+#define INT5_IN 20
+#define INT6_IN 19
+#define INT7_IN 18
 
+cpu_state_t state = { 0 };
+
+
+void int_callback(uint gpio, uint32_t events) {
+	switch (gpio) {
+		case INT0_IN:
+			state.intr |= INT0;
+			break;
+		case INT1_IN:
+			state.intr |= INT1;
+			break;
+		case INT2_IN:
+			state.intr |= INT2;
+			break;
+		case INT3_IN:
+			state.intr |= INT3;
+			break;
+		case INT4_IN:
+			state.intr |= INT4;
+			break;
+		case INT5_IN:
+			state.intr |= INT5;
+			break;
+		case INT6_IN:
+			state.intr |= INT6;
+			break;
+		case INT7_IN:
+			state.intr |= INT7;
+			break;
+	}
+}
+
+void _core_run() {
+	while (cpu_tick(&state)) {
+        silent({
+            char out[0xff] = { 0 };
+		    cpu_dbg(&state, out);
+		    debugf("%s", out);
+        });
+	#ifdef SLOW
+		sleep_us(1000 * 1000 * 2);
+	#endif
+	}
+}
+
+void int_in_config(uint pin) {
+	gpio_init(pin);
+    gpio_set_dir(pin, GPIO_IN);
+    gpio_set_pulls(pin, false, true);
+	gpio_set_irq_enabled_with_callback(pin, GPIO_IRQ_EDGE_RISE, true, &int_callback);
+}
 
 int main() {
     stdio_init_all();
@@ -87,6 +146,16 @@ int main() {
     gpio_set_dir(GPIO_PROGRAMING_SEL, GPIO_IN);
     gpio_set_pulls(GPIO_PROGRAMING_SEL, false, true);
 
+	int_in_config(INT0_IN);
+	int_in_config(INT1_IN);
+	int_in_config(INT2_IN);
+	int_in_config(INT3_IN);
+	int_in_config(INT4_IN);
+	int_in_config(INT5_IN);
+	int_in_config(INT6_IN);
+	int_in_config(INT7_IN);
+
+
     if (gpio_get(GPIO_PROGRAMING_SEL)) {
 	    programing_mode();
     } else {
@@ -100,7 +169,7 @@ int main() {
         }
     }
 
-    core_run();
+    _core_run();
 
 	while (true) {}
 }
