@@ -27,6 +27,7 @@ typedef struct cpu_state {
 	uint8_t curr_intr;
 	uint8_t intr_mask;
 	uint16_t intr_ret;
+	bool intr_lock;
 } cpu_state_t;
 
 uint8_t cpu_fetch_byte(uint16_t addr);
@@ -272,6 +273,7 @@ static inline bool cpu_tick(cpu_state_t* state) {
 	case INSTR_IRE:
 		state->pc = state->intr_ret;
 		state->curr_intr = 0;
+		state->intr_lock = false;
 		goto out;
 		break;
 	default:
@@ -287,10 +289,11 @@ out:
 		silent(debugf("pc == 0xffff setting halt flag"));
 		state->fg |= FG_HALT;
 	} else {
-		if ((state->intr & state->intr_mask) != 0) {
+		if ((state->intr & state->intr_mask) != 0 && !state->intr_lock) {
 			state->curr_intr = state->intr;
 			state->intr = 0;
 			state->intr_ret = state->pc;
+			state->intr_lock = true;
 			state->pc = INT_ENTRY;
 		}
 	}
