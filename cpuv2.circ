@@ -3030,6 +3030,7 @@
     </comp>
     <comp lib="4" loc="(2860,4660)" name="Register">
       <a name="appearance" val="logisim_evolution"/>
+      <a name="trigger" val="falling"/>
     </comp>
     <comp lib="4" loc="(310,1760)" name="Counter">
       <a name="appearance" val="logisim_evolution"/>
