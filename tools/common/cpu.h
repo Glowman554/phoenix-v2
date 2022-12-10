@@ -58,7 +58,7 @@
 #define SAVE_ADDR_B		(1 << 27) // x
 
 #define INT_RET_TO_ADDR (1 << 28)
-
+#define INT7_TRIGGER	(1 << 29)
 #define FINISH			(1 << 31) // X
 
 #define MAX_INSTR 0xff
@@ -124,6 +124,8 @@
 #define INSTR_INPB 0x25	// X
 
 #define INSTR_IRE 0x26
+
+#define INSTR_INT 0x27
 
 #define INT0	(1 << 0)
 #define INT1	(1 << 1)
@@ -203,3 +205,4 @@ typedef PACK(struct instruction {
 #define LAD(a, imm) a == A ? INSTR_IMM16(INSTR_LADA, imm) : INSTR_IMM16(INSTR_LADB, imm)
 
 #define IRE() INSTR(INSTR_IRE, 0, 0, 0)
+#define INT() INSTR(INSTR_INT, 0, 0, 0)

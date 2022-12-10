@@ -125,6 +125,9 @@ static inline void cpu_disasm(instruction_t instruction, char* out) {
 	case INSTR_IRE:
 		sprintf(out, "ire");
 		break;
+	case INSTR_INT:
+		sprintf(out, "int");
+		break;
 	default:
 		sprintf(out, "unk 0x%x", instruction.opcode);
 		break;

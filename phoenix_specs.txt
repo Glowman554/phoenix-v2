@@ -188,6 +188,6 @@ Microcode commands:
 	SAVE_ADDR_B: 	address bus -> B reg
 
 	INT_RET_TO_ADDR: Interrupt return address -> address bus && resets interrupt controller int num && release interrupt lock
-	INT7:			1 -> INT7
+	INT7_TRIGGER:	1 -> INT7
 
 	FINISH:			start next instruction fetch / decode / execute cycle
