@@ -6,9 +6,9 @@
 #include <string.h>
 #include <utils.h>
 
-char* instructions[INSTRUCTIONS_LEN] = {"add", "cmp", "inp", "jeq", "jmp", "jnq", "jnz", "jzr", "lad", "ldr", "lod", "mov", "nad", "nop", "nor", "out", "sub", "wtr", "db"};
-parser_function corresponding_function[INSTRUCTIONS_LEN] = {register_register_or_imm8, register_register_or_imm8, register_dregister, dregister_or_imm16, dregister_or_imm16, dregister_or_imm16, dregister_or_imm16, dregister_or_imm16, dregister_imm16, register_dregister, register_imm8, register_register, register_register_or_imm8, nop, register_register_or_imm8, dregister_register, register_register_or_imm8, dregister_register, db};
-int instruction_opcodes[INSTRUCTIONS_LEN] = {INSTR_ADD, INSTR_CMP, INSTR_INPA, INSTR_JEQA, INSTR_JMPA, INSTR_JNQA, INSTR_JNZA, INSTR_JZRA, INSTR_LADA, INSTR_LDRA, INSTR_LOD, INSTR_MOV, INSTR_NAD, INSTR_NOP, INSTR_NOR, INSTR_OUTA, INSTR_SUB, INSTR_WTRA, -1};
+char* instructions[INSTRUCTIONS_LEN] = {"add", "cmp", "inp", "jeq", "jmp", "jnq", "jnz", "jzr", "lad", "ldr", "lod", "mov", "nad", "nop", "nor", "out", "sub", "wtr", "db", "ire"};
+parser_function corresponding_function[INSTRUCTIONS_LEN] = {register_register_or_imm8, register_register_or_imm8, register_dregister, dregister_or_imm16, dregister_or_imm16, dregister_or_imm16, dregister_or_imm16, dregister_or_imm16, dregister_imm16, register_dregister, register_imm8, register_register, register_register_or_imm8, nop, register_register_or_imm8, dregister_register, register_register_or_imm8, dregister_register, db, nop};
+int instruction_opcodes[INSTRUCTIONS_LEN] = {INSTR_ADD, INSTR_CMP, INSTR_INPA, INSTR_JEQA, INSTR_JMPA, INSTR_JNQA, INSTR_JNZA, INSTR_JZRA, INSTR_LADA, INSTR_LDRA, INSTR_LOD, INSTR_MOV, INSTR_NAD, INSTR_NOP, INSTR_NOR, INSTR_OUTA, INSTR_SUB, INSTR_WTRA, -1, INSTR_IRE};
 
 char* registers[REGISTER_LEN] = {"r0", "r1", "r2", "r3", "r4", "r5"};
 uint8_t register_opcodes[REGISTER_LEN] = {R0, R1, R2, R3, R4, R5};
