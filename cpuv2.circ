@@ -55,7 +55,7 @@
     <a name="appearance" val="logisim_evolution"/>
     <a name="circuit" val="main"/>
     <a name="circuitnamedboxfixedsize" val="true"/>
-    <a name="simulationFrequency" val="8.0"/>
+    <a name="simulationFrequency" val="16.0"/>
     <comp lib="0" loc="(100,2310)" name="Tunnel">
       <a name="facing" val="east"/>
       <a name="label" val="reset"/>
@@ -197,6 +197,9 @@
       <a name="label" val="INT_RET_TO_ADDR"/>
     </comp>
     <comp lib="0" loc="(1020,3860)" name="Transistor"/>
+    <comp lib="0" loc="(1020,3860)" name="Tunnel">
+      <a name="label" val="INT7"/>
+    </comp>
     <comp lib="0" loc="(1020,3890)" name="Transistor"/>
     <comp lib="0" loc="(1020,3920)" name="Transistor"/>
     <comp lib="0" loc="(1030,5290)" name="Splitter">
@@ -1603,14 +1606,14 @@
     <comp lib="0" loc="(3130,5620)" name="Pull Resistor">
       <a name="facing" val="west"/>
     </comp>
+    <comp lib="0" loc="(3150,1110)" name="Constant"/>
     <comp lib="0" loc="(3150,130)" name="Constant"/>
-    <comp lib="0" loc="(3160,1110)" name="Constant"/>
-    <comp lib="0" loc="(3160,270)" name="Constant"/>
-    <comp lib="0" loc="(3160,410)" name="Constant"/>
-    <comp lib="0" loc="(3160,550)" name="Constant"/>
-    <comp lib="0" loc="(3160,690)" name="Constant"/>
-    <comp lib="0" loc="(3160,830)" name="Constant"/>
-    <comp lib="0" loc="(3160,970)" name="Constant"/>
+    <comp lib="0" loc="(3150,270)" name="Constant"/>
+    <comp lib="0" loc="(3150,410)" name="Constant"/>
+    <comp lib="0" loc="(3150,550)" name="Constant"/>
+    <comp lib="0" loc="(3150,690)" name="Constant"/>
+    <comp lib="0" loc="(3150,830)" name="Constant"/>
+    <comp lib="0" loc="(3150,970)" name="Constant"/>
     <comp lib="0" loc="(3280,2610)" name="Splitter">
       <a name="fanout" val="8"/>
       <a name="incoming" val="8"/>
@@ -2950,9 +2953,13 @@
       <a name="addrWidth" val="15"/>
       <a name="appearance" val="logisim_evolution"/>
       <a name="contents">addr/data: 15 8
-22 0 80 2 3 26 12 3
-0 22 0 ff 2 3 1 3
-3 4*0 1d 12
+22 0 80 2 3 1d 12 3
+0 23 2d 0 22 1 80 12
+2 0 22 2 80 12 3 0
+22 0 ff 2 3 80 3 3
+0 22 0 0 2 5 0 27
+0 0 1d 27 0 d 5 0
+3 5 0 26
 </a>
       <a name="labelvisible" val="true"/>
     </comp>
@@ -3131,7 +3138,8 @@
 20000 0 80000000 4*0 2002000 40000 80000000 5*0
 2002800 40000 80000000 13*0 2001800 40000 80000000 5*0
 6000000 80000000 6*0 a000000 80000000 6*0 1800002 80000000
-6*0 1400008 80000000 6*0 10004000 20000 80000000
+6*0 1400008 80000000 6*0 10004000 20000 80000000 5*0
+20000000 80000000
 </a>
       <a name="dataWidth" val="32"/>
     </comp>

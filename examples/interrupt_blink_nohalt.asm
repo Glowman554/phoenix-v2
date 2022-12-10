@@ -58,6 +58,4 @@ delayloop2:
     jmp B
 
 intr:
-    db 0x26 ; just execute ire instruction
-    db 0
-    db 0
+	ire

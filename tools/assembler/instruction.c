@@ -117,3 +117,7 @@ instruction_t build_lad_instr(int ir0, int ir1, int iimm, int sreg) {
 instruction_t build_ire_instr(int ir0, int ir1, int iimm, int sreg) {
 	return IRE();
 }
+
+instruction_t build_int_instr(int ir0, int ir1, int iimm, int sreg) {
+	return INT();
+}

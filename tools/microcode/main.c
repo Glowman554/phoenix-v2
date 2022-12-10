@@ -166,6 +166,9 @@ int main() {
 	microcode[INSTR_IRE << 3 | MICROCODE_STEP_1] = PC_FLUSH;
 	microcode[INSTR_IRE << 3 | MICROCODE_STEP_2] = FINISH;
 
+	microcode[INSTR_INT << 3 | MICROCODE_STEP_0] = INT7_TRIGGER;
+	microcode[INSTR_INT << 3 | MICROCODE_STEP_1] = FINISH;
+
 	FILE* f = fopen("microcode.bin", "wb");
 	fwrite(microcode, sizeof(microcode), 1, f);
 	fclose(f);
