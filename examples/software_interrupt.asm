@@ -3,7 +3,7 @@ entry:
     lod r3, 0x1d
     wtr A, r3
 
-    lad B, intr ; write addres for jmp
+    lad B, intr ; write address for jmp
     lad A, 0x8001
     wtr A, r2
 
@@ -15,14 +15,12 @@ entry:
     out A, r3
 
     lad A, 0x0
-    lod r5, 0b00001000
+    lod r5, 0
 loop:
 	int
     jmp loop
 
 intr:
-    nor r5, 0
-    nad r5, 0b00001000
     nor r5, 0
     out A, r5
 	ire
