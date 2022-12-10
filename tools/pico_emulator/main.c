@@ -70,7 +70,6 @@ uint16_t emit(instruction_t instr) {
 #define INT4_IN 21
 #define INT5_IN 20
 #define INT6_IN 19
-#define INT7_IN 18
 
 cpu_state_t state = { 0 };
 
@@ -97,9 +96,6 @@ void int_callback(uint gpio, uint32_t events) {
 			break;
 		case INT6_IN:
 			state.intr |= INT6;
-			break;
-		case INT7_IN:
-			state.intr |= INT7;
 			break;
 	}
 }
@@ -153,7 +149,6 @@ int main() {
 	int_in_config(INT4_IN);
 	int_in_config(INT5_IN);
 	int_in_config(INT6_IN);
-	int_in_config(INT7_IN);
 
 
     if (gpio_get(GPIO_PROGRAMING_SEL)) {
