@@ -88,6 +88,12 @@ root_t* parse(token_t* _tokens, size_t _len, bool _enable_errors) {
 
 void parse_id() {
 	if (is_instruction()) {
+		if (strcmp(current_token.string_data, "db") && db_count != 0) {
+			// flush buffer
+			append_to_ast(*((instruction_t*)&current_db));
+			db_count = 0;
+		}
+
 		for (int i = 0; i < INSTRUCTIONS_LEN; i++) {
 			if (strcmp(instructions[i], current_token.string_data) == 0) {
 				corresponding_function[i](instruction_opcodes[i]);
