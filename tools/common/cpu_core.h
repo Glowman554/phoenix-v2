@@ -8,9 +8,9 @@
 #include <stddef.h>
 
 #define FG_ZERO (1 << 0)
-#define FG_EQ (1 << 2)
-#define FG_OV (1 << 3)
-#define FG_HALT (1 << 4)
+#define FG_EQ (1 << 1)
+#define FG_OV (1 << 2)
+#define FG_HALT (1 << 3)
 
 #ifdef SILENT
 #define silent(s)
@@ -67,6 +67,15 @@ static inline void cpu_io_write_i(uint16_t addr, uint8_t val, cpu_state_t* state
 	}
 }
 
+static inline bool is_8bit_add_overflow(int a, int b) {
+	return a + b > 0xff;
+}
+
+static inline bool is_8bit_sub_negative(int a, int b) {
+	return a - b < 0;
+}
+
+
 static inline bool cpu_tick(cpu_state_t* state) {
 	instruction_t instruction = cpu_fetch_instruction(state->pc);
 
@@ -105,15 +114,31 @@ static inline bool cpu_tick(cpu_state_t* state) {
 		}
 		break;
 	case INSTR_ADD:
+		if (is_8bit_add_overflow(state->regs[instruction.reg1], state->regs[instruction.reg2])) {
+			state->fg |= FG_OV;
+			silent(debugf("setting bit FG_OV"));
+		}
 		state->regs[instruction.reg1] += state->regs[instruction.reg2];
 		break;
 	case INSTR_ADDI:
+		if (is_8bit_add_overflow(state->regs[instruction.reg1], instruction.imm)) {
+			state->fg |= FG_OV;
+			silent(debugf("setting bit FG_OV"));
+		}
 		state->regs[instruction.reg1] += instruction.imm;
 		break;
 	case INSTR_SUB:
+		if (is_8bit_sub_negative(state->regs[instruction.reg1], state->regs[instruction.reg2])) {
+			state->fg |= FG_OV;
+			silent(debugf("setting bit FG_OV"));
+		}
 		state->regs[instruction.reg1] -= state->regs[instruction.reg2];
 		break;
 	case INSTR_SUBI:
+		if (is_8bit_sub_negative(state->regs[instruction.reg1], instruction.imm)) {
+			state->fg |= FG_OV;
+			silent(debugf("setting bit FG_OV"));
+		}
 		state->regs[instruction.reg1] -= instruction.imm;
 		break;
 	case INSTR_NAD:
@@ -279,6 +304,48 @@ static inline bool cpu_tick(cpu_state_t* state) {
 	case INSTR_INT:
 		state->intr |= INT7;
 		break;
+	case INSTR_JOFA:
+		if ((state->fg & FG_OV) != 0) {
+			silent(debugf("exec jmp"));
+			state->pc = AR;
+			goto out;
+		}
+		break;
+	case INSTR_JOFB:
+		if ((state->fg & FG_OV) != 0) {
+			silent(debugf("exec jmp"));
+			state->pc = BR;
+			goto out;
+		}
+		break;
+	case INSTR_JOFI:
+		if ((state->fg & FG_OV) != 0) {
+			silent(debugf("exec jmp"));
+			state->pc = instruction.imm16;
+			goto out;
+		}
+		break;
+	case INSTR_JNOA:
+		if ((state->fg & FG_OV) == 0) {
+			silent(debugf("exec jmp"));
+			state->pc = AR;
+			goto out;
+		}
+		break;
+	case INSTR_JNOB:
+		if ((state->fg & FG_OV) == 0) {
+			silent(debugf("exec jmp"));
+			state->pc = BR;
+			goto out;
+		}
+		break;
+	case INSTR_JNOI:
+		if ((state->fg & FG_OV) == 0) {
+			silent(debugf("exec jmp"));
+			state->pc = instruction.imm16;
+			goto out;
+		}
+		break;
 	default:
 		silent(debugf("unk instr setting halt flag"));
 		state->fg |= FG_HALT;
@@ -305,7 +372,7 @@ out:
 }
 
 static inline void cpu_dbg(cpu_state_t* state, char* out) {
-	// sprintf(out, "---- CPU STATE ----\n\rPC: 0x%x\n\rFG: %s%s%s%s\n\rR0: 0x%x, R1: 0x%x, R2: 0x%x\n\rR3: 0x%x, R4: 0x%x, R5: 0x%x\n\rINT_RET: 0x%x\n\rCURR_INT: 0x%x\n\r-------------------", state->pc, (state->fg & FG_ZERO) != 0 ? "FG_ZERO " : "", (state->fg & FG_EQ) != 0 ? "FG_EQ " : "", (state->fg & FG_OV) != 0 ? "FG_OV " : "", (state->fg & FG_HALT) != 0 ? "FG_HALT" : "", state->regs[0], state->regs[1], state->regs[2], state->regs[3], state->regs[4], state->regs[5], state->intr_ret, state->curr_intr);
+	sprintf(out, "---- CPU STATE ----\n\rPC: 0x%x\n\rFG: %s%s%s%s\n\rR0: 0x%x, R1: 0x%x, R2: 0x%x\n\rR3: 0x%x, R4: 0x%x, R5: 0x%x\n\rINT_RET: 0x%x\n\rCURR_INT: 0x%x\n\r-------------------", state->pc, (state->fg & FG_ZERO) != 0 ? "FG_ZERO " : "", (state->fg & FG_EQ) != 0 ? "FG_EQ " : "", (state->fg & FG_OV) != 0 ? "FG_OV " : "", (state->fg & FG_HALT) != 0 ? "FG_HALT" : "", state->regs[0], state->regs[1], state->regs[2], state->regs[3], state->regs[4], state->regs[5], state->intr_ret, state->curr_intr);
 	#warning find better way to do this
 }
 
