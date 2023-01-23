@@ -151,12 +151,23 @@ typedef PACK(struct instruction {
 	};
 }) instruction_t;
 
-#define R0 0
-#define R1 1
-#define R2 2
-#define R3 3
-#define R4 4
-#define R5 5
+#define R0 0 // x 0b0000
+#define R1 1 // x 0b0001
+#define R2 2 // x 0b0010
+#define R3 3 // x 0b0011
+#define R4 4 // x 0b0100
+#define R5 5 // x 0b0101
+
+#define R6 6 // x 0b0110
+#define R7 7 // x 0b0111
+#define R8 8 // x 0b1000
+#define R9 9 // x 0b1001
+#define R10 10 // x 0b1010
+#define R11 11 // x 0b1011
+#define R12 12 // x 0b1100
+#define R13 13 // - 0b1101
+#define R14 14 // - 0b1110
+#define R15 15 // - 0b1111
 
 #define A 16
 #define B 17

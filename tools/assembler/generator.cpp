@@ -10,7 +10,7 @@ instruction_builder_t instruction_builder(char* name, int op1, int op2, instruct
 	instr.operands[1] = op2;
 	instr.build = build;
 
-	// debugf("instr: %s (%d, %d)\n", name, op1, op2);
+	debugf("instr: %s (%d, %d)\n", name, op1, op2);
 
 	return instr;
 }
@@ -22,7 +22,7 @@ regsiter_name_list_t register_name(char* name, int id, bool sreg) {
 	reg.id = id;
 	reg.sreg = sreg;
 
-	// debugf("reg: %s (%d, %s)\n", name, id, sreg ? "true" : "false");
+	debugf("reg: %s (%d, %s)\n", name, id, sreg ? "true" : "false");
 
 	return reg;
 }
@@ -74,6 +74,17 @@ generator::generator(list<lexer_token_t>* tokens) : register_names(10), instruct
 	register_names.add(register_name((char*)"r3", R3, false));
 	register_names.add(register_name((char*)"r4", R4, false));
 	register_names.add(register_name((char*)"r5", R5, false));
+	register_names.add(register_name((char*)"r6", R6, false));
+	register_names.add(register_name((char*)"r7", R7, false));
+	register_names.add(register_name((char*)"r8", R8, false));
+	register_names.add(register_name((char*)"r9", R9, false));
+	register_names.add(register_name((char*)"r10", R10, false));
+	register_names.add(register_name((char*)"r11", R11, false));
+	register_names.add(register_name((char*)"r12", R12, false));
+	register_names.add(register_name((char*)"r13", R13, false));
+	register_names.add(register_name((char*)"r14", R14, false));
+	register_names.add(register_name((char*)"r15", R15, false));
+
     register_names.add(register_name((char*) "A", A, true));
 	register_names.add(register_name((char*) "B", B, true));
 

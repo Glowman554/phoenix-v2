@@ -4,7 +4,7 @@
 #include <stdio.h>
 
 static inline void cpu_disasm(instruction_t instruction, char* out) {
-	char* regs[] = { "r0", "r1", "r2", "r3", "r4", "r5", "unk", "unk", "unk", "unk", "unk", "unk", "unk", "unk", "unk", "unk" };
+	char* regs[] = { "r0", "r1", "r2", "r3", "r4", "r5", "r6", "r7", "r8", "r9", "r10", "r11", "r12", "r13", "r14", "r15" };
 
 	switch (instruction.opcode)
 	{

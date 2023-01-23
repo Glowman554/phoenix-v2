@@ -6,6 +6,8 @@
 #include <stdlib.h>
 #include <list.h>
 
+#warning make better version of this
+
 char* copy_line(char* input, char* output) {
 	int i = 0;
 	while (input[i] != '\n' && input[i] != '\0') {
