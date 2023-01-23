@@ -128,6 +128,24 @@ static inline void cpu_disasm(instruction_t instruction, char* out) {
 	case INSTR_INT:
 		sprintf(out, "int");
 		break;
+	case INSTR_JOFA:
+		sprintf(out, "jof A");
+		break;
+	case INSTR_JOFB:
+		sprintf(out, "jof B");
+		break;
+	case INSTR_JOFI:
+		sprintf(out, "jof 0x%x", instruction.imm16);
+		break;
+	case INSTR_JNOA:
+		sprintf(out, "jno A");
+		break;
+	case INSTR_JNOB:
+		sprintf(out, "jno B");
+		break;
+	case INSTR_JNOI:
+		sprintf(out, "jno 0x%x", instruction.imm16);
+		break;
 	default:
 		sprintf(out, "unk 0x%x", instruction.opcode);
 		break;
