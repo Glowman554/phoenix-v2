@@ -121,3 +121,19 @@ instruction_t build_ire_instr(int ir0, int ir1, int iimm, int sreg) {
 instruction_t build_int_instr(int ir0, int ir1, int iimm, int sreg) {
 	return INT();
 }
+
+instruction_t build_jof_instr(int ir0, int ir1, int iimm, int sreg) {
+	return JOF(sreg);
+}
+
+instruction_t build_jofi_instr(int ir0, int ir1, int iimm, int sreg) {
+	return JOFI(iimm);
+}
+
+instruction_t build_jno_instr(int ir0, int ir1, int iimm, int sreg) {
+	return JNO(sreg);
+}
+
+instruction_t build_jnoi_instr(int ir0, int ir1, int iimm, int sreg) {
+	return JNOI(iimm);
+}

@@ -61,6 +61,9 @@
 #define INT7_TRIGGER	(1 << 29)
 #define FINISH			(1 << 31) // X
 
+// mc2
+#define SAVE_PCB_IF_OF (1 << 0)
+
 #define MAX_INSTR 0xff
 #define MAX_MICROCODE_STEP 0b111
 
@@ -126,6 +129,14 @@
 #define INSTR_IRE 0x26
 
 #define INSTR_INT 0x27
+
+#define INSTR_JOFA 0x28
+#define INSTR_JOFB 0x29
+#define INSTR_JOFI 0x2a
+
+#define INSTR_JNOA 0x2b
+#define INSTR_JNOB 0x2c
+#define INSTR_JNOI 0x2d
 
 #define INT0	(1 << 0)
 #define INT1	(1 << 1)
@@ -217,3 +228,9 @@ typedef PACK(struct instruction {
 
 #define IRE() INSTR(INSTR_IRE, 0, 0, 0)
 #define INT() INSTR(INSTR_INT, 0, 0, 0)
+
+#define JOF(a) a == A ? INSTR(INSTR_JOFA, 0, 0, 0) : INSTR(INSTR_JOFB, 0, 0, 0)
+#define JOFI(imm) INSTR_IMM16(INSTR_JOFI, imm)
+
+#define JNO(a) a == A ? INSTR(INSTR_JNOA, 0, 0, 0) : INSTR(INSTR_JNOB, 0, 0, 0)
+#define JNOI(imm) INSTR_IMM16(INSTR_JNOI, imm)

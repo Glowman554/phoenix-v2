@@ -67,6 +67,14 @@
 0x26: IRE					-> interrupt return
 0x27: INT					-> trigger int7 interrupt
 
+0x28: JOF A					-> jump overflow
+0x29: JOF B					-> jump overflow
+0x2a: JOF <imm16>			-> jump overflow
+
+0x2b: JNO A					-> jump no overflow
+0x2c: JNO B					-> jump no overflow
+0x2d: JNO <imm16>			-> jump no overflow
+
 === INSTRUCTION ENCODING ===
 A instruction has a fixed size of 24bit, and can never contain two imm8.
 
@@ -112,6 +120,8 @@ r0 + r1 add to make the address A register and r2 + r3 add to make the address B
     -> bit 3: halt
 
 -: pc (16bit)
+
+NOTE: fg gets reset on every cmp. if you want to clear the overflow flag do an empty compare to clear it
 
 === MEMORY LAYOUT ===
 0x0000 - 0x7fff = general purpose rom
@@ -201,3 +211,6 @@ Microcode commands:
 	INT7_TRIGGER:	1 -> INT7
 
 	FINISH:			start next instruction fetch / decode / execute cycle
+
+microcode2 commands:
+	SAVE_PCB_IF_OF:	if (if COND_INV !OVERFLOW else OVERFLOW) address bus -> pc buf and 1 -> cond

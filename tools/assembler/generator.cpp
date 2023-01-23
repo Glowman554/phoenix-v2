@@ -61,6 +61,13 @@ extern "C" {
 
 	instruction_t build_ire_instr(int ir0, int ir1, int iimm, int sreg);
 	instruction_t build_int_instr(int ir0, int ir1, int iimm, int sreg);
+
+	instruction_t build_jof_instr(int ir0, int ir1, int iimm, int sreg);
+	instruction_t build_jofi_instr(int ir0, int ir1, int iimm, int sreg);
+
+	instruction_t build_jno_instr(int ir0, int ir1, int iimm, int sreg);
+	instruction_t build_jnoi_instr(int ir0, int ir1, int iimm, int sreg);
+
 }
 
 generator::generator(list<lexer_token_t>* tokens) : register_names(10), instruction_builders(10) {
@@ -118,6 +125,12 @@ generator::generator(list<lexer_token_t>* tokens) : register_names(10), instruct
 	instruction_builders.add(instruction_builder((char*)"lad", SREG, IIMM, build_lad_instr));
 	instruction_builders.add(instruction_builder((char*)"ire", NONE, NONE, build_ire_instr));
 	instruction_builders.add(instruction_builder((char*)"int", NONE, NONE, build_int_instr));
+
+	instruction_builders.add(instruction_builder((char*)"jof", SREG, NONE, build_jof_instr));
+	instruction_builders.add(instruction_builder((char*)"jofi", IIMM, NONE, build_jofi_instr));
+
+	instruction_builders.add(instruction_builder((char*)"jno", SREG, NONE, build_jno_instr));
+	instruction_builders.add(instruction_builder((char*)"jnoi", IIMM, NONE, build_jnoi_instr));
 }
 
 

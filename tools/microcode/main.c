@@ -5,6 +5,7 @@
 
 int main() {
 	uint32_t microcode[MAX_INSTR * MAX_MICROCODE_STEP] = { 0 };
+	uint32_t microcode2[MAX_INSTR * MAX_MICROCODE_STEP] = { 0 };
 
 	microcode[INSTR_NOP << 3 | MICROCODE_STEP_0] = FINISH;
 
@@ -169,7 +170,42 @@ int main() {
 	microcode[INSTR_INT << 3 | MICROCODE_STEP_0] = INT7_TRIGGER;
 	microcode[INSTR_INT << 3 | MICROCODE_STEP_1] = FINISH;
 
+	microcode[INSTR_JOFA << 3 | MICROCODE_STEP_0] = PUT_A_ADDR;
+	microcode2[INSTR_JOFA << 3 | MICROCODE_STEP_0] = SAVE_PCB_IF_OF;
+	microcode[INSTR_JOFA << 3 | MICROCODE_STEP_1] = PC_FLUSH_COND;
+	microcode[INSTR_JOFA << 3 | MICROCODE_STEP_2] = FINISH;
+
+	microcode[INSTR_JOFB << 3 | MICROCODE_STEP_0] = PUT_B_ADDR;
+	microcode2[INSTR_JOFB << 3 | MICROCODE_STEP_0] = SAVE_PCB_IF_OF;
+	microcode[INSTR_JOFB << 3 | MICROCODE_STEP_1] = PC_FLUSH_COND;
+	microcode[INSTR_JOFB << 3 | MICROCODE_STEP_2] = FINISH;
+
+	microcode[INSTR_JOFI << 3 | MICROCODE_STEP_0] = PUT_IADR_ADDR;
+	microcode2[INSTR_JOFI << 3 | MICROCODE_STEP_0] = SAVE_PCB_IF_OF;
+	microcode[INSTR_JOFI << 3 | MICROCODE_STEP_1] = PC_FLUSH_COND;
+	microcode[INSTR_JOFI << 3 | MICROCODE_STEP_2] = FINISH;
+
+	microcode[INSTR_JNOA << 3 | MICROCODE_STEP_0] = PUT_A_ADDR | COND_INVERT;
+	microcode2[INSTR_JNOA << 3 | MICROCODE_STEP_0] = SAVE_PCB_IF_OF;
+	microcode[INSTR_JNOA << 3 | MICROCODE_STEP_1] = PC_FLUSH_COND;
+	microcode[INSTR_JOFA << 3 | MICROCODE_STEP_2] = FINISH;
+
+	microcode[INSTR_JNOB << 3 | MICROCODE_STEP_0] = PUT_B_ADDR | COND_INVERT;
+	microcode2[INSTR_JNOB << 3 | MICROCODE_STEP_0] = SAVE_PCB_IF_OF;
+	microcode[INSTR_JNOB << 3 | MICROCODE_STEP_1] = PC_FLUSH_COND;
+	microcode[INSTR_JNOB << 3 | MICROCODE_STEP_2] = FINISH;
+
+	microcode[INSTR_JNOI << 3 | MICROCODE_STEP_0] = PUT_IADR_ADDR | COND_INVERT;
+	microcode2[INSTR_JNOI << 3 | MICROCODE_STEP_0] = SAVE_PCB_IF_OF;
+	microcode[INSTR_JNOI << 3 | MICROCODE_STEP_1] = PC_FLUSH_COND;
+	microcode[INSTR_JNOI << 3 | MICROCODE_STEP_2] = FINISH;
+
+
 	FILE* f = fopen("microcode.bin", "wb");
 	fwrite(microcode, sizeof(microcode), 1, f);
+	fclose(f);
+
+	f = fopen("microcode2.bin", "wb");
+	fwrite(microcode2, sizeof(microcode2), 1, f);
 	fclose(f);
 }
