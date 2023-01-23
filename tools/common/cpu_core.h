@@ -371,8 +371,42 @@ out:
 	return !((state->fg & FG_HALT) != 0);
 }
 
+// #define EXTRA_DEBUG
 static inline void cpu_dbg(cpu_state_t* state, char* out) {
-	sprintf(out, "---- CPU STATE ----\n\rPC: 0x%x\n\rFG: %s%s%s%s\n\rR0: 0x%x, R1: 0x%x, R2: 0x%x\n\rR3: 0x%x, R4: 0x%x, R5: 0x%x\n\rINT_RET: 0x%x\n\rCURR_INT: 0x%x\n\r-------------------", state->pc, (state->fg & FG_ZERO) != 0 ? "FG_ZERO " : "", (state->fg & FG_EQ) != 0 ? "FG_EQ " : "", (state->fg & FG_OV) != 0 ? "FG_OV " : "", (state->fg & FG_HALT) != 0 ? "FG_HALT" : "", state->regs[0], state->regs[1], state->regs[2], state->regs[3], state->regs[4], state->regs[5], state->intr_ret, state->curr_intr);
+	// sprintf(out, "---- CPU STATE ----\n\rPC: 0x%x\n\rFG: %s%s%s%s\n\rR0: 0x%x, R1: 0x%x, R2: 0x%x\n\rR3: 0x%x, R4: 0x%x, R5: 0x%x\n\rINT_RET: 0x%x\n\rCURR_INT: 0x%x\n\r-------------------", state->pc, (state->fg & FG_ZERO) != 0 ? "FG_ZERO " : "", (state->fg & FG_EQ) != 0 ? "FG_EQ " : "", (state->fg & FG_OV) != 0 ? "FG_OV " : "", (state->fg & FG_HALT) != 0 ? "FG_HALT" : "", state->regs[0], state->regs[1], state->regs[2], state->regs[3], state->regs[4], state->regs[5], state->intr_ret, state->curr_intr);
+	char* regs[] = { "r0", "r1", "r2", "r3", "r4", "r5", "r6", "r7", "r8", "r9", "r10", "r11", "r12", "r13", "r14", "r15" };
+
+	out += sprintf(out, "---- CPU STATE ----\n");
+
+	out += sprintf(out, "PC: 0x%x\n", state->pc);
+
+	out += sprintf(out, "FG: ");
+	if ((state->fg & FG_ZERO) != 0) {
+		out += sprintf(out, "FG_ZERO ");
+	}
+	if ((state->fg & FG_EQ) != 0) {
+		out += sprintf(out, "FG_EQ ");
+	}
+	if ((state->fg & FG_OV) != 0) {
+		out += sprintf(out, "FG_OV ");
+	}
+	if ((state->fg & FG_HALT) != 0) {
+		out += sprintf(out, "FG_HALT ");
+	}
+	out += sprintf(out, "\n");
+
+
+	for (int i = 0; i < 16; i++) {
+		out += sprintf(out, "%s: 0x%x\n", regs[i], state->regs[i]);
+	}
+
+#ifdef EXTRA_DEBUG
+	out += sprintf(out, "INTR_RET: 0x%x\n", state->intr_ret);
+	out += sprintf(out, "CURR_INTR: 0x%x\n", state->curr_intr);
+#endif
+
+	out += sprintf(out, "-------------------\n");
+
 	#warning find better way to do this
 }
 
