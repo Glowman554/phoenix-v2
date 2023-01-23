@@ -1,4 +1,0 @@
--I/usr/lib/avr/include/
--Iinclude
--I../common
--D__AVR_ATmega328P__

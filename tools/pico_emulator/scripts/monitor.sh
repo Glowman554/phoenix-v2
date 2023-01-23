@@ -1,3 +1,0 @@
-DEVICE=/dev/ttyACM0
-BAUD=115200
-screen $DEVICE $BAUD

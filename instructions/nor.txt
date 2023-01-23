@@ -1,9 +1,0 @@
-nor r1, r2 ->
-start
-	r1 = r1 nor r2
-finish
-
-nor r, imm8 ->
-start
-	r = r nor imm8
-finish

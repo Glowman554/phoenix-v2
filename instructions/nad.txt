@@ -1,9 +1,0 @@
-nad r1, r2 ->
-start
-	r1 = r1 nand r2
-finish
-
-nad r, imm8 ->
-start
-	r = r nand imm8
-finish

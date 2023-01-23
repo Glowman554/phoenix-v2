@@ -1,4 +1,0 @@
-lod r, imm8 ->
-start
-	r = imm8
-finish

@@ -1,5 +1,0 @@
-inp r, a ->
-A = (r0:r1)
-start
-	r = io[a]
-finish

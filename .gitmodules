@@ -1,9 +1,0 @@
-[submodule "tools/json"]
-	path = tools/json
-	url = https://github.com/nlohmann/json
-[submodule "tools/pico_emulator/pico-sdk"]
-	path = tools/pico_emulator/pico-sdk
-	url = https://github.com/raspberrypi/pico-sdk
-[submodule "tools/pico_emulator/littlefs-lib"]
-	path = tools/pico_emulator/littlefs-lib
-	url = https://github.com/lurk101/littlefs-lib/
