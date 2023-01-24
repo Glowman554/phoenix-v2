@@ -137,3 +137,24 @@ instruction_t build_jno_instr(int ir0, int ir1, int iimm, int sreg) {
 instruction_t build_jnoi_instr(int ir0, int ir1, int iimm, int sreg) {
 	return JNOI(iimm);
 }
+
+
+instruction_t build_ado_instr(int ir0, int ir1, int iimm, int sreg) {
+	return ADO(ir0, ir1);
+}
+
+instruction_t build_adoi_instr(int ir0, int ir1, int iimm, int sreg) {
+	return ADOI(ir0, iimm);
+}
+
+instruction_t build_sbo_instr(int ir0, int ir1, int iimm, int sreg) {
+	return SBO(ir0, ir1);
+}
+
+instruction_t build_sboi_instr(int ir0, int ir1, int iimm, int sreg) {
+	return SBOI(ir0, iimm);
+}
+
+instruction_t build_cfg_instr(int ir0, int ir1, int iimm, int sreg) {
+	return CFG();
+}

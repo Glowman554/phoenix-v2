@@ -68,6 +68,14 @@ extern "C" {
 	instruction_t build_jno_instr(int ir0, int ir1, int iimm, int sreg);
 	instruction_t build_jnoi_instr(int ir0, int ir1, int iimm, int sreg);
 
+	instruction_t build_ado_instr(int ir0, int ir1, int iimm, int sreg);
+	instruction_t build_adoi_instr(int ir0, int ir1, int iimm, int sreg);
+
+	instruction_t build_sbo_instr(int ir0, int ir1, int iimm, int sreg);
+	instruction_t build_sboi_instr(int ir0, int ir1, int iimm, int sreg);
+
+	instruction_t build_cfg_instr(int ir0, int ir1, int iimm, int sreg);
+
 }
 
 generator::generator(list<lexer_token_t>* tokens) : register_names(10), instruction_builders(10) {
@@ -131,6 +139,14 @@ generator::generator(list<lexer_token_t>* tokens) : register_names(10), instruct
 
 	instruction_builders.add(instruction_builder((char*)"jno", SREG, NONE, build_jno_instr));
 	instruction_builders.add(instruction_builder((char*)"jnoi", IIMM, NONE, build_jnoi_instr));
+
+	instruction_builders.add(instruction_builder((char*)"ado",IR0, IR1, build_ado_instr));
+	instruction_builders.add(instruction_builder((char*)"adoi", IR0, IIMM, build_adoi_instr));
+
+	instruction_builders.add(instruction_builder((char*)"sbo", IR0, IR1, build_sbo_instr));
+	instruction_builders.add(instruction_builder((char*)"sboi", IR0, IIMM, build_sboi_instr));
+
+	instruction_builders.add(instruction_builder((char*)"cfg", NONE, NONE, build_cfg_instr));
 }
 
 

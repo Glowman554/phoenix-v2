@@ -138,6 +138,14 @@
 #define INSTR_JNOB 0x2c
 #define INSTR_JNOI 0x2d
 
+#define INSTR_ADO 0x2e
+#define INSTR_ADOI 0x2f
+
+#define INSTR_SBO 0x30
+#define INSTR_SBOI 0x31
+
+#define INSTR_CFG 0x32
+
 #define INT0	(1 << 0)
 #define INT1	(1 << 1)
 #define INT2	(1 << 2)
@@ -234,3 +242,11 @@ typedef PACK(struct instruction {
 
 #define JNO(a) a == A ? INSTR(INSTR_JNOA, 0, 0, 0) : INSTR(INSTR_JNOB, 0, 0, 0)
 #define JNOI(imm) INSTR_IMM16(INSTR_JNOI, imm)
+
+#define ADO(reg1, reg2) INSTR(INSTR_ADO, reg1, reg2, 0)
+#define ADOI(reg1, imm) INSTR(INSTR_ADOI, reg1, 0, imm)
+
+#define SBO(reg1, reg2) INSTR(INSTR_SBO, reg1, reg2, 0)
+#define SBOI(reg1, imm) INSTR(INSTR_SBOI, reg1, 0, imm)
+
+#define CFG() INSTR(INSTR_CFG, 0, 0, 0)

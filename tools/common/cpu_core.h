@@ -346,6 +346,33 @@ static inline bool cpu_tick(cpu_state_t* state) {
 			goto out;
 		}
 		break;
+	case INSTR_ADO:
+		if ((state->fg & FG_OV) != 0) {
+			silent(debugf("exec add"));
+			state->regs[instruction.reg1] += state->regs[instruction.reg2];
+		}
+		break;
+	case INSTR_ADOI:
+		if ((state->fg & FG_OV) != 0) {
+			silent(debugf("exec add"));
+			state->regs[instruction.reg1] += instruction.imm;
+		}
+		break;
+	case INSTR_SBO:
+		if ((state->fg & FG_OV) != 0) {
+			silent(debugf("exec sub"));
+			state->regs[instruction.reg1] -= state->regs[instruction.reg2];
+		}
+		break;
+	case INSTR_SBOI:
+		if ((state->fg & FG_OV) != 0) {
+			silent(debugf("exec sub"));
+			state->regs[instruction.reg1] -= instruction.imm;
+		}
+		break;
+	case INSTR_CFG:
+		state->fg = 0;
+		break;
 	default:
 		silent(debugf("unk instr setting halt flag"));
 		state->fg |= FG_HALT;

@@ -75,6 +75,14 @@
 0x2c: JNO B					-> jump no overflow
 0x2d: JNO <imm16>			-> jump no overflow
 
+0x2e: ADO <reg> <reg>		-> add if overflow
+0x2f: ADO <reg> <imm8>		-> add if overflow
+
+0x30: SBO <reg> <reg>		-> sub if overflow
+0x31: SBO <reg> <imm8>		-> sub if overflow
+
+0x32: CFG 					-> clear fg
+
 === INSTRUCTION ENCODING ===
 A instruction has a fixed size of 24bit, and can never contain two imm8.
 
