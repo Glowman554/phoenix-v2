@@ -222,3 +222,4 @@ Microcode commands:
 
 microcode2 commands:
 	SAVE_PCB_IF_OF:	if (if COND_INV !OVERFLOW else OVERFLOW) address bus -> pc buf and 1 -> cond
+	CLEAR_FG:		clear flags

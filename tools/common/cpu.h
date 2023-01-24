@@ -62,7 +62,10 @@
 #define FINISH			(1 << 31) // X
 
 // mc2
-#define SAVE_PCB_IF_OF (1 << 0)
+#define SAVE_PCB_IF_OF 	(1 << 0)
+#define CLEAR_FG		(1 << 1)
+#define ALU_ADO			(1 << 2)
+#define ALU_SBO			(1 << 3)
 
 #define MAX_INSTR 0xff
 #define MAX_MICROCODE_STEP 0b111
