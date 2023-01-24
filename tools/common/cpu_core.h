@@ -407,7 +407,7 @@ static inline void cpu_dbg(cpu_state_t* state, char* out) {
 
 	out += sprintf(out, "-------------------\n");
 
-	#warning find better way to do this
+	// #warning find better way to do this
 }
 
 static inline void core_run() {
