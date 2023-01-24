@@ -146,6 +146,21 @@ static inline void cpu_disasm(instruction_t instruction, char* out) {
 	case INSTR_JNOI:
 		sprintf(out, "jno 0x%x", instruction.imm16);
 		break;
+	case INSTR_ADO:
+		sprintf(out, "ado %s, %s", regs[instruction.reg1], regs[instruction.reg2]);
+		break;
+	case INSTR_ADOI:
+		sprintf(out, "ado %s, 0x%x", regs[instruction.reg1], instruction.imm);
+		break;
+	case INSTR_SBO:
+		sprintf(out, "sbo %s, %s", regs[instruction.reg1], regs[instruction.reg2]);
+		break;
+	case INSTR_SBOI:
+		sprintf(out, "sbo %s, 0x%x", regs[instruction.reg1], instruction.imm);
+		break;
+	case INSTR_CFG:
+		sprintf(out, "cfg");
+		break;
 	default:
 		sprintf(out, "unk 0x%x", instruction.opcode);
 		break;
