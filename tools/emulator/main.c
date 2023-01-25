@@ -53,7 +53,7 @@ int main(int argc, char* argv[]) {
 
 	cpu_state_t state = { 0 };
 	while (cpu_tick(&state)) {
-		char out[0xff] = { 0 };
+		char out[0xfff] = { 0 };
 		cpu_dbg(&state, out);
 		debugf("%s", out);
 	}

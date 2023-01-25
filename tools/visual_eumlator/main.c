@@ -103,7 +103,7 @@ int main(int argc, char* argv[]) {
                 {
                     running = cpu_tick(&state);
 
-                    char dbg[0xff] = { 0 };
+                    char dbg[0xfff] = { 0 };
                     cpu_dbg(&state, dbg);
 
                     printf("%s\n\n", dbg);
@@ -113,7 +113,7 @@ int main(int argc, char* argv[]) {
 
             case 'd':
                 {
-                    char dbg[0xff] = { 0 };
+                    char dbg[0xfff] = { 0 };
                     cpu_dbg(&state, dbg);
 
                     printf("%s\n\n", dbg);

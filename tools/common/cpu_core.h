@@ -18,6 +18,19 @@
 #define silent(s) s
 #endif
 
+#define TIM_EN (1 << 0)
+#define TIM_PSC_EN (1 << 1)
+
+typedef struct timer_state {
+	uint8_t psc;
+	uint8_t psc_curr;
+
+	uint8_t cmp;
+	uint8_t cnt_curr;
+
+	uint8_t ctl;
+} timer_state_t;
+
 typedef struct cpu_state {
 	uint16_t pc;
 	uint16_t fg;
@@ -29,6 +42,8 @@ typedef struct cpu_state {
 	uint16_t intr_ret;
 	uint16_t intr_handler;
 	bool intr_lock;
+
+	timer_state_t timer;
 } cpu_state_t;
 
 uint8_t cpu_fetch_byte(uint16_t addr);
@@ -53,18 +68,60 @@ static inline void cpu_write_instruction(instruction_t instr, uint16_t addr) {
 }
 
 static inline uint8_t cpu_io_read_i(uint16_t addr, cpu_state_t* state) {
-	if (addr == INT_IO) {
-		return state->curr_intr;
-	} else {
-		return cpu_io_read(addr);
+	switch (addr) {
+		case INT_IO:
+			return state->curr_intr;
+
+		case TIM_PSC_IO:
+			return state->timer.psc;
+		case TIM_CMP_IO:
+			return state->timer.cmp;
+		case TIM_CTL_IO:
+			return state->timer.ctl;
+
+		default:
+			return cpu_io_read(addr);
 	}
 }
 
 static inline void cpu_io_write_i(uint16_t addr, uint8_t val, cpu_state_t* state) {
-	if (addr == INT_IO) {
-		state->intr_mask = val;
-	} else {
-		cpu_io_write(addr, val);
+		switch (addr) {
+		case INT_IO:
+			state->intr_mask = val;
+			break;
+
+		case TIM_PSC_IO:
+			state->timer.psc = val;
+			break;
+		case TIM_CMP_IO:
+			state->timer.cmp = val;
+			break;
+		case TIM_CTL_IO:
+			state->timer.ctl = val;
+			break;
+
+		default:
+			cpu_io_write(addr, val);
+			break;
+	}
+}
+
+static inline void timer_tick(cpu_state_t* state) {
+	if ((state->timer.ctl & TIM_EN) != 0) {
+		if ((state->timer.ctl & TIM_PSC_EN) != 0) {
+			state->timer.psc_curr++;
+			if (state->timer.psc_curr == state->timer.psc) {
+				state->timer.psc_curr = 0;
+				state->timer.cnt_curr++;
+			}
+		} else {
+			state->timer.cnt_curr++;
+		}
+
+		if (state->timer.cnt_curr == state->timer.cmp) {
+			state->timer.cnt_curr = 0;
+			state->intr |= INT6;
+		}
 	}
 }
 
@@ -404,12 +461,15 @@ out:
 			state->intr_lock = true;
 			state->pc = state->intr_handler;
 		}
+
+		timer_tick(state);
 	}
 
 	return !((state->fg & FG_HALT) != 0);
 }
 
 // #define EXTRA_DEBUG
+// #define TIMER_DEBUG
 static inline void cpu_dbg(cpu_state_t* state, char* out) {
 	// sprintf(out, "---- CPU STATE ----\n\rPC: 0x%x\n\rFG: %s%s%s%s\n\rR0: 0x%x, R1: 0x%x, R2: 0x%x\n\rR3: 0x%x, R4: 0x%x, R5: 0x%x\n\rINT_RET: 0x%x\n\rCURR_INT: 0x%x\n\r-------------------", state->pc, (state->fg & FG_ZERO) != 0 ? "FG_ZERO " : "", (state->fg & FG_EQ) != 0 ? "FG_EQ " : "", (state->fg & FG_OV) != 0 ? "FG_OV " : "", (state->fg & FG_HALT) != 0 ? "FG_HALT" : "", state->regs[0], state->regs[1], state->regs[2], state->regs[3], state->regs[4], state->regs[5], state->intr_ret, state->curr_intr);
 	char* regs[] = { "r0", "r1", "r2", "r3", "r4", "r5", "r6", "r7", "r8", "r9", "r10", "r11", "r12", "r13", "r14", "r15" };
@@ -444,6 +504,14 @@ static inline void cpu_dbg(cpu_state_t* state, char* out) {
 	out += sprintf(out, "CURR_INTR: 0x%x\n", state->curr_intr);
 #endif
 
+#ifdef TIMER_DEBUG
+	out += sprintf(out, "PSC: 0x%x\n", state->timer.psc);
+	out += sprintf(out, "PSC_CURR: 0x%x\n", state->timer.psc_curr);
+	out += sprintf(out, "CMP: 0x%x\n", state->timer.cmp);
+	out += sprintf(out, "CNT_CURR: 0x%x\n", state->timer.cnt_curr);
+	out += sprintf(out, "CTL: 0x%x\n", state->timer.ctl);
+#endif
+
 	out += sprintf(out, "-------------------\n");
 
 	// #warning find better way to do this
@@ -453,7 +521,7 @@ static inline void core_run() {
 	cpu_state_t state = { 0 };
 	while (cpu_tick(&state)) {
         silent({
-            char out[0xff] = { 0 };
+            char out[0xfff] = { 0 };
 		    cpu_dbg(&state, out);
 		    debugf("%s", out);
         });

@@ -164,6 +164,9 @@
 #define INT7	(1 << 7)
 
 #define INT_IO 0xff00
+#define TIM_PSC_IO 0xff01
+#define TIM_CMP_IO 0xff02
+#define TIM_CTL_IO 0xff03
 
 typedef PACK(struct instruction {
 	uint8_t opcode;
