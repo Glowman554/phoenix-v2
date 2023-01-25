@@ -158,3 +158,11 @@ instruction_t build_sboi_instr(int ir0, int ir1, int iimm, int sreg) {
 instruction_t build_cfg_instr(int ir0, int ir1, int iimm, int sreg) {
 	return CFG();
 }
+
+instruction_t build_lih_instr(int ir0, int ir1, int iimm, int sreg) {
+	return LIH(sreg);
+}
+
+instruction_t build_lihi_instr(int ir0, int ir1, int iimm, int sreg) {
+	return LIHI(iimm);
+}

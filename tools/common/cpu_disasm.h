@@ -161,6 +161,15 @@ static inline void cpu_disasm(instruction_t instruction, char* out) {
 	case INSTR_CFG:
 		sprintf(out, "cfg");
 		break;
+	case INSTR_LIHA:
+		sprintf(out, "lih A");
+		break;
+	case INSTR_LIHB:
+		sprintf(out, "lih B");
+		break;
+	case INSTR_LIHI:
+		sprintf(out, "lih 0x%x", instruction.imm16);
+		break;
 	default:
 		sprintf(out, "unk 0x%x", instruction.opcode);
 		break;

@@ -76,6 +76,8 @@ extern "C" {
 
 	instruction_t build_cfg_instr(int ir0, int ir1, int iimm, int sreg);
 
+	instruction_t build_lih_instr(int ir0, int ir1, int iimm, int sreg);
+	instruction_t build_lihi_instr(int ir0, int ir1, int iimm, int sreg);
 }
 
 generator::generator(list<lexer_token_t>* tokens) : register_names(10), instruction_builders(10) {
@@ -147,6 +149,9 @@ generator::generator(list<lexer_token_t>* tokens) : register_names(10), instruct
 	instruction_builders.add(instruction_builder((char*)"sboi", IR0, IIMM, build_sboi_instr));
 
 	instruction_builders.add(instruction_builder((char*)"cfg", NONE, NONE, build_cfg_instr));
+
+	instruction_builders.add(instruction_builder((char*)"lih", SREG, NONE, build_lih_instr));
+	instruction_builders.add(instruction_builder((char*)"lihi", IIMM, NONE, build_lihi_instr));
 }
 
 
@@ -197,8 +202,8 @@ bool generator::gen() {
 		lexer_token_t tmp = this->current_token->data;
 		this->advance();
 
-		if (this->current_token->data.type == COLLON) {
-			// debugf("label %s at 0x%x\n", tmp.data_s, address);
+		if (this->current_token && this->current_token->data.type == COLLON) {
+			debugf("label %s at 0x%x\n", tmp.data_s, address);
 
 			label_t label = { 0 };
 			strcpy(label.name, tmp.data_s);
@@ -300,7 +305,7 @@ bool generator::gen() {
 		lexer_token_t tmp = this->current_token->data;
 		this->advance();
 
-		if (this->current_token->data.type == COLLON) {
+		if (this->current_token && this->current_token->data.type == COLLON) {
 			this->advance();
 		}
 		else {

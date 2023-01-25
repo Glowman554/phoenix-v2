@@ -4034,12 +4034,9 @@
       <a name="addrWidth" val="15"/>
       <a name="appearance" val="logisim_evolution"/>
       <a name="contents">addr/data: 15 8
-2 0 0 2 1 1 4*2 3
-3 2 4 4 2 5 5 2
-6 6 2 7 7 2 8 8
-2 9 9 2 a a 2 b
-b 2 c c 2 d d 2
-e e 2 f f 1d ff ff
+35 12 0 22 0 ff 2 3
+80 3 3 0 27 0 0 1d
+ff ff 26
 </a>
       <a name="labelvisible" val="true"/>
     </comp>
@@ -4305,7 +4302,8 @@ e e 2 f f 1d ff ff
 80000000 5*0 42 84 0 408 80000000 0
 0 0 42 a0 0 408 80000000 0
 0 0 42 84 0 408 80000000 0
-0 0 42 a0 0 408 80000000
+0 0 42 a0 0 408 80000000 11*0
+1 80000000 6*0 1000000 80000000 6*0 2000000 80000000
 </a>
       <a name="dataWidth" val="32"/>
       <a name="label" val="MC1"/>
@@ -4317,7 +4315,8 @@ e e 2 f f 1d ff ff
       <a name="contents">addr/data: 11 32
 321*0 1 7*0 1 7*0 1 7*0 1
 7*0 1 7*0 1 9*0 4 7*0 4
-7*0 8 7*0 8 5*0 2
+7*0 8 7*0 8 5*0 2 7*0 10
+7*0 10 7*0 10
 </a>
       <a name="dataWidth" val="32"/>
       <a name="label" val="MC2"/>

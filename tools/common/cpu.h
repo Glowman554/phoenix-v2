@@ -66,6 +66,7 @@
 #define CLEAR_FG		(1 << 1)
 #define ALU_ADO			(1 << 2)
 #define ALU_SBO			(1 << 3)
+#define SAVE_IH			(1 << 4)
 
 #define MAX_INSTR 0xff
 #define MAX_MICROCODE_STEP 0b111
@@ -149,6 +150,10 @@
 
 #define INSTR_CFG 0x32
 
+#define INSTR_LIHA 0x33
+#define INSTR_LIHB 0x34
+#define INSTR_LIHI 0x35
+
 #define INT0	(1 << 0)
 #define INT1	(1 << 1)
 #define INT2	(1 << 2)
@@ -158,7 +163,6 @@
 #define INT6	(1 << 6)
 #define INT7	(1 << 7)
 
-#define INT_ENTRY 0x8000
 #define INT_IO 0xff00
 
 typedef PACK(struct instruction {
@@ -253,3 +257,6 @@ typedef PACK(struct instruction {
 #define SBOI(reg1, imm) INSTR(INSTR_SBOI, reg1, 0, imm)
 
 #define CFG() INSTR(INSTR_CFG, 0, 0, 0)
+
+#define LIH(a) a == A ? INSTR(INSTR_LIHA, 0, 0, 0) : INSTR(INSTR_LIHB, 0, 0, 0)
+#define LIHI(imm) INSTR_IMM16(INSTR_LIHI, imm)

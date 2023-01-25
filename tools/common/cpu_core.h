@@ -27,6 +27,7 @@ typedef struct cpu_state {
 	uint8_t curr_intr;
 	uint8_t intr_mask;
 	uint16_t intr_ret;
+	uint16_t intr_handler;
 	bool intr_lock;
 } cpu_state_t;
 
@@ -373,6 +374,16 @@ static inline bool cpu_tick(cpu_state_t* state) {
 	case INSTR_CFG:
 		state->fg = 0;
 		break;
+		break;
+	case INSTR_LIHA:
+		state->intr_handler = AR;
+		break;
+	case INSTR_LIHB:
+		state->intr_handler = BR;
+		break;
+	case INSTR_LIHI:
+		state->intr_handler = instruction.imm16;
+		break;
 	default:
 		silent(debugf("unk instr setting halt flag"));
 		state->fg |= FG_HALT;
@@ -391,7 +402,7 @@ out:
 			state->intr = 0;
 			state->intr_ret = state->pc;
 			state->intr_lock = true;
-			state->pc = INT_ENTRY;
+			state->pc = state->intr_handler;
 		}
 	}
 
@@ -429,6 +440,7 @@ static inline void cpu_dbg(cpu_state_t* state, char* out) {
 
 #ifdef EXTRA_DEBUG
 	out += sprintf(out, "INTR_RET: 0x%x\n", state->intr_ret);
+	out += sprintf(out, "IH: 0x%x\n", state->intr_handler);
 	out += sprintf(out, "CURR_INTR: 0x%x\n", state->curr_intr);
 #endif
 

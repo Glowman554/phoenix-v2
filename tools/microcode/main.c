@@ -200,8 +200,6 @@ int main() {
 	microcode[INSTR_JNOI << 3 | MICROCODE_STEP_1] = PC_FLUSH_COND;
 	microcode[INSTR_JNOI << 3 | MICROCODE_STEP_2] = FINISH;
 
-	//ado / sbo
-
 	microcode[INSTR_ADO << 3 | MICROCODE_STEP_0] = PUT_IR0_DB | SAVE_DB_ALUA;
 	microcode[INSTR_ADO << 3 | MICROCODE_STEP_1] = PUT_IR1_DB | SAVE_DB_ALUB;
 	microcode2[INSTR_ADO << 3 | MICROCODE_STEP_2] = ALU_ADO;
@@ -228,6 +226,18 @@ int main() {
 
 	microcode2[INSTR_CFG << 3 | MICROCODE_STEP_0] = CLEAR_FG;
 	microcode[INSTR_JNOI << 3 | MICROCODE_STEP_1] = FINISH;
+
+	microcode[INSTR_LIHA << 3 | MICROCODE_STEP_0] = PUT_A_ADDR;
+	microcode2[INSTR_LIHA << 3 | MICROCODE_STEP_0] = SAVE_IH;
+	microcode[INSTR_LIHA << 3 | MICROCODE_STEP_1] = FINISH;
+
+	microcode[INSTR_LIHB << 3 | MICROCODE_STEP_0] = PUT_B_ADDR;
+	microcode2[INSTR_LIHB << 3 | MICROCODE_STEP_0] = SAVE_IH;
+	microcode[INSTR_LIHB << 3 | MICROCODE_STEP_1] = FINISH;
+
+	microcode[INSTR_LIHI << 3 | MICROCODE_STEP_0] = PUT_IADR_ADDR;
+	microcode2[INSTR_LIHI << 3 | MICROCODE_STEP_0] = SAVE_IH;
+	microcode[INSTR_LIHI << 3 | MICROCODE_STEP_1] = FINISH;
 
 
 	FILE* f = fopen("microcode.bin", "wb");
