@@ -165,12 +165,28 @@ The interrupt handler needs to save the registers manually.
 The interrupt will trigger when the current instruction finished executing.
 When the execution of an interrupt begins a interrupt lock will be triggere witch masks all interrupts.
 The lock gets released when the ire instruction is executed.
+NOTE: it might cause problems when triggering the interrupt on a posedge. to avoid this trigger the interrupts on negedges.	
 
 === INTERRUPT CONTROLLER ===
 The interrupt controller is located at 0xff00 in the io space.
 
 the bits written to that address decide if the interrupt can be triggered.
 reading from that io port will get the current interrupt id.
+
+=== BASIC 8BIT TIMER ===
+The timer is a basic 8 bit timer which triggers int6 if compare == counter.
+the timer has 3 register:
+0xff01: Prescaler (8 bit)
+0xff02: compare (8 bit)
+0xff03: control (8 bit)
+
+the control register has the following bits:
+0: timer enable
+1: Prescaler enable (if 0 clk is directly passed to the timer)
+
+those registers are r/w and if read return the current value set unlike the interrupt controller
+
+NOTE: the interrupt needs to be unmasekd manually
 
 === MICROCODE ===
 
