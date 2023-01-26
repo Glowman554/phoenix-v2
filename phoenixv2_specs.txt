@@ -250,3 +250,5 @@ microcode2 commands:
 	ALU_ADO:		if (OVERFLOW) a + b -> out
 	ALU_SBO:		if (OVERFLOW) a - b -> out
 	SAVE_IH:		address bus -> ih
+	PUT_DB_FG:		write db in fg
+	PUT_FG_DB:		write fg on db

@@ -75,11 +75,13 @@ int main() {
 
 	microcode[INSTR_CMP << 3 | MICROCODE_STEP_0] = PUT_IR0_DB | SAVE_DB_ALUA;
 	microcode[INSTR_CMP << 3 | MICROCODE_STEP_1] = PUT_IR1_DB | SAVE_DB_ALUB;
+	microcode2[INSTR_CMP << 3 | MICROCODE_STEP_1] = CLEAR_FG;
 	microcode[INSTR_CMP << 3 | MICROCODE_STEP_2] = ALU_CMP;
 	microcode[INSTR_CMP << 3 | MICROCODE_STEP_3] = FINISH;
 
 	microcode[INSTR_CMPI << 3 | MICROCODE_STEP_0] = PUT_IR0_DB | SAVE_DB_ALUA;
 	microcode[INSTR_CMPI << 3 | MICROCODE_STEP_1] = PUT_IIMM_DB | SAVE_DB_ALUB;
+	microcode2[INSTR_CMP << 3 | MICROCODE_STEP_1] = CLEAR_FG;
 	microcode[INSTR_CMPI << 3 | MICROCODE_STEP_2] = ALU_CMP;
 	microcode[INSTR_CMPI << 3 | MICROCODE_STEP_3] = FINISH;
 
@@ -238,6 +240,14 @@ int main() {
 	microcode[INSTR_LIHI << 3 | MICROCODE_STEP_0] = PUT_IADR_ADDR;
 	microcode2[INSTR_LIHI << 3 | MICROCODE_STEP_0] = SAVE_IH;
 	microcode[INSTR_LIHI << 3 | MICROCODE_STEP_1] = FINISH;
+
+	microcode[INSTR_WFG << 3 | MICROCODE_STEP_0] = PUT_IR0_DB;
+	microcode2[INSTR_WFG << 3 | MICROCODE_STEP_0] = PUT_DB_FG;
+	microcode[INSTR_WFG << 3 | MICROCODE_STEP_1] = FINISH;
+
+	microcode[INSTR_RFG << 3 | MICROCODE_STEP_0] = SAVE_DB_IR0;
+	microcode2[INSTR_RFG << 3 | MICROCODE_STEP_0] = PUT_FG_DB;
+	microcode[INSTR_RFG << 3 | MICROCODE_STEP_1] = FINISH;
 
 
 	FILE* f = fopen("microcode.bin", "wb");

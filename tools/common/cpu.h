@@ -67,6 +67,8 @@
 #define ALU_ADO			(1 << 2)
 #define ALU_SBO			(1 << 3)
 #define SAVE_IH			(1 << 4)
+#define PUT_FG_DB		(1 << 5)
+#define PUT_DB_FG		(1 << 6)
 
 #define MAX_INSTR 0xff
 #define MAX_MICROCODE_STEP 0b111
