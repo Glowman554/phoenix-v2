@@ -78,6 +78,9 @@ extern "C" {
 
 	instruction_t build_lih_instr(int ir0, int ir1, int iimm, int sreg);
 	instruction_t build_lihi_instr(int ir0, int ir1, int iimm, int sreg);
+
+	instruction_t build_wfg_instr(int ir0, int ir1, int iimm, int sreg);
+	instruction_t build_rfg_instr(int ir0, int ir1, int iimm, int sreg);
 }
 
 generator::generator(list<lexer_token_t>* tokens) : register_names(10), instruction_builders(10) {
@@ -152,6 +155,9 @@ generator::generator(list<lexer_token_t>* tokens) : register_names(10), instruct
 
 	instruction_builders.add(instruction_builder((char*)"lih", SREG, NONE, build_lih_instr));
 	instruction_builders.add(instruction_builder((char*)"lihi", IIMM, NONE, build_lihi_instr));
+
+	instruction_builders.add(instruction_builder((char*)"wfg", IR0, NONE, build_wfg_instr));
+	instruction_builders.add(instruction_builder((char*)"rfg", IR0, NONE, build_rfg_instr));
 }
 
 

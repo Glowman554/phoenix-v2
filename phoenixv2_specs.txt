@@ -87,6 +87,9 @@
 0x34: LIH B					-> load interrupt handler
 0x35: LIH <imm16>			-> load interrupt handler
 
+0x36: wfg <reg>				-> write flags
+0x37: rfg <reg>				-> read flags
+
 === INSTRUCTION ENCODING ===
 A instruction has a fixed size of 24bit, and can never contain two imm8.
 

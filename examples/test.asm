@@ -1,9 +1,12 @@
 entry:
-	lod r5, 0xff
-	lad A, 0xff01
-	out A, r5
-	lad A, 0xff02
-	out A, r5
-	lad A, 0xff03
-	out A, r5
-	jmpi 0xffff
+	lod r0, 0x0
+	cmpi r0, 0x0
+	
+	cfg
+
+	cmpi r0, 0x0
+
+	rfg r1
+	nori r1, 0b00001000
+	nori r1, 0
+	wfg r1

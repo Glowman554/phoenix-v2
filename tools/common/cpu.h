@@ -154,6 +154,9 @@
 #define INSTR_LIHB 0x34
 #define INSTR_LIHI 0x35
 
+#define INSTR_WFG 0x36
+#define INSTR_RFG 0x37
+
 #define INT0	(1 << 0)
 #define INT1	(1 << 1)
 #define INT2	(1 << 2)
@@ -263,3 +266,6 @@ typedef PACK(struct instruction {
 
 #define LIH(a) a == A ? INSTR(INSTR_LIHA, 0, 0, 0) : INSTR(INSTR_LIHB, 0, 0, 0)
 #define LIHI(imm) INSTR_IMM16(INSTR_LIHI, imm)
+
+#define WFG(reg) INSTR(INSTR_WFG, reg, 0, 0)
+#define RFG(reg) INSTR(INSTR_RFG, reg, 0, 0)

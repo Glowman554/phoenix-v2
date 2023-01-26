@@ -166,3 +166,11 @@ instruction_t build_lih_instr(int ir0, int ir1, int iimm, int sreg) {
 instruction_t build_lihi_instr(int ir0, int ir1, int iimm, int sreg) {
 	return LIHI(iimm);
 }
+
+instruction_t build_wfg_instr(int ir0, int ir1, int iimm, int sreg) {
+	return WFG(ir0);
+}
+
+instruction_t build_rfg_instr(int ir0, int ir1, int iimm, int sreg) {
+	return RFG(ir0);
+}

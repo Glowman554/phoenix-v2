@@ -441,6 +441,12 @@ static inline bool cpu_tick(cpu_state_t* state) {
 	case INSTR_LIHI:
 		state->intr_handler = instruction.imm16;
 		break;
+	case INSTR_WFG:
+		state->fg = state->regs[instruction.reg1];
+		break;
+	case INSTR_RFG:
+		state->regs[instruction.reg1] = state->fg;
+		break;
 	default:
 		silent(debugf("unk instr setting halt flag"));
 		state->fg |= FG_HALT;
