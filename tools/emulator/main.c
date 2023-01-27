@@ -27,6 +27,10 @@ void cpu_io_write(uint16_t addr, uint8_t val) {
 	debugf("writing byte 0x%x to io at 0x%x", val, addr);
 }
 
+void cpu_tout(bool val) {
+	debugf("tout: %s", val ? "true" : "false");
+}
+
 int main(int argc, char* argv[]) {
 	if (argc != 2) {
 		printf("usage: %s <file>\n", argv[0]);

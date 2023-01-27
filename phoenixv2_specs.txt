@@ -205,6 +205,11 @@ the timer has 3 register:
 the control register has the following bits:
 0: timer enable
 1: Prescaler enable (if 0 clk is directly passed to the timer)
+2: interrupt enable
+3: pulse out
+4: toggle out
+
+NOTE: pulse out and toggle out can not be used at the same time!!
 
 those registers are r/w and if read return the current value set unlike the interrupt controller
 

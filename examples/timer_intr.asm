@@ -17,8 +17,8 @@ entry:
 	out A, r4 ; set compare to 0x0f
 
 	lad A, 0xff03
-	lod r4, 0b00000011
-	out A, r4 ; enable timer + prescaler
+	lod r4, 0b00000111
+	out A, r4 ; enable timer + prescaler + intr
 
 loop:
 	jmpi addr(loop)

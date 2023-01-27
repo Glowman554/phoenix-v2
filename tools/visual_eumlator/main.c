@@ -26,6 +26,10 @@ void cpu_io_write(uint16_t addr, uint8_t val) {
 	debugf("writing byte 0x%x to io at 0x%x\n", val, addr);
 }
 
+void cpu_tout(bool val) {
+	debugf("tout: %s", val ? "true" : "false");
+}
+
 #define DISASEMBLY_SIZE 6
 
 void do_disasm(cpu_state_t state) {

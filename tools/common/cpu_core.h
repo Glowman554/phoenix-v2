@@ -20,6 +20,9 @@
 
 #define TIM_EN (1 << 0)
 #define TIM_PSC_EN (1 << 1)
+#define TIM_INT (1 << 2)
+#define TIM_PULSE (1 << 3)
+#define TIM_TOGGLE (1 << 4)
 
 typedef struct timer_state {
 	uint8_t psc;
@@ -29,6 +32,7 @@ typedef struct timer_state {
 	uint8_t cnt_curr;
 
 	uint8_t ctl;
+	bool toggle;
 } timer_state_t;
 
 typedef struct cpu_state {
@@ -53,6 +57,8 @@ void cpu_write_byte(uint16_t addr, uint8_t val);
 
 uint8_t cpu_io_read(uint16_t addr);
 void cpu_io_write(uint16_t addr, uint8_t val);
+
+void cpu_tout(bool val);
 
 static inline instruction_t cpu_fetch_instruction(uint16_t addr) {
 	instruction_t instruction = { 0 };
@@ -122,7 +128,20 @@ static inline void timer_tick(cpu_state_t* state) {
 
 		if (state->timer.cnt_curr == state->timer.cmp) {
 			state->timer.cnt_curr = 0;
-			state->intr |= INT6;
+
+			if ((state->timer.ctl & TIM_INT) != 0) {
+				state->intr |= INT6;
+			}
+
+			if ((state->timer.ctl & TIM_PULSE) != 0) {
+				cpu_tout(true);
+				cpu_tout(false);
+			}
+
+			if ((state->timer.ctl & TIM_TOGGLE) != 0) {
+				state->timer.toggle = !state->timer.toggle;
+				cpu_tout(state->timer.toggle);
+			}
 		}
 	}
 }
@@ -506,7 +525,7 @@ out:
 }
 
 // #define EXTRA_DEBUG
-#define TIMER_DEBUG
+// #define TIMER_DEBUG
 static inline void cpu_dbg(cpu_state_t* state, char* out) {
 	// sprintf(out, "---- CPU STATE ----\n\rPC: 0x%x\n\rFG: %s%s%s%s\n\rR0: 0x%x, R1: 0x%x, R2: 0x%x\n\rR3: 0x%x, R4: 0x%x, R5: 0x%x\n\rINT_RET: 0x%x\n\rCURR_INT: 0x%x\n\r-------------------", state->pc, (state->fg & FG_ZERO) != 0 ? "FG_ZERO " : "", (state->fg & FG_EQ) != 0 ? "FG_EQ " : "", (state->fg & FG_OV) != 0 ? "FG_OV " : "", (state->fg & FG_HALT) != 0 ? "FG_HALT" : "", state->regs[0], state->regs[1], state->regs[2], state->regs[3], state->regs[4], state->regs[5], state->intr_ret, state->curr_intr);
 	char* regs[] = { "r0", "r1", "r2", "r3", "r4", "r5", "r6", "r7", "r8", "r9", "r10", "r11", "r12", "r13", "r14", "r15" };
