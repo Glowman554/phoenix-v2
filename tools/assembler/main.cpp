@@ -14,7 +14,7 @@ void print_error(int pos_start, int pos_end, char* error) {
 	printf("error: %s\n", error);
 
 	int i = pos_start;
-	while (code[i] != '\n' && i > 0) {
+	while (code[i] != '\n' && i >=s 0) {
 		i--;
 	}
 
