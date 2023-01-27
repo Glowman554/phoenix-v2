@@ -90,6 +90,20 @@
 0x36: wfg <reg>				-> write flags
 0x37: rfg <reg>				-> read flags
 
+
+0x38: LSP A					-> load stack pointer
+0x39: LSP B					-> load stack pointer
+0x3a: LSP <imm16>			-> load stack pointer
+
+0x3b: RSP A					-> read stack pointer
+0x3c: RSP B					-> read stack pointer
+
+0x3d: PUT <imm8>			-> push on stack
+0x3e: PUT <reg>				-> push on stack
+
+0x3f: POP <reg>				-> pop from stack
+
+
 === INSTRUCTION ENCODING ===
 A instruction has a fixed size of 24bit, and can never contain two imm8.
 
@@ -137,11 +151,16 @@ r0 + r1 add to make the address A register and r2 + r3 add to make the address B
 -: pc (16bit)
 -: ih (16bit)
 
+-: sp (16 bit)
+
 NOTE: fg gets reset on every cmp. if you want to clear the overflow flag do an empty compare to clear it
 
 === MEMORY LAYOUT ===
 0x0000 - 0x7fff = general purpose rom
 0x8000 - 0xffff = general purpose ram
+
+=== STACK ===
+The recommended stack location is at 0xffff. The stack grows downwards and sp always points at the address used by the next put instruction.
 
 === STARTUP ===
 Code execution starts at 0x0
@@ -252,3 +271,7 @@ microcode2 commands:
 	SAVE_IH:		address bus -> ih
 	PUT_DB_FG:		write db in fg
 	PUT_FG_DB:		write fg on db
+	SP_UP:			sp = sp + 1
+	SP_DOWN: 		sp = sp - 1
+	SAVE_ADDR_SP:	address bus -> sp
+	PUT_SP_ADDR:	sp -> address bus

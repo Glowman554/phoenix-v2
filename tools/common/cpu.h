@@ -69,6 +69,10 @@
 #define SAVE_IH			(1 << 4)
 #define PUT_FG_DB		(1 << 5)
 #define PUT_DB_FG		(1 << 6)
+#define SP_UP			(1 << 7)
+#define SP_DOWN			(1 << 8)
+#define SAVE_ADDR_SP	(1 << 9)
+#define PUT_SP_ADDR		(1 << 10)
 
 #define MAX_INSTR 0xff
 #define MAX_MICROCODE_STEP 0b111
@@ -158,6 +162,17 @@
 
 #define INSTR_WFG 0x36
 #define INSTR_RFG 0x37
+
+#define INSTR_LSPA 0x38
+#define INSTR_LSPB 0x39
+#define INSTR_LSPI 0x3a
+
+#define INSTR_RSPA 0x3b
+#define INSTR_RSPB 0x3c
+
+#define INSTR_PUTI 0x3d
+#define INSTR_PUT 0x3e
+#define INSTR_POP 0x3f
 
 #define INT0	(1 << 0)
 #define INT1	(1 << 1)
@@ -271,3 +286,13 @@ typedef PACK(struct instruction {
 
 #define WFG(reg) INSTR(INSTR_WFG, reg, 0, 0)
 #define RFG(reg) INSTR(INSTR_RFG, reg, 0, 0)
+
+#define LSP(a) a == A ? INSTR(INSTR_LSPA, 0, 0, 0) : INSTR(INSTR_LSPB, 0, 0, 0)
+#define LSPI(imm) INSTR_IMM16(INSTR_LSPI, imm)
+
+#define RSP(a) a == A ? INSTR(INSTR_RSPA, 0, 0, 0) : INSTR(INSTR_RSPB, 0, 0, 0)
+
+#define PUTI(imm) INSTR(INSTR_PUTI, 0, 0, imm)
+
+#define PUT(reg) INSTR(INSTR_PUT, reg, 0, 0)
+#define POP(reg) INSTR(INSTR_POP, reg, 0, 0)

@@ -174,3 +174,27 @@ instruction_t build_wfg_instr(int ir0, int ir1, int iimm, int sreg) {
 instruction_t build_rfg_instr(int ir0, int ir1, int iimm, int sreg) {
 	return RFG(ir0);
 }
+
+instruction_t build_lsp_instr(int ir0, int ir1, int iimm, int sreg) {
+	return LSP(sreg);
+}
+
+instruction_t build_lspi_instr(int ir0, int ir1, int iimm, int sreg) {
+	return LSPI(iimm);
+}
+
+instruction_t build_rsp_instr(int ir0, int ir1, int iimm, int sreg) {
+	return RSP(sreg);
+}
+
+instruction_t build_put_instr(int ir0, int ir1, int iimm, int sreg) {
+	return PUT(ir0);
+}
+
+instruction_t build_puti_instr(int ir0, int ir1, int iimm, int sreg) {
+	return PUTI(iimm);
+}
+
+instruction_t build_pop_instr(int ir0, int ir1, int iimm, int sreg) {
+	return POP(ir0);
+}

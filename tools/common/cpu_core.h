@@ -43,6 +43,8 @@ typedef struct cpu_state {
 	uint16_t intr_handler;
 	bool intr_lock;
 
+	uint16_t sp;
+
 	timer_state_t timer;
 } cpu_state_t;
 
@@ -447,6 +449,35 @@ static inline bool cpu_tick(cpu_state_t* state) {
 	case INSTR_RFG:
 		state->regs[instruction.reg1] = state->fg;
 		break;
+	case INSTR_LSPA:
+		state->sp = AR;
+		break;
+	case INSTR_LSPB:
+		state->sp = BR;
+		break;
+	case INSTR_LSPI:
+		state->sp = instruction.imm16;
+		break;
+	case INSTR_RSPA:
+		state->regs[0] = state->sp & 0xff;
+		state->regs[1] = (state->sp & 0xff00) >> 8;
+		break;
+	case INSTR_RSPB:
+		state->regs[2] = state->sp & 0xff;
+		state->regs[3] = (state->sp & 0xff00) >> 8;
+		break;
+	case INSTR_PUTI:
+		cpu_write_byte(state->sp, instruction.imm);
+		state->sp--;
+		break;
+	case INSTR_PUT:
+		cpu_write_byte(state->sp, state->regs[instruction.reg1]);
+		state->sp--;
+		break;
+	case INSTR_POP:
+		state->sp++;
+		state->regs[instruction.reg1] = cpu_fetch_byte(state->sp);
+		break;
 	default:
 		silent(debugf("unk instr setting halt flag"));
 		state->fg |= FG_HALT;
@@ -475,7 +506,7 @@ out:
 }
 
 // #define EXTRA_DEBUG
-// #define TIMER_DEBUG
+#define TIMER_DEBUG
 static inline void cpu_dbg(cpu_state_t* state, char* out) {
 	// sprintf(out, "---- CPU STATE ----\n\rPC: 0x%x\n\rFG: %s%s%s%s\n\rR0: 0x%x, R1: 0x%x, R2: 0x%x\n\rR3: 0x%x, R4: 0x%x, R5: 0x%x\n\rINT_RET: 0x%x\n\rCURR_INT: 0x%x\n\r-------------------", state->pc, (state->fg & FG_ZERO) != 0 ? "FG_ZERO " : "", (state->fg & FG_EQ) != 0 ? "FG_EQ " : "", (state->fg & FG_OV) != 0 ? "FG_OV " : "", (state->fg & FG_HALT) != 0 ? "FG_HALT" : "", state->regs[0], state->regs[1], state->regs[2], state->regs[3], state->regs[4], state->regs[5], state->intr_ret, state->curr_intr);
 	char* regs[] = { "r0", "r1", "r2", "r3", "r4", "r5", "r6", "r7", "r8", "r9", "r10", "r11", "r12", "r13", "r14", "r15" };
@@ -483,6 +514,7 @@ static inline void cpu_dbg(cpu_state_t* state, char* out) {
 	out += sprintf(out, "---- CPU STATE ----\n");
 
 	out += sprintf(out, "PC: 0x%x\n", state->pc);
+	out += sprintf(out, "SP: 0x%x\n", state->sp);
 
 	out += sprintf(out, "FG: ");
 	if ((state->fg & FG_ZERO) != 0) {

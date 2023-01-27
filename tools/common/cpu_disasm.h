@@ -176,6 +176,30 @@ static inline void cpu_disasm(instruction_t instruction, char* out) {
 	case INSTR_RFG:
 		sprintf(out, "rfg %s", regs[instruction.reg1]);
 		break;
+	case INSTR_LSPA:
+		sprintf(out, "lsp A");
+		break;
+	case INSTR_LSPB:
+		sprintf(out, "lsp B");
+		break;
+	case INSTR_LSPI:
+		sprintf(out, "lsp 0x%x", instruction.imm16);
+		break;
+	case INSTR_RSPA:
+		sprintf(out, "rsp A");
+		break;
+	case INSTR_RSPB:
+		sprintf(out, "rsp B");
+		break;
+	case INSTR_PUTI:
+		sprintf(out, "put 0x%x", instruction.imm);
+		break;
+	case INSTR_PUT:
+		sprintf(out, "put %s", regs[instruction.reg1]);
+		break;
+	case INSTR_POP:
+		sprintf(out, "pop %s", regs[instruction.reg1]);
+		break;
 	default:
 		sprintf(out, "unk 0x%x", instruction.opcode);
 		break;

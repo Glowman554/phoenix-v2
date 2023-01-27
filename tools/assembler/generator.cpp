@@ -81,6 +81,17 @@ extern "C" {
 
 	instruction_t build_wfg_instr(int ir0, int ir1, int iimm, int sreg);
 	instruction_t build_rfg_instr(int ir0, int ir1, int iimm, int sreg);
+
+	instruction_t build_lsp_instr(int ir0, int ir1, int iimm, int sreg);
+	instruction_t build_lspi_instr(int ir0, int ir1, int iimm, int sreg);
+
+	instruction_t build_rsp_instr(int ir0, int ir1, int iimm, int sreg);
+
+	instruction_t build_put_instr(int ir0, int ir1, int iimm, int sreg);
+	instruction_t build_puti_instr(int ir0, int ir1, int iimm, int sreg);
+
+	instruction_t build_pop_instr(int ir0, int ir1, int iimm, int sreg);
+
 }
 
 generator::generator(list<lexer_token_t>* tokens) : register_names(10), instruction_builders(10) {
@@ -158,6 +169,16 @@ generator::generator(list<lexer_token_t>* tokens) : register_names(10), instruct
 
 	instruction_builders.add(instruction_builder((char*)"wfg", IR0, NONE, build_wfg_instr));
 	instruction_builders.add(instruction_builder((char*)"rfg", IR0, NONE, build_rfg_instr));
+
+	instruction_builders.add(instruction_builder((char*)"lsp", SREG, NONE, build_lsp_instr));
+	instruction_builders.add(instruction_builder((char*)"lspi", IIMM, NONE, build_lspi_instr));
+
+	instruction_builders.add(instruction_builder((char*)"rsp", SREG, NONE, build_rsp_instr));
+
+	instruction_builders.add(instruction_builder((char*)"put", IR0, NONE, build_put_instr));
+	instruction_builders.add(instruction_builder((char*)"puti", IIMM, NONE, build_puti_instr));
+
+	instruction_builders.add(instruction_builder((char*)"pop", IR0, NONE, build_pop_instr));
 }
 
 

@@ -249,6 +249,40 @@ int main() {
 	microcode2[INSTR_RFG << 3 | MICROCODE_STEP_0] = PUT_FG_DB;
 	microcode[INSTR_RFG << 3 | MICROCODE_STEP_1] = FINISH;
 
+	microcode[INSTR_LSPA << 3 | MICROCODE_STEP_0] = PUT_A_ADDR;
+	microcode2[INSTR_LSPA << 3 | MICROCODE_STEP_0] = SAVE_ADDR_SP;
+	microcode[INSTR_LSPA << 3 | MICROCODE_STEP_1] = FINISH;
+
+	microcode[INSTR_LSPB << 3 | MICROCODE_STEP_0] = PUT_B_ADDR;
+	microcode2[INSTR_LSPB << 3 | MICROCODE_STEP_0] = SAVE_ADDR_SP;
+	microcode[INSTR_LSPB << 3 | MICROCODE_STEP_1] = FINISH;
+
+	microcode[INSTR_LSPI << 3 | MICROCODE_STEP_0] = PUT_IADR_ADDR;
+	microcode2[INSTR_LSPI << 3 | MICROCODE_STEP_0] = SAVE_ADDR_SP;
+	microcode[INSTR_LSPI << 3 | MICROCODE_STEP_1] = FINISH;
+
+	microcode[INSTR_RSPA << 3 | MICROCODE_STEP_0] = SAVE_ADDR_A;
+	microcode2[INSTR_RSPA << 3 | MICROCODE_STEP_0] = PUT_SP_ADDR;
+	microcode[INSTR_RSPA << 3 | MICROCODE_STEP_1] = FINISH;
+
+	microcode[INSTR_RSPB << 3 | MICROCODE_STEP_0] = SAVE_ADDR_B;
+	microcode2[INSTR_RSPB << 3 | MICROCODE_STEP_0] = PUT_SP_ADDR;
+	microcode[INSTR_RSPB << 3 | MICROCODE_STEP_1] = FINISH;
+
+	microcode[INSTR_PUTI << 3 | MICROCODE_STEP_0] = PUT_IIMM_DB | SAVE_DB_MEM;
+	microcode2[INSTR_PUTI << 3 | MICROCODE_STEP_0] = PUT_SP_ADDR;
+	microcode2[INSTR_PUTI << 3 | MICROCODE_STEP_1] = SP_DOWN;
+	microcode[INSTR_PUTI << 3 | MICROCODE_STEP_2] = FINISH;
+
+	microcode[INSTR_PUT << 3 | MICROCODE_STEP_0] = PUT_IR0_DB | SAVE_DB_MEM;
+	microcode2[INSTR_PUT << 3 | MICROCODE_STEP_0] = PUT_SP_ADDR;
+	microcode2[INSTR_PUT << 3 | MICROCODE_STEP_1] = SP_DOWN;
+	microcode[INSTR_PUT << 3 | MICROCODE_STEP_2] = FINISH;
+
+	microcode2[INSTR_POP << 3 | MICROCODE_STEP_0] = SP_UP;
+	microcode[INSTR_POP << 3 | MICROCODE_STEP_1] = PUT_MEM_DB | SAVE_DB_IR0;
+	microcode2[INSTR_POP << 3 | MICROCODE_STEP_1] = PUT_SP_ADDR;
+	microcode[INSTR_POP << 3 | MICROCODE_STEP_2] = FINISH;
 
 	FILE* f = fopen("microcode.bin", "wb");
 	fwrite(microcode, sizeof(microcode), 1, f);
