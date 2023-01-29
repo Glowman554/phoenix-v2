@@ -2,7 +2,7 @@ entry:
 	lod r15, 0
 	lad B, 0x0
 
-	lihi addr(intr)
+	lih intr
 
 	lad A, 0xff00
 	lod r4, 0b01000000
@@ -21,9 +21,9 @@ entry:
 	out A, r4 ; enable timer + prescaler + intr
 
 loop:
-	jmpi addr(loop)
+	jmp loop
 
 intr:
-	nori r15, 0
+	nor r15, 0
 	out B, r15
 	ire

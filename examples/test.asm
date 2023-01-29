@@ -2,9 +2,9 @@ entry:
 	lod r15, 0
 	lad B, 0x0
 
-	lspi 0xffff
+	lsp 0xffff
 
-	lihi addr(intr)
+	lih intr
 
 	lad A, 0xff00
 	lod r4, 0b01000000
@@ -23,10 +23,10 @@ entry:
 	out A, r4 ; enable timer + prescaler + interrupt
 
 loop:
-	addi r0, 1
-	addi r1, 2
-	addi r14, 2
-	jmpi addr(loop)
+	add r0, 1
+	add r1, 2
+	add r14, 2
+	jmp loop
 
 intr:
 	put r15
@@ -38,7 +38,7 @@ intr:
 
 	lad A, 0x8000
 	ldr r14, A
-	nori r14, 0
+	nor r14, 0
 	wtr A, r14
 	lad A, 0x0
 	out A, r14

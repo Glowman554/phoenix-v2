@@ -8,4 +8,4 @@ entry:
 	out A, r4 ; enable timer + pulse
 
 loop:
-	jmpi addr(loop)
+	jmp loop

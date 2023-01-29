@@ -12,4 +12,4 @@ entry:
 	out A, r4 ; enable timer + prescaler + toggle
 
 loop:
-	jmpi addr(loop)
+	jmp loop
