@@ -9,7 +9,7 @@ bin
 lib
 BIN
 disk
-
+build
 __pycache__
 
 *.gm2.*

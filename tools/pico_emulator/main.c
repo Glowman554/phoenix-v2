@@ -6,7 +6,6 @@
 #include <stdarg.h>
 
 #include <programing.h>
-#include <pico_hal.h>
 
 uint8_t memory_[0xffff] = { 0 };
 
@@ -57,7 +56,6 @@ uint16_t emit(instruction_t instr) {
 	return result;
 }
 
-#define GPIO_PROGRAMING_SEL 17
 #define INT0_IN 28
 #define INT1_IN 27
 #define INT2_IN 26
@@ -105,7 +103,7 @@ void _core_run() {
 			debugf("%s", out);
 		});
 	#ifdef SLOW
-		sleep_us(1000 * 1000 * 2);
+		sleep_us(1000 * 1000);
 	#endif
 	}
 }
@@ -130,10 +128,6 @@ int main() {
 		gpio_set_dir(i + 8, GPIO_IN);
 	}
 
-	gpio_init(GPIO_PROGRAMING_SEL);
-	gpio_set_dir(GPIO_PROGRAMING_SEL, GPIO_IN);
-	gpio_set_pulls(GPIO_PROGRAMING_SEL, false, true);
-
 	gpio_init(TOUT);
 	gpio_set_dir(TOUT, GPIO_OUT);
 
@@ -145,9 +139,7 @@ int main() {
 	int_in_config(INT5_IN);
 
 
-	if (gpio_get(GPIO_PROGRAMING_SEL)) {
-		programing_mode();
-	}
+	programing_mode();
 
 	_core_run();
 

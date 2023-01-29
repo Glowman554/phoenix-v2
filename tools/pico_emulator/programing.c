@@ -3,7 +3,6 @@
 #include <stdio.h>
 #include <readline.h>
 #include <cpu_core.h>
-#include <pico_hal.h>
 
 #include "pico/stdlib.h"
 
