@@ -19,6 +19,7 @@ bool is_register(char* cmp);
 void append_to_ast(instruction_t instr);
 
 // parser functions
+void register_or_imm8(int opcode);
 void only_register(int opcode);
 void only_dregister(int opcode);
 void only_imm8(int opcode);

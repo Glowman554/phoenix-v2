@@ -70,7 +70,7 @@ parser_function corresponding_function[INSTRUCTIONS_LEN] =  { register_register_
 															, only_register
 															, dregister_or_imm16
 															, only_dregister
-															, register_imm8
+															, register_or_imm8
 															, only_register
 															, nop
 															};
@@ -316,6 +316,20 @@ label_t get_label(label_t* labels, size_t* number_of_labels, const char* key) {
 }
 
 // p functions
+void register_or_imm8(int opcode) {
+	instruction_t instr = {.opcode = opcode};
+	p_advance();
+	
+	if (is_register(current_token.string_data)) {
+		instr.reg1 = parse_second_class(REG_TYPE);
+	} else {
+		instr.imm = parse_second_class(IMM8_TYPE);
+	}
+	p_advance();
+
+	append_to_ast(instr);
+}
+
 void only_imm8(int opcode) {
 	instruction_t instr = {.opcode = opcode};
 	p_advance();
