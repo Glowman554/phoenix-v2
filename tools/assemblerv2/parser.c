@@ -324,6 +324,7 @@ void register_or_imm8(int opcode) {
 		instr.reg1 = parse_second_class(REG_TYPE);
 	} else {
 		instr.imm = parse_second_class(IMM8_TYPE);
+		instr.opcode = get_opcode_increment_from_opcode(instr.opcode);
 	}
 	p_advance();
 
