@@ -38,6 +38,7 @@ char* instructions[INSTRUCTIONS_LEN] =  { "add"
 										, "rsp"
 										, "put"
 										, "pop"
+										, "int"
 										};
 parser_function corresponding_function[INSTRUCTIONS_LEN] =  { register_register_or_imm8
 															, register_register_or_imm8
@@ -71,6 +72,7 @@ parser_function corresponding_function[INSTRUCTIONS_LEN] =  { register_register_
 															, only_dregister
 															, register_imm8
 															, only_register
+															, nop
 															};
 int instruction_opcodes[INSTRUCTIONS_LEN] = { INSTR_ADD
 											, INSTR_CMP
@@ -104,6 +106,7 @@ int instruction_opcodes[INSTRUCTIONS_LEN] = { INSTR_ADD
 											, INSTR_RSPA
 											, INSTR_PUT
 											, INSTR_POP
+											, INSTR_INT
 											};
 
 char* registers[REGISTER_LEN] = {"r0", "r1", "r2", "r3", "r4", "r5", "r6", "r7", "r8", "r9", "r10", "r11", "r12", "r13", "r14", "r15"};
