@@ -34,7 +34,7 @@ void db(int opcode);
 
 typedef void (*parser_function)(int);
 
-#define INSTRUCTIONS_LEN 32
+#define INSTRUCTIONS_LEN 33
 extern char* instructions[INSTRUCTIONS_LEN];
 extern parser_function corresponding_function[INSTRUCTIONS_LEN];
 extern int instruction_opcodes[INSTRUCTIONS_LEN];

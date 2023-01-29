@@ -5,13 +5,13 @@ loop:
 	wtr A, r5
 
 	cfg
-	addi r0, 1
-	adoi r1, 1
+	add r0, 1
+	ado r1, 1
 	
-	cmpi r1, 0xff
-	jnqi addr(loop)
+	cmp r1, 0xff
+	jnq loop
 
-	cmpi r0, 0xff
-	jnqi addr(loop)
+	cmp r0, 0xff
+	jnq loop
 
-	jmpi 0xffff
+	jmp 0xffff

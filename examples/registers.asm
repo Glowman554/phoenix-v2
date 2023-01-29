@@ -15,4 +15,4 @@ entry:
 	lod r13, 13
 	lod r14, 14
 	lod r15, 15
-	jmpi 0xffff
+	jmp 0xffff

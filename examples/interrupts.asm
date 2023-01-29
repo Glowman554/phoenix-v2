@@ -1,5 +1,5 @@
 entry:
-	lihi addr(intr)
+	lih intr
 
 	lad A, 0xff00
 	lod r3, 0b10000000
@@ -7,7 +7,7 @@ entry:
 
 	int
 
-	jmpi 0xffff
+	jmp 0xffff
 
 intr:
 	ire

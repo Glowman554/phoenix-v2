@@ -3,7 +3,7 @@ entry:
 	lod r15, 0x0
 
 loop:
-	nori r15, 0
+	nor r15, 0
 	out A, r15
 
-	jmpi addr(loop)
+	jmp loop
