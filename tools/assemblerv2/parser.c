@@ -69,8 +69,7 @@ parser_function corresponding_function[INSTRUCTIONS_LEN] =  { register_register_
 															, only_register
 															, dregister_or_imm16
 															, only_dregister
-															, only_imm8
-															, only_register
+															, register_imm8
 															, only_register
 															};
 int instruction_opcodes[INSTRUCTIONS_LEN] = { INSTR_ADD
