@@ -19,6 +19,9 @@ bool is_register(char* cmp);
 void append_to_ast(instruction_t instr);
 
 // parser functions
+void only_register(int opcode);
+void only_dregister(int opcode);
+void only_imm8(int opcode);
 void register_register_or_imm8(int opcode);
 void register_imm8(int opcode);
 void dregister_or_imm16(int opcode);
@@ -31,7 +34,7 @@ void db(int opcode);
 
 typedef void (*parser_function)(int);
 
-#define INSTRUCTIONS_LEN 25
+#define INSTRUCTIONS_LEN 32
 extern char* instructions[INSTRUCTIONS_LEN];
 extern parser_function corresponding_function[INSTRUCTIONS_LEN];
 extern int instruction_opcodes[INSTRUCTIONS_LEN];
