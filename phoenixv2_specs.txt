@@ -167,9 +167,14 @@ Code execution starts at 0x0
 
 === I/O ===
 
-The cpu can have multiple io ports. The following io ports exsist:
+The cpu can have multiple io ports. The following io ports exist:
 
 0x0: GPIO
+0xff00: interrupt controller
+0xff01: timer Prescaler
+0xff02: timer compare
+0xff03: timer control
+
 
 === GPIO ===
 
