@@ -10,7 +10,7 @@
 
 typedef bool eof;
 
-enum TokenTypes { ID, COLON, COMMA, NUMBER8, NUMBER16, LPAREN, RPAREN };
+enum TokenTypes { ID, COLON, COMMA, NUMBER8, NUMBER16, LPAREN, RPAREN, DOLLAR };
 
 typedef struct {
 	int type;
