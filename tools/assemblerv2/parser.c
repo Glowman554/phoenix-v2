@@ -281,6 +281,10 @@ int parse_second_class(int expected_type) {
 		if (expected_type != IMM16_TYPE && expected_type != NUMBER8)
 			throw_error("Type error", enable_errors);
 		return current_token.imm16_data;
+	} else if (current_token.type == DOLLAR) {
+		if (expected_type != IMM16_TYPE) 
+			throw_error("Type error", enable_errors);
+		return instruction_count;
 	} else {
 		char err[0xff];
 		sprintf(err, "Unexpected second class citizen: \"%s\"", current_token.string_data);

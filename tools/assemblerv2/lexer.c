@@ -135,9 +135,14 @@ token_t* lex(char* _code, size_t _code_len, int* number_of_tokens_produced) {
 			token_t to_append = {.type = RPAREN, .string_data = ")"};
 			tokens = append_token(tokens, number_of_tokens_produced, to_append);
 		} break;
+		case '$': {
+			token_t to_append = {.type = DOLLAR, .string_data = "$"};
+			tokens = append_token(tokens, number_of_tokens_produced, to_append);
+		} break;
         case ';': {
             lex_comment();
         } break;
+		
 
 		default: {
 			// check for IDs and Numbers. otherwise throw error
