@@ -3,6 +3,22 @@
 #include <stdlib.h>
 #include <string.h>
 
+void writeMcBin(const char* output, uint32_t* microcode) {
+	FILE* f = fopen(output, "wb");
+	fwrite(microcode, sizeof(uint32_t) * MAX_INSTR * MAX_MICROCODE_STEP, 1, f);
+	fclose(f);
+}
+
+void writeMcHex(const char* output, uint32_t* microcode) {
+	FILE* f = fopen(output, "w");
+	fputs("@0\n", f);
+	for (int i = 0; i < MAX_INSTR * MAX_MICROCODE_STEP; i++) {
+        fprintf(f, "%08x\n", microcode[i]);
+	}
+	fclose(f);
+}
+
+
 int main() {
 	uint32_t microcode[MAX_INSTR * MAX_MICROCODE_STEP] = { 0 };
 	uint32_t microcode2[MAX_INSTR * MAX_MICROCODE_STEP] = { 0 };
@@ -284,11 +300,8 @@ int main() {
 	microcode2[INSTR_POP << 3 | MICROCODE_STEP_1] = PUT_SP_ADDR;
 	microcode[INSTR_POP << 3 | MICROCODE_STEP_2] = FINISH;
 
-	FILE* f = fopen("microcode.bin", "wb");
-	fwrite(microcode, sizeof(microcode), 1, f);
-	fclose(f);
-
-	f = fopen("microcode2.bin", "wb");
-	fwrite(microcode2, sizeof(microcode2), 1, f);
-	fclose(f);
+	writeMcBin("microcode1.bin", microcode);
+	writeMcHex("mc_p_1.hex", microcode);
+	writeMcBin("microcode2.bin", microcode2);
+	writeMcHex("mc_p_2.hex", microcode2);
 }
